@@ -3,8 +3,10 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 
-export const login = async (req: Request, res: Response) => {
+const loginControler = async (req: Request, res: Response) => {
   const { email, password } = req.body;
+
+  console.log(email, password);
 
   const user = await User.findOne({ email });
 
@@ -30,3 +32,5 @@ export const login = async (req: Request, res: Response) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export default loginControler;
