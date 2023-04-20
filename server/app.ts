@@ -7,6 +7,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import express from 'express';
 import { fileURLToPath } from 'url';
+import { registerUser } from './controllers/auth.ts';
 
 const __fileName = fileURLToPath(import.meta.url);
 const __dirName = path.dirname(__fileName);
@@ -37,5 +38,8 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+
+/*ROUTES WITH FILES */
+app.post('/auth/register', upload.single('picture'), registerUser);
 
 export { app };
