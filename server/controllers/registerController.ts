@@ -1,11 +1,8 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
+import User from '../models/User.ts';
 import { Request, Response } from 'express';
 
-/* REGISTER USER */
-
-export const registerUser = async (req: Request, res: Response) => {
+const registerController = async (req: Request, res: Response) => {
   try {
     const {
       firstName,
@@ -39,3 +36,5 @@ export const registerUser = async (req: Request, res: Response) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export default registerController;

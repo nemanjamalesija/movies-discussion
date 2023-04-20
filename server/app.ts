@@ -6,9 +6,9 @@ import morgan from 'morgan';
 import path from 'path';
 import dotenv from 'dotenv';
 import express from 'express';
-import authRoutes from './routes/authRoutes.ts';
 import { fileURLToPath } from 'url';
-import { registerUser } from './controllers/auth.ts';
+import registerController from './controllers/registerController.ts';
+import loginControler from './controllers/loginController.ts';
 
 const __fileName = fileURLToPath(import.meta.url);
 const __dirName = path.dirname(__fileName);
@@ -41,9 +41,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 /*ROUTES WITH FILES */
-app.post('/auth/register', upload.single('picture'), registerUser);
+app.post('/auth/register', upload.single('picture'), registerController);
 
 /* ROUTES */
-app.use('/auth', authRoutes);
+app.use('/auth', loginControler);
 
 export { app };
