@@ -6,8 +6,6 @@ import { Request, Response } from 'express';
 const loginControler = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
-  console.log(email, password);
-
   const user = await User.findOne({ email });
 
   // user does not exist
