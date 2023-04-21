@@ -8,7 +8,9 @@ import dotenv from 'dotenv';
 import express from 'express';
 import { fileURLToPath } from 'url';
 import registerController from './controllers/registerController.ts';
-import loginControler from './controllers/loginController.ts';
+import verifyToken from './middleware/verifyToken.ts';
+import authRouter from './routes/authRouter.ts';
+import usersRouter from './routes/usersRouter.ts';
 
 const __fileName = fileURLToPath(import.meta.url);
 const __dirName = path.dirname(__fileName);
@@ -43,6 +45,7 @@ const upload = multer({ storage });
 app.post('/auth/register', upload.single('picture'), registerController);
 
 /* ROUTES */
-app.use('/auth', loginControler);
+app.use('/auth', authRouter);
+app.use('/users', usersRouter);
 
 export { app };

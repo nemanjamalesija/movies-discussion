@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 
-const loginController = async (req: Request, res: Response) => {
+const loginControler = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
@@ -31,4 +31,4 @@ const loginController = async (req: Request, res: Response) => {
   }
 };
 
-export default loginController;
+export default loginControler;
