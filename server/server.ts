@@ -1,4 +1,4 @@
-import { app } from './app.ts';
+import app from './app.ts';
 import mongoose from 'mongoose';
 import http from 'http';
 import dotenv from 'dotenv';
