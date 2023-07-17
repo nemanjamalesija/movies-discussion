@@ -1,15 +1,15 @@
 import mongoose from 'mongoose';
 
-const postScehma = new mongoose.Schema({
+const postSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: [true, 'Booking must belong to a Tour!'],
+    required: [true, 'Post must belong to an User!'],
   },
 
   text: {
     type: Number,
-    require: [true, 'Booking must have a price.'],
+    required: [true, 'Post must have some text!'],
   },
   createdAt: {
     type: Date,
@@ -19,7 +19,7 @@ const postScehma = new mongoose.Schema({
   },
 });
 
-postScehma.pre(/^find/, function (next) {
+postSchema.pre(/^find/, function (next) {
   this.populate('user').populate({
     path: 'user',
     select: 'name lastName',

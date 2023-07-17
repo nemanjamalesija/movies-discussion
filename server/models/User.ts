@@ -1,59 +1,78 @@
 import mongoose from 'mongoose';
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    requred: [true, 'User must have a name'],
-  },
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      requred: [true, 'User must have a name'],
+    },
 
-  lastName: {
-    type: String,
-    requred: [true, 'User must have a name'],
-  },
+    lastName: {
+      type: String,
+      requred: [true, 'User must have a name'],
+    },
 
-  email: {
-    type: String,
-    required: [true, 'User must have an email'],
-    unique: true,
-    lowercase: true,
-  },
+    email: {
+      type: String,
+      required: [true, 'User must have an email'],
+      unique: true,
+      lowercase: true,
+    },
 
-  photo: {
-    type: String,
-    default: () => {
-      return 'https://jumbo-bowls.onrender.com/public/images/users/defaultUser.webp';
+    photo: {
+      type: String,
+      default: () => {
+        return '';
+      },
+    },
+
+    role: {
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user',
+    },
+
+    password: {
+      type: String,
+      required: [true, 'User must have a password'],
+      minlength: 1,
+      select: false,
+    },
+
+    passwordConfirm: {
+      type: String || undefined,
+      required: [true, 'You must confirm the password'],
+    },
+
+    joinedAt: {
+      type: Date,
+      default: () => {
+        return Date.now();
+      },
+    },
+
+    active: {
+      type: Boolean,
+      default: true,
     },
   },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
 
-  role: {
-    type: String,
-    enum: ['user', 'admin'],
-    default: 'user',
-  },
+userSchema.virtual('posts', {
+  ref: 'Post',
+  foreignField: 'user',
+  localField: '_id',
+  type: mongoose.Schema.Types.ObjectId,
+});
 
-  password: {
-    type: String,
-    required: [true, 'User must have a password'],
-    minlength: 1,
-    select: false,
-  },
+userSchema.pre('find', function (next) {
+  this.populate('posts').select('text createdAt');
 
-  passwordConfirm: {
-    type: String || undefined,
-    required: [true, 'You must confirm the password'],
-  },
-
-  joinedAt: {
-    type: Date,
-    default: () => {
-      return Date.now();
-    },
-  },
-
-  active: {
-    type: Boolean,
-    default: true,
-  },
+  next();
 });
 
 const User = mongoose.model('User', userSchema);
