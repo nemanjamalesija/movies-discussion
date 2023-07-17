@@ -4,12 +4,12 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      requred: [true, 'User must have a name'],
+      required: [true, 'User must have a name'],
     },
 
     lastName: {
       type: String,
-      requred: [true, 'User must have a name'],
+      required: [true, 'User must have a name'],
     },
 
     email: {
@@ -66,11 +66,10 @@ userSchema.virtual('posts', {
   ref: 'Post',
   foreignField: 'user',
   localField: '_id',
-  type: mongoose.Schema.Types.ObjectId,
 });
 
 userSchema.pre('find', function (next) {
-  this.populate('posts').select('text createdAt');
+  this.populate('posts').select('postText createdAt');
 
   next();
 });

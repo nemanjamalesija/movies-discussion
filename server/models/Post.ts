@@ -7,10 +7,11 @@ const postSchema = new mongoose.Schema({
     required: [true, 'Post must belong to an User!'],
   },
 
-  text: {
-    type: Number,
+  postText: {
+    type: String,
     required: [true, 'Post must have some text!'],
   },
+
   createdAt: {
     type: Date,
     default: () => {
@@ -26,3 +27,7 @@ postSchema.pre(/^find/, function (next) {
   });
   next();
 });
+
+const Post = mongoose.model('Post', postSchema);
+
+export default Post;

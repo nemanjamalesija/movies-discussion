@@ -11,7 +11,7 @@ const db = process?.env?.DATABASE?.replace(
   process.env.DATABASE_PASSWORD as string
 );
 
-const PORT = process.env.PORT || 6001;
+const PORT = process.env.PORT || 3001;
 
 if (!db)
   throw new Error(
