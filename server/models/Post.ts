@@ -12,6 +12,14 @@ const postSchema = new mongoose.Schema({
     required: [true, 'Post must have some text!'],
   },
 
+  likes: {
+    type: Array,
+  },
+
+  comments: {
+    type: Array,
+  },
+
   createdAt: {
     type: Date,
     default: () => {
