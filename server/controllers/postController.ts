@@ -1,16 +1,7 @@
-import { NextFunction, Request, Response } from 'express';
-import User from '../models/User.ts';
 import Post from '../models/Post.ts';
+import controllerFactory from './controllerFactory.ts';
 
-async function getAllPosts(req: Request, res: Response, next: NextFunction) {
-  const posts = await Post.find();
+const getAllPosts = controllerFactory.getAll(Post);
+const createPost = controllerFactory.createOne(Post);
 
-  // SEND RESPONSE
-  res.status(200).json({
-    status: 'sucess',
-    length: posts.length,
-    data: { posts },
-  });
-}
-
-export default { getAllPosts };
+export default { getAllPosts, createPost };
