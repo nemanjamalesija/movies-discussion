@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema<UserType>(
 
     lastName: {
       type: String,
-      required: [true, 'User must have a name'],
+      required: [true, 'User must have a last name'],
     },
 
     email: {
@@ -80,6 +80,9 @@ userSchema.pre('find', function (next) {
 userSchema.pre('save', async function (next) {
   // Only run this function if password was actually modified
   if (!this.isModified('password')) return next();
+
+  console.log('middleware running');
+  console.log(this.password);
 
   // Hash the password with cost of 12
   this.password = await bcrypt.hash(this.password as string, 12);

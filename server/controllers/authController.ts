@@ -6,7 +6,7 @@ import User from '../models/User.ts';
 import { UserType } from '../types/User.ts';
 
 const signToken = (id: string) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET_STRING as string, {
+  return jwt.sign({ id }, process.env.JWT_SECRET as string, {
     expiresIn: '90d',
   });
 };
@@ -28,16 +28,19 @@ const createSendToken = (res: Response, statusCode: number, user: UserType) => {
 
 const signUp = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name, email, password, passwordConfirm, role } = req.body;
+    const { name, lastName, email, password, passwordConfirm, role } = req.body;
 
     // 1. Create new user
     const newUser = await User.create({
       name,
+      lastName,
       email,
       role,
       password,
       passwordConfirm,
     });
+
+    console.log(newUser.password);
 
     // 2. Sign token an send success response
     createSendToken(res, 201, newUser as UserType);
