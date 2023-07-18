@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
+import { UserType } from '../types/User.ts';
 
-const userSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema<UserType>(
   {
     name: {
       type: String,
@@ -73,6 +75,27 @@ userSchema.pre('find', function (next) {
 
   next();
 });
+
+// HASH PASSWORD ON SIGNUP
+userSchema.pre('save', async function (next) {
+  // Only run this function if password was actually modified
+  if (!this.isModified('password')) return next();
+
+  // Hash the password with cost of 12
+  this.password = await bcrypt.hash(this.password as string, 12);
+
+  // Delete passwordConfirm field
+  this.passwordConfirm = undefined;
+  next();
+});
+
+// PASS VERIFICATION
+userSchema.methods.correctPassword = async function (
+  canditatePassword: string,
+  userPassword: string
+) {
+  return await bcrypt.compare(canditatePassword, userPassword);
+};
 
 const User = mongoose.model('User', userSchema);
 
