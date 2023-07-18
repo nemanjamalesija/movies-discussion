@@ -55,7 +55,7 @@ const login = catchAsync(
     if (!email || !password) {
       const error = new Error('Please provide both email and password');
 
-      return next(error.message);
+      return next(error);
     }
 
     // 2. Check if the user exists && password is correct
@@ -67,7 +67,7 @@ const login = catchAsync(
     ) {
       const error = new Error('Incorrect email or password');
 
-      next(error.message);
+      next(error);
     } else {
       // 3. If everything ok, send token to client
       createSendToken(res, 200, currentUser as UserType);
@@ -111,7 +111,7 @@ const authenticateUser = async (
     const message = 'The user belonging to the token no longer exists';
     const error = new Error(message);
 
-    return next(error.message);
+    return next(error);
   }
 
   return currentUser;
@@ -134,6 +134,17 @@ const getUserWithToken = catchAsync(
   }
 );
 
+const protect = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const currentUser = await authenticateUser(req, res, next);
+
+    if (currentUser) {
+      req.body = { ...req.body, currentUser };
+      return next();
+    }
+  }
+);
+
 const logout = (req: Request, res: Response) => {
   res.clearCookie('jwt');
   res.status(200).json({ status: 'success' });
@@ -144,4 +155,5 @@ export default {
   login,
   getUserWithToken,
   logout,
+  protect,
 };

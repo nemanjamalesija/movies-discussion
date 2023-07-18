@@ -10,6 +10,8 @@ export type UserType = Document & {
   passwordConfirm: string | undefined;
   joinedAt: Date;
   active: boolean;
+  frendRequests: any[];
+  friends: any[];
   correctPassword: (
     candidatePassword: string,
     userPassword: string

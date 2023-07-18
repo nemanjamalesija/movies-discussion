@@ -71,7 +71,7 @@ userSchema.virtual('posts', {
 });
 
 userSchema.pre('find', function (next) {
-  this.populate('posts').select('postText createdAt');
+  this.populate('posts');
 
   next();
 });
