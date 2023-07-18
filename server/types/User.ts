@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 export type UserType = Document & {
   name: string;
@@ -10,8 +10,8 @@ export type UserType = Document & {
   passwordConfirm: string | undefined;
   joinedAt: Date;
   active: boolean;
-  frendRequests: any[];
-  friends: any[];
+  friends: mongoose.Schema.Types.ObjectId[];
+  friendRequests: mongoose.Schema.Types.ObjectId[];
   correctPassword: (
     candidatePassword: string,
     userPassword: string

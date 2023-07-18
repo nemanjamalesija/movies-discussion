@@ -40,8 +40,6 @@ const signUp = catchAsync(
       passwordConfirm,
     });
 
-    console.log(newUser.password);
-
     // 2. Sign token an send success response
     createSendToken(res, 201, newUser as UserType);
   }
@@ -87,6 +85,8 @@ const authenticateUser = async (
     token = req.headers.authorization.split(' ')[1];
   }
 
+ 
+
   // 2. Validate the token
   const decodeTokenFn: (token: string, secret: string) => Promise<any> =
     promisify(jwt.verify);
@@ -96,12 +96,11 @@ const authenticateUser = async (
   try {
     decodedTokenObj = await decodeTokenFn(
       token as string,
-      process.env.JWT_SECRET_STRING as string
+      process.env.JWT_SECRET as string
     );
   } catch (error) {
-    return next(
-      new Error("The user belonging to the jwt token doesn't exist!")
-    );
+    res.status(400).json({ error: 'This token is not valid.' });
+    return next();
   }
 
   // 3. Check if user still exists

@@ -28,6 +28,20 @@ const userSchema = new mongoose.Schema<UserType>(
       },
     },
 
+    friends: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+
+    friendRequests: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+
     role: {
       type: String,
       enum: ['user', 'admin'],
@@ -80,9 +94,6 @@ userSchema.pre('find', function (next) {
 userSchema.pre('save', async function (next) {
   // Only run this function if password was actually modified
   if (!this.isModified('password')) return next();
-
-  console.log('middleware running');
-  console.log(this.password);
 
   // Hash the password with cost of 12
   this.password = await bcrypt.hash(this.password as string, 12);
