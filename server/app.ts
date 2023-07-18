@@ -53,9 +53,9 @@ app.use('/api/v1/posts', postsRouter);
 
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
   const message = `Can't find ${req.originalUrl} on this server`;
-  // const error = new AppError(message, 404);
+  const error = new Error(message);
 
-  // next(error);
+  next(error);
 });
 
 export default app;

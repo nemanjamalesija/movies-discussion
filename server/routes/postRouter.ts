@@ -1,7 +1,7 @@
 import express from 'express';
 import postController from '../controllers/postController.ts';
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router
   .route('/')
