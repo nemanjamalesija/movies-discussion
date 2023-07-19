@@ -21,5 +21,6 @@ router
   .patch(userController.acceptFriend);
 
 router.patch('/:id', userController.addFriend);
+router.get('/:id', userController.getOneUser);
 
 export default router;

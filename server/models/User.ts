@@ -84,7 +84,7 @@ userSchema.virtual('posts', {
   localField: '_id',
 });
 
-userSchema.pre('find', function (next) {
+userSchema.pre(/^find/, function (next) {
   this.populate('posts');
 
   next();

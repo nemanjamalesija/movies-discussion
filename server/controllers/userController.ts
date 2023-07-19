@@ -6,6 +6,30 @@ import controllerFactory from './controllerFactory.ts';
 const getAllUsers = controllerFactory.getAll(User);
 const createUser = controllerFactory.createOne(User);
 
+const getOneUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await User.findById(req.params.id)
+      .populate({
+        path: 'friends',
+        select: ['name', 'lastName', 'photo'],
+      })
+      .populate({
+        path: 'friendRequests',
+        select: ['name', 'lastName', 'photo'],
+      });
+
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
+      return next();
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: { user },
+    });
+  }
+);
+
 const addFriend = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const userToAdd = await User.findById(req.params.id);
@@ -78,4 +102,4 @@ const acceptFriend = catchAsync(
   }
 );
 
-export default { getAllUsers, createUser, addFriend, acceptFriend };
+export default { getAllUsers, createUser, addFriend, acceptFriend, getOneUser };
