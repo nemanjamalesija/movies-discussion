@@ -9,44 +9,73 @@ const createUser = controllerFactory.createOne(User);
 const addFriend = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const userToAdd = await User.findById(req.params.id);
-    const currentUser = await User.findById(req.body.currentUser._id);
+    const currentUser = await User.findById(req.body.currentUser.id);
 
     if (!userToAdd || !currentUser) {
       res.status(404).json({ error: 'This user does not exist' });
       return next();
     }
 
-    if (userToAdd._id === currentUser._id) {
+    if (userToAdd.id === currentUser.id) {
       res.status(404).json({ error: 'You cannot add yourself as a friend' });
       return next();
     }
 
-    if (userToAdd.friendRequests.includes(currentUser._id)) {
+    if (userToAdd.friendRequests.includes(currentUser.id)) {
       res.status(400).json({ error: 'Already requested' });
       return next();
     }
 
-    if (currentUser.friends.includes(userToAdd._id)) {
+    if (currentUser.friends.includes(userToAdd.id)) {
       res
         .status(400)
         .json({ error: 'This person is already in your friends list.' });
       return next();
     }
 
-    await User.findByIdAndUpdate(
-      userToAdd._id,
-      { friendRequests: [...userToAdd.friendRequests, currentUser._id] },
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    userToAdd.friendRequests = [...userToAdd.friendRequests, currentUser.id];
 
+    await userToAdd.save({ validateBeforeSave: false });
     res.status(200).json({
       status: 'success',
-      message: 'User succesfully added!',
+      message: 'Request sucessfully sent',
     });
   }
 );
 
-export default { getAllUsers, createUser, addFriend };
+const acceptFriend = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userRequesting = await User.findById(req.body.id);
+    const currentUser = await User.findById(req.body.currentUser.id);
+
+    if (!userRequesting || !currentUser) {
+      res.status(400).json({ error: 'This user does not exist' });
+      return next();
+    }
+
+    if (
+      userRequesting.friends.includes(currentUser.id) ||
+      currentUser.friends.includes(userRequesting.id)
+    ) {
+      res.status(400).json({ error: 'You are already friend with this user.' });
+      return next();
+    }
+
+    currentUser.friends.push(userRequesting.id);
+    currentUser.friendRequests = currentUser.friendRequests.filter(
+      (id) => id.toString() !== userRequesting.id
+    );
+
+    userRequesting.friends.push(currentUser.id);
+
+    await currentUser.save({ validateBeforeSave: false });
+    await userRequesting.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+      status: 'success',
+      message: 'User accepted to your friend list!',
+    });
+  }
+);
+
+export default { getAllUsers, createUser, addFriend, acceptFriend };

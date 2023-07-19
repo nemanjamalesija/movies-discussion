@@ -17,8 +17,9 @@ router.use(authController.protect);
 router
   .route('/')
   .get(userController.getAllUsers)
-  .post(userController.createUser);
+  .post(userController.createUser)
+  .patch(userController.acceptFriend);
 
-router.post('/:id', userController.addFriend);
+router.patch('/:id', userController.addFriend);
 
 export default router;
