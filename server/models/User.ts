@@ -1,8 +1,8 @@
-import mongoose from 'mongoose';
+import { Types, Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import { UserType } from '../types/User.ts';
 
-const userSchema = new mongoose.Schema<UserType>(
+const userSchema = new Schema<UserType>(
   {
     name: {
       type: String,
@@ -30,14 +30,14 @@ const userSchema = new mongoose.Schema<UserType>(
 
     friends: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Types.ObjectId,
         ref: 'User',
       },
     ],
 
     friendRequests: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Types.ObjectId,
         ref: 'User',
       },
     ],
@@ -111,6 +111,6 @@ userSchema.methods.correctPassword = async function (
   return await bcrypt.compare(canditatePassword, userPassword);
 };
 
-const User = mongoose.model('User', userSchema);
+const User = model<UserType>('User', userSchema);
 
 export default User;

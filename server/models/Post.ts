@@ -1,32 +1,38 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
+import { PostType } from '../types/Post.ts';
 
-const postSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: [true, 'Post must belong to an User!'],
-  },
-
-  postText: {
-    type: String,
-    required: [true, 'Post must have some text!'],
-  },
-
-  likes: {
-    type: Array,
-  },
-
-  comments: {
-    type: Array,
-  },
-
-  createdAt: {
-    type: Date,
-    default: () => {
-      return Date.now();
+const postSchema = new Schema<PostType>(
+  {
+    text: {
+      type: String,
+      default: '',
     },
+    image: {
+      type: String,
+      default: '',
+    },
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    likes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Comment',
+      },
+    ],
   },
-});
+  {
+    timestamps: true,
+  }
+);
 
 postSchema.pre(/^find/, function (next) {
   this.populate('user').populate({
@@ -36,6 +42,6 @@ postSchema.pre(/^find/, function (next) {
   next();
 });
 
-const Post = mongoose.model('Post', postSchema);
+const Post = model<PostType>('Post', postSchema);
 
 export default Post;
