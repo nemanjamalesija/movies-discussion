@@ -148,9 +148,38 @@ const denyFriendRequest = catchAsync(
       (id) => id.toString() !== requestedUser.id
     );
 
-    console.log(currentUser);
+    await currentUser.save({ validateBeforeSave: false });
+
+    res.status(204).json({
+      status: 'sucess',
+      data: null,
+    });
+  }
+);
+
+// const [sourceUser, targetUser] = await User.find({
+//   _id: { $in: [currentUser, id] },
+// });
+
+const removeFriend = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const currentUser = await User.findById(req.body.currentUser.id);
+    const targetUser = await User.findById(req.body.id);
+
+    if (!targetUser || !currentUser) {
+      res.status(400).json({ error: 'This user does not exist' });
+      return next();
+    }
+
+    currentUser.friends = currentUser.friends.filter(
+      (id) => id.toString() !== targetUser.id
+    );
+    targetUser.friends = targetUser.friends.filter(
+      (id) => id.toString() !== currentUser.id
+    );
 
     await currentUser.save({ validateBeforeSave: false });
+    await targetUser.save({ validateBeforeSave: false });
 
     res.status(204).json({
       status: 'sucess',
@@ -166,4 +195,5 @@ export default {
   acceptFriendRequest,
   getOneUser,
   denyFriendRequest,
+  removeFriend,
 };
