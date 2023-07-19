@@ -18,9 +18,11 @@ router
   .route('/')
   .get(userController.getAllUsers)
   .post(userController.createUser)
-  .patch(userController.acceptFriend);
+  .patch(userController.acceptFriendRequest);
 
-router.patch('/:id', userController.addFriend);
+router.patch('/add', userController.addFriend);
+router.patch('/accept', userController.acceptFriendRequest);
+router.delete('/denny', userController.denyFriendRequest);
 router.get('/:id', userController.getOneUser);
 
 export default router;
