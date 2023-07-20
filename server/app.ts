@@ -9,6 +9,7 @@ import { fileURLToPath } from 'url';
 
 import usersRouter from './routes/userRouter.ts';
 import postsRouter from './routes/postRouter.ts';
+import commentsRouter from './routes/commentRouter.ts';
 
 dotenv.config();
 const app = express();
@@ -50,6 +51,7 @@ app.use(
 /* ROUTES */
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/posts', postsRouter);
+app.use('/api/v1/comments', commentsRouter);
 
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
   const message = `Can't find ${req.originalUrl} on this server`;

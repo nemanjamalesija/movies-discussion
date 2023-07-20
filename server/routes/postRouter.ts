@@ -2,7 +2,7 @@ import express from 'express';
 import postController from '../controllers/postController.ts';
 import authController from '../controllers/authController.ts';
 
-const router = express.Router({ mergeParams: true });
+const router = express.Router();
 
 router.use(authController.protect);
 

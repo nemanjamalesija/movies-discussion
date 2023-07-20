@@ -53,8 +53,6 @@ const like = catchAsync(
       return next();
     }
 
-    console.log(isAlreadyLiked);
-
     currentPost.likes.push(currentUser.id);
     await currentPost.save();
 
