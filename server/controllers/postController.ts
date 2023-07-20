@@ -5,6 +5,8 @@ import controllerFactory from './controllerFactory.ts';
 import { Request, Response, NextFunction } from 'express';
 
 const getAllPosts = controllerFactory.getAll(Post);
+const deletePost = controllerFactory.deleteOne(Post);
+const updatePost = controllerFactory.updateOne(Post);
 
 const createPost = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -27,4 +29,4 @@ const createPost = catchAsync(
   }
 );
 
-export default { getAllPosts, createPost };
+export default { getAllPosts, createPost, deletePost, updatePost };

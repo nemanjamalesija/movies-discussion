@@ -11,4 +11,9 @@ router
   .get(postController.getAllPosts)
   .post(postController.createPost);
 
+router
+  .route('/:id')
+  .delete(postController.deletePost)
+  .patch(postController.updatePost);
+
 export default router;
