@@ -3,11 +3,12 @@ import { Request, Response, NextFunction } from 'express';
 import User from '../models/User.ts';
 import Post from '../models/Post.ts';
 import Comment from '../models/Comment.ts';
+import controllerFactory from './controllerFactory.ts';
 
 const createComment = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const currentUserId = req.body.currentUser.id;
-    const targetPostId = req.params.postId;
+    const targetPostId = req.params.id;
     const newCommentText = req.body.text;
 
     const currentUser = await User.findById(currentUserId);
@@ -40,4 +41,7 @@ const createComment = catchAsync(
   }
 );
 
-export default { createComment };
+const deleteComment = controllerFactory.deleteOne(Comment);
+const editComment = controllerFactory.updateOne(Comment);
+
+export default { createComment, deleteComment, editComment };

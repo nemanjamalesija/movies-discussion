@@ -7,6 +7,10 @@ const router = express.Router();
 router.use(authController.protect);
 
 /* COMMENTS */
-router.route('/:postId').post(commentController.createComment);
+router
+  .route('/:id')
+  .post(commentController.createComment)
+  .patch(commentController.editComment)
+  .delete(commentController.deleteComment);
 
 export default router;
