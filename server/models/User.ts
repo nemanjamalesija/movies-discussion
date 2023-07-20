@@ -84,12 +84,6 @@ userSchema.virtual('posts', {
   localField: '_id',
 });
 
-userSchema.pre(/^find/, function (next) {
-  this.populate('posts');
-
-  next();
-});
-
 // HASH PASSWORD ON SIGNUP
 userSchema.pre('save', async function (next) {
   // Only run this function if password was actually modified

@@ -10,6 +10,26 @@ const getOneUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const targetUser = await User.findById(req.params.id)
       .populate({
+        path: 'posts',
+        strictPopulate: false,
+        populate: {
+          path: 'likes',
+          select: ['name', 'lastName', 'photo'],
+        },
+      })
+      .populate({
+        path: 'posts',
+        strictPopulate: false,
+        populate: {
+          path: 'comments',
+          select: ['text', 'author'],
+          populate: {
+            path: 'author',
+            select: ['name', 'lastName', 'photo'],
+          },
+        },
+      })
+      .populate({
         path: 'friends',
         select: ['name', 'lastName', 'photo'],
       })
