@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.use(authController.protect);
 
+router.get('/feed', postController.getUsersFeed);
+
 router
   .route('/')
   .get(postController.getAllPosts)

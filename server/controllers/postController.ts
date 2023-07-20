@@ -8,6 +8,54 @@ const getAllPosts = controllerFactory.getAll(Post);
 const deletePost = controllerFactory.deleteOne(Post);
 const updatePost = controllerFactory.updateOne(Post);
 
+async function getFeed(userId: string, offset: number, limit: number) {
+  if (offset < 0 || limit < 0 || Number.isNaN(offset) || Number.isNaN(limit))
+    throw new Error('Must provide offset and limit in the query string');
+
+  const user = await User.findById(userId);
+  if (!user) throw new Error('User not found');
+
+  const posts = await Post.find()
+    .populate({
+      path: 'author',
+      select: ['-password', '-passwordConfirm'],
+    })
+    .populate({
+      path: 'likes',
+      select: ['name', 'lastName', 'photo'],
+    })
+    .populate({
+      path: 'comments',
+      select: ['text', 'author'],
+      populate: {
+        path: 'author',
+        select: ['name', 'lastName', 'photo'],
+      },
+    })
+    .where('author')
+    .in([...user.friends, user.id])
+    .sort({ createdAt: 'desc' })
+    .skip(offset)
+    .limit(limit);
+
+  return posts;
+}
+
+const getUsersFeed = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const currentUserId = req.body.currentUser.id;
+    const { offset, limit } = req.query;
+
+    const posts = await getFeed(
+      currentUserId,
+      parseInt(offset as string),
+      parseInt(limit as string)
+    );
+
+    res.json(posts);
+  }
+);
+
 const createPost = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const currentUser = await User.findById(req.body.currentUser.id);
@@ -101,4 +149,5 @@ export default {
   updatePost,
   like,
   unlike,
+  getUsersFeed,
 };
