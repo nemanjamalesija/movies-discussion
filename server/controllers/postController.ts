@@ -29,4 +29,78 @@ const createPost = catchAsync(
   }
 );
 
-export default { getAllPosts, createPost, deletePost, updatePost };
+const like = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const currentUser = await User.findById(req.body.currentUser.id);
+    const currentPost = await Post.findById(req.body.id);
+
+    if (!currentUser) {
+      res.status(404).json({ error: 'User not found' });
+      return next();
+    }
+
+    if (!currentPost) {
+      res.status(404).json({ error: 'Post not found' });
+      return next();
+    }
+
+    const isAlreadyLiked = currentPost.likes.some(
+      (id) => id.toString() === currentUser.id
+    );
+
+    if (isAlreadyLiked) {
+      res.status(400).json({ error: 'Already liked this post' });
+      return next();
+    }
+
+    console.log(isAlreadyLiked);
+
+    currentPost.likes.push(currentUser.id);
+    await currentPost.save();
+
+    res.status(200).json({ message: 'succeess' });
+  }
+);
+
+const unlike = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const currentUser = await User.findById(req.body.currentUser.id);
+    const currentPost = await Post.findById(req.body.id);
+
+    if (!currentUser) {
+      res.status(404).json({ error: 'User not found' });
+      return next();
+    }
+
+    if (!currentPost) {
+      res.status(404).json({ error: 'Post not found' });
+      return next();
+    }
+
+    const isAlreadyLiked = currentPost.likes.some(
+      (id) => id.toString() === currentUser.id
+    );
+
+    if (!isAlreadyLiked) {
+      res.status(400).json({ error: 'First you must like this post' });
+      return next();
+    }
+
+    currentPost.likes = currentPost.likes.filter(
+      (id) => id.toString() !== currentUser.id
+    );
+
+    await currentPost.save();
+
+    res.status(200).json({ message: 'success' });
+  }
+);
+
+export default {
+  getAllPosts,
+  createPost,
+  deletePost,
+  updatePost,
+  like,
+  unlike,
+};

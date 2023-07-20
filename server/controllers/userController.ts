@@ -19,7 +19,7 @@ const getOneUser = catchAsync(
       });
 
     if (!targetUser) {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ error: 'User not found' });
       return next();
     }
 
@@ -66,7 +66,7 @@ const addFriend = catchAsync(
     }
 
     if (targetUser.id === currentUser.id) {
-      res.status(404).json({ error: 'You cannot add yourself as a friend' });
+      res.status(400).json({ error: 'You cannot add yourself as a friend' });
       return next();
     }
 

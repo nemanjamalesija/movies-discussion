@@ -11,6 +11,9 @@ router
   .get(postController.getAllPosts)
   .post(postController.createPost);
 
+router.patch('/like', postController.like);
+router.delete('/unlike', postController.unlike);
+
 router
   .route('/:id')
   .delete(postController.deletePost)
