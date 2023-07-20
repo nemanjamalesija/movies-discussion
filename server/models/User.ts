@@ -58,6 +58,7 @@ const userSchema = new Schema<UserType>(
     passwordConfirm: {
       type: String || undefined,
       required: [true, 'You must confirm the password'],
+      select: false,
     },
 
     joinedAt: {
