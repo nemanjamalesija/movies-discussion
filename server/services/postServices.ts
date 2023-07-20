@@ -1,12 +1,13 @@
 import Post from '../models/Post.ts';
 import User from '../models/User.ts';
+import { AppError } from '../utils/errors.ts';
 
 async function getUsersFeed(userId: string, offset: number, limit: number) {
   if (offset < 0 || limit < 0 || Number.isNaN(offset) || Number.isNaN(limit))
-    throw new Error('Must provide offset and limit in the query string');
+    throw new AppError('Must provide offset and limit in query string', 400);
 
   const user = await User.findById(userId);
-  if (!user) return null;
+  if (!user) throw new AppError('User not found', 404);
 
   const posts = await Post.find()
     .populate({
