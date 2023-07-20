@@ -53,12 +53,8 @@ const getOneUser = catchAsync(
 
 const addFriend = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const currentUserId = req.body.currentUser.id;
-    const targetUserId = req.body.id;
-
-    const [currentUser, targetUser] = await User.find({
-      _id: { $in: [currentUserId, targetUserId] },
-    });
+    const currentUser = await User.findById(req.body.currentUser.id);
+    const targetUser = await User.findById(req.body.id);
 
     if (!targetUser || !currentUser) {
       res.status(404).json({ error: 'This user does not exist' });
@@ -100,12 +96,8 @@ const addFriend = catchAsync(
 
 const acceptFriendRequest = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const currentUserId = req.body.currentUser.id;
-    const targetUserId = req.body.id;
-
-    const [currentUser, targetUser] = await User.find({
-      _id: { $in: [currentUserId, targetUserId] },
-    });
+    const currentUser = await User.findById(req.body.currentUser.id);
+    const targetUser = await User.findById(req.body.id);
 
     if (!targetUser || !currentUser) {
       res.status(400).json({ error: 'This user does not exist' });
@@ -162,12 +154,8 @@ const denyFriendRequest = catchAsync(
 
 const removeFriend = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const currentUserId = req.body.currentUser.id;
-    const targetUserId = req.body.id;
-
-    const [currentUser, targetUser] = await User.find({
-      _id: { $in: [currentUserId, targetUserId] },
-    });
+    const currentUser = await User.findById(req.body.currentUser.id);
+    const targetUser = await User.findById(req.body.id);
 
     if (!targetUser || !currentUser) {
       res.status(400).json({ error: 'This user does not exist' });
