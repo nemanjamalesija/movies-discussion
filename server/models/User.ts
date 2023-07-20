@@ -42,8 +42,6 @@ const userSchema = new Schema<UserType>(
       },
     ],
 
-   
-
     role: {
       type: String,
       enum: ['user', 'admin'],
@@ -82,7 +80,7 @@ const userSchema = new Schema<UserType>(
 
 userSchema.virtual('posts', {
   ref: 'Post',
-  foreignField: 'user',
+  foreignField: 'author',
   localField: '_id',
 });
 

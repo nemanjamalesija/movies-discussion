@@ -6,4 +6,5 @@ export type PostType = {
   author: Types.ObjectId;
   likes: Types.ObjectId[];
   comments: Types.ObjectId[];
+  createdAt: Date;
 };
