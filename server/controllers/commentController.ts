@@ -41,7 +41,35 @@ const createComment = catchAsync(
   }
 );
 
-const deleteComment = controllerFactory.deleteOne(Comment);
+const deleteComment = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const targetcomment = await Comment.findById(req.params.id);
+
+    if (!targetcomment) {
+      res.status(400).json({ error: 'This comment does not exist' });
+      return next();
+    }
+
+    const targetPost = await Post.findById(targetcomment.post);
+
+    if (!targetPost) {
+      res.status(400).json({ error: 'This post does not exist' });
+      return next();
+    }
+
+    targetPost.comments = targetPost.comments.filter(
+      (id) => id.toString() !== targetcomment.id
+    );
+
+    await targetPost.save();
+    await Comment.findByIdAndUpdate(targetcomment.id);
+
+    res.status(204).json({
+      status: 'sucess',
+      data: null,
+    });
+  }
+);
 const editComment = controllerFactory.updateOne(Comment);
 
 export default { createComment, deleteComment, editComment };
