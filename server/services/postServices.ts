@@ -1,6 +1,6 @@
 import Post from '../models/Post.ts';
 import User from '../models/User.ts';
-import { AppError } from '../utils/errors.ts';
+import { AppError } from '../helpers/appError.ts';
 
 async function getUsersFeed(userId: string, offset: number, limit: number) {
   if (offset < 0 || limit < 0 || Number.isNaN(offset) || Number.isNaN(limit))

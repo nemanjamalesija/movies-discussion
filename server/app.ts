@@ -10,7 +10,7 @@ import { fileURLToPath } from 'url';
 import usersRouter from './routes/userRouter.ts';
 import postsRouter from './routes/postRouter.ts';
 import commentsRouter from './routes/commentRouter.ts';
-import { AppError } from './utils/errors.ts';
+import { AppError } from './helpers/appError.ts';
 import errorController from './controllers/errorController.ts';
 
 dotenv.config();

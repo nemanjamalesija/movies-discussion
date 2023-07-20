@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { AppError } from '../utils/errors.ts';
+import { AppError } from '../helpers/appError.ts';
 import { Error } from 'mongoose';
 import { MongoError } from 'mongodb';
 
@@ -28,24 +28,19 @@ const handleCastErrorDB = (err: Error.CastError) => {
 };
 
 const handleDuplicateFieldErrorDB = (err: any) => {
-  const productName = err.keyValue.email;
   const userEmail = err.keyValue.email;
-  let message: string = '';
-
-  if (productName)
-    message = `The product under the name ${productName} already exists`;
 
   if (userEmail)
-    message = `The user under the email ${userEmail} already exists`;
-
-  return new AppError(message, 404);
+    return new AppError(
+      `The user under the email ${userEmail} already exists`,
+      404
+    );
 };
 
 const handleValidatorErrorDB = (err: Error.ValidationError) => {
   const errors = Object.values(err.errors).map((el) => el.message);
 
-  const message = `Invalid input data: ${errors.join('. ')}`;
-  return new AppError(message, 404);
+  return new AppError(`Invalid input data: ${errors.join('. ')}`, 404);
 };
 
 const errorController = (
