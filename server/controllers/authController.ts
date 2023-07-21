@@ -52,9 +52,9 @@ const login = catchAsync(
 
     // 1. Check if email and password exist
     if (!email || !password) {
-      const error = new Error('Please provide both email and password');
-
-      return next(error);
+      return next(
+        new AppError('Please provide both username and password', 403)
+      );
     }
 
     // 2. Check if the user exists && password is correct
@@ -64,9 +64,7 @@ const login = catchAsync(
       !currentUser ||
       !(await currentUser.correctPassword(password, currentUser.password))
     ) {
-      const error = new Error('Incorrect email or password');
-
-      next(error);
+      return next(new AppError('Incorrect email or password', 400));
     } else {
       // 3. If everything ok, send token to client
       createSendToken(res, 200, currentUser as UserType);
@@ -106,10 +104,9 @@ const authenticateUser = async (
   const currentUser = await User.findById(decodedTokenObj.id);
 
   if (!currentUser) {
-    const message = 'The user belonging to the token no longer exists';
-    const error = new Error(message);
-
-    return next(error);
+    return next(
+      new AppError('The user belonging to the token no longer exists', 404)
+    );
   }
 
   return currentUser;
