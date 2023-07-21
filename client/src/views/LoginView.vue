@@ -104,21 +104,16 @@ async function loginUserHandler() {
 </script>
 
 <template>
-  <section class="mt-28 px-5 lg:px-0 login">
+  <section class="mt-40 px-5 lg:px-0 login">
     <LoadingSpinner v-if="loading" />
     <div v-else class="form__container">
       <div>
-        <h1 class="text-7xl text-gray-800 mb-4 align-middle mt-16 font-semibold">Socialis</h1>
-        <p class="text-xl text-gray-600">
+        <h1 class="text-8xl text-indigo-600 mb-4 align-middle mt-16 font-semibold">Socialis</h1>
+        <p class="text-2xl">
           Stay connected with your friends and the world around you with Socialis.
         </p>
       </div>
       <div class="login-form">
-        <h2
-          class="heading-secondary heading-secondary heading-gradient text-text-lg lg:text-2xl uppercase mb-8 font-semibold text-center"
-        >
-          Log into your account
-        </h2>
         <form class="form form--login">
           <div class="form__group">
             <label class="form__label" for="email">Email address</label>
@@ -145,13 +140,21 @@ async function loginUserHandler() {
           </div>
           <div class="form__group">
             <button
-              class="btn py-3 px-6 bg-orange-500 text-sm lg:text-base hover:bg-orange-600 disabled:bg-gray-500"
+              class="py-3 px-6 w-full rounded-md uppercase font-semibold text-white transition-all duration-300 bg-indigo-600 hover:bg-indigo-700 text-sm lg:text-base hover:bg-orange-60 disabled:bg-gray-500 mb-2"
               type="submit"
               :disabled="!allFieldsCompleted"
               @click.prevent="loginUserHandler"
             >
               Log in
             </button>
+
+            <RouterLink to="/signup"
+              ><button
+                class="py-3 px-6 w-full rounded-md uppercase font-semibold text-white transition-all duration-300 bg-emerald-600 hover:bg-emerald-700 text-sm lg:text-base hover:bg-orange-60"
+              >
+                Create new account
+              </button>
+            </RouterLink>
           </div>
         </form>
       </div>

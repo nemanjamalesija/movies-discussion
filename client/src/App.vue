@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+import NavigationLayout from './components/NavigationLayout.vue'
+import useGetUserStore from './hooks/useGetUserStore'
+
+const { currentUser } = useGetUserStore()
 </script>
 
 <template>
-  <header>
-    <h1 class="text-red-500 text-2xl">Hello</h1>
-  </header>
-
+  <NavigationLayout v-if="currentUser.firstName" />
   <RouterView />
 </template>
 

@@ -71,21 +71,16 @@ async function signUpHandler() {
 </script>
 
 <template>
-  <section class="my-24 singup">
+  <section class="my-16 singup">
     <LoadingSpinner v-if="loading" />
     <div v-else class="form__container">
       <div>
-        <h1 class="text-7xl text-gray-800 mb-4 align-middle mt-16 font-semibold">Socialis</h1>
-        <p class="text-xl text-gray-600">
+        <h1 class="text-8xl text-indigo-600 mb-4 align-middle mt-24 font-bold">Socialis</h1>
+        <p class="text-2xl">
           Stay connected with your friends and the world around you with Socialis.
         </p>
       </div>
       <div class="singup-form">
-        <h2
-          class="heading-secondary heading-gradient text-text-lg lg:text-2xl uppercase mb-5 font-semibold text-center"
-        >
-          Create your account
-        </h2>
         <form class="form form--signup">
           <div class="form__group">
             <label class="form__label" for="name">Your name</label>
@@ -146,13 +141,21 @@ async function signUpHandler() {
           </div>
           <div class="form__group">
             <button
-              class="btn btn--signup py-3 px-6 bg-orange-500 text-sm lg:text-base hover:bg-orange-60 disabled:bg-gray-500"
+              class="py-3 px-6 w-full rounded-md uppercase font-semibold text-white transition-all duration-300 bg-indigo-600 hover:bg-indigo-700 text-sm lg:text-base hover:bg-orange-60 disabled:bg-gray-500 mb-2"
               type="submit"
               @click.prevent="signUpHandler"
               :disabled="!allFieldsCompleted"
             >
               Sign up
             </button>
+
+            <RouterLink to="/login"
+              ><button
+                class="py-3 px-6 w-full rounded-md uppercase font-semibold text-white transition-all duration-300 bg-emerald-600 hover:bg-emerald-700 text-sm lg:text-base hover:bg-orange-60"
+              >
+                Log in with your account
+              </button>
+            </RouterLink>
           </div>
         </form>
       </div>
