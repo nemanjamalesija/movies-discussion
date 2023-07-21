@@ -4,6 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 import catchAsync from '../helpers/catchAsync.ts';
 import User from '../models/User.ts';
 import { UserType } from '../types/User.ts';
+import { AppError } from '../helpers/appError.ts';
 
 const signToken = (id: string) => {
   return jwt.sign({ id }, process.env.JWT_SECRET as string, {
@@ -85,8 +86,6 @@ const authenticateUser = async (
     token = req.headers.authorization.split(' ')[1];
   }
 
- 
-
   // 2. Validate the token
   const decodeTokenFn: (token: string, secret: string) => Promise<any> =
     promisify(jwt.verify);
@@ -137,10 +136,10 @@ const protect = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const currentUser = await authenticateUser(req, res, next);
 
-    if (currentUser) {
-      req.body = { ...req.body, currentUser };
-      return next();
-    }
+    if (!currentUser) return next(new AppError('User not found', 404));
+
+    req.body = { ...req.body, currentUser };
+    return next();
   }
 );
 

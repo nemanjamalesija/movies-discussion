@@ -16,7 +16,7 @@ const sendError = (res: Response, err: any) => {
     res.status(err.statusCode || 500).json({
       status: err.status,
       error: err,
-      message: err.message,
+      message: 'Something went wrong',
     });
   }
 };

@@ -1,3 +1,4 @@
+import { AppError } from '../helpers/appError.ts';
 import catchAsync from '../helpers/catchAsync.ts';
 import Post from '../models/Post.ts';
 import User from '../models/User.ts';
@@ -27,17 +28,13 @@ const getUsersFeed = catchAsync(async (req: Request, res: Response) => {
 
 const createPost = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const currentUser = await User.findById(req.body.currentUser.id);
-
-    if (!currentUser) {
-      res.status(404).json({ message: 'User not found' });
-      return next();
-    }
-
     const { text, photo } = req.body;
 
-    const post = await Post.create({ text, photo, author: currentUser.id });
-    await post.save();
+    const post = await postServices.createPost(
+      req.body.currentUser.id,
+      text,
+      photo
+    );
 
     res.status(200).json({
       message: 'sucess',
