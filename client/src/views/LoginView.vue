@@ -3,8 +3,8 @@ import { baseUrl } from '../constants/baseUrl'
 import { ref, watch } from 'vue'
 import useGetUserStore from '../hooks/useGetUserStore'
 import useAppNavigation from '../composables/useAppNavigation'
-import { loginSchema } from '../types/loginUserType'
-import type { LoginUserType } from '../types/loginUserType'
+import { loginSchema } from '../schemas/loginUserSchema'
+import type { LoginUserType } from '../schemas/loginUserSchema'
 import { computed } from 'vue'
 import z from 'zod'
 import formatZodErrors from '../helpers/formatZodErrors'
@@ -38,7 +38,7 @@ async function loginUserHandler() {
       password: loginUser.value.password
     })
 
-    const response = await fetch(`${baseUrl}/api/v1/users/login`, {
+    const response = await fetch(`${baseUrl}/users/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -106,47 +106,56 @@ async function loginUserHandler() {
 <template>
   <section class="mt-28 px-5 lg:px-0 login">
     <LoadingSpinner v-if="loading" />
-    <div v-else class="login-form">
-      <h2
-        class="heading-secondary heading-secondary heading-gradient text-text-lg lg:text-2xl uppercase mb-8 font-semibold text-center"
-      >
-        Log into your account
-      </h2>
-      <form class="form form--login">
-        <div class="form__group">
-          <label class="form__label" for="email">Email address</label>
-          <input
-            id="email"
-            class="form__input"
-            type="email"
-            placeholder="you@example.com"
-            required
-            v-model="loginUser.email"
-          />
-        </div>
-        <div class="form__group ma-bt-md">
-          <label class="form__label" for="password">Password</label>
-          <input
-            id="password"
-            class="form__input"
-            type="password"
-            placeholder="••••••••"
-            minlength="8"
-            required
-            v-model="loginUser.password"
-          />
-        </div>
-        <div class="form__group">
-          <button
-            class="btn py-3 px-6 bg-orange-500 text-sm lg:text-base hover:bg-orange-600 disabled:bg-gray-500"
-            type="submit"
-            :disabled="!allFieldsCompleted"
-            @click.prevent="loginUserHandler"
-          >
-            Log in
-          </button>
-        </div>
-      </form>
+    <div v-else class="form__container">
+      <div>
+        <h1 class="text-7xl text-gray-800 mb-4 align-middle mt-16 font-semibold">Socialis</h1>
+        <p class="text-xl text-gray-600">
+          Stay connected with your friends and the world around you with Socialis.
+        </p>
+      </div>
+      <div class="login-form">
+        <h2
+          class="heading-secondary heading-secondary heading-gradient text-text-lg lg:text-2xl uppercase mb-8 font-semibold text-center"
+        >
+          Log into your account
+        </h2>
+        <form class="form form--login">
+          <div class="form__group">
+            <label class="form__label" for="email">Email address</label>
+            <input
+              id="email"
+              class="form__input"
+              type="email"
+              placeholder="you@example.com"
+              required
+              v-model="loginUser.email"
+            />
+          </div>
+          <div class="form__group ma-bt-md">
+            <label class="form__label" for="password">Password</label>
+            <input
+              id="password"
+              class="form__input"
+              type="password"
+              placeholder="••••••••"
+              minlength="8"
+              required
+              v-model="loginUser.password"
+            />
+          </div>
+          <div class="form__group">
+            <button
+              class="btn py-3 px-6 bg-orange-500 text-sm lg:text-base hover:bg-orange-600 disabled:bg-gray-500"
+              type="submit"
+              :disabled="!allFieldsCompleted"
+              @click.prevent="loginUserHandler"
+            >
+              Log in
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </section>
 </template>
+../schemas/loginUserType../schemas/loginUserType
