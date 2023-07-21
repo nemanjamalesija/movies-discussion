@@ -13,8 +13,8 @@ router
   .get(postController.getAllPosts)
   .post(postController.createPost);
 
-router.patch('/like', postController.like);
-router.delete('/unlike', postController.unlike);
+router.patch('/like', postController.likePost);
+router.patch('/unlike', postController.unlikePost);
 
 router
   .route('/:id')
