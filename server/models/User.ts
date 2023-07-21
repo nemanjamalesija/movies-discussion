@@ -61,13 +61,6 @@ const userSchema = new Schema<UserType>(
       select: false,
     },
 
-    joinedAt: {
-      type: Date,
-      default: () => {
-        return Date.now();
-      },
-    },
-
     active: {
       type: Boolean,
       default: true,
