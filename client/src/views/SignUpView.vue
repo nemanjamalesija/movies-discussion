@@ -75,7 +75,7 @@ async function signUpHandler() {
     <LoadingSpinner v-if="loading" />
     <div v-else class="form__container">
       <div>
-        <h1 class="text-8xl text-indigo-600 mb-4 align-middle mt-24 font-bold">Socialis</h1>
+        <h1 class="text-8xl text-indigo-600 mb-4 align-middle mt-32 font-bold">Socialis</h1>
         <p class="text-2xl">
           Stay connected with your friends and the world around you with Socialis.
         </p>
