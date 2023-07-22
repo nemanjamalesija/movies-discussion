@@ -4,9 +4,11 @@ import { onMounted, ref } from 'vue'
 import useAppNavigation from '../composables/useAppNavigation'
 import logoutHandler from '../helpers/logoutHandler'
 import userAnonym from '../utils/anonym.png'
+import { accountIcons } from '../utils/accountIcons'
 
 const { currentUser, setCurrentUser } = useGetUserStore()
 const { router, toast } = useAppNavigation()
+const isUserInfoDropDown = ref<boolean>(true)
 
 onMounted(async () => {
   const navRef = ref(document.querySelector('.header-nav'))
@@ -26,10 +28,10 @@ onMounted(async () => {
 <template>
   <header class="header-nav absolute top-0 left-0 w-full z-40">
     <nav
-      class="nav pb-3 relative h-full px-6 flex items-center justify-between text-base lg:text-lg font-medium"
+      class="nav relative h-full px-6 flex items-center justify-between text-base lg:text-lg font-medium"
     >
       <!-- Logo and page navigation -->
-      <div class="flex items-center">
+      <div class="flex items-center py-3">
         <div class="logo flex items-center gap-2">
           <RouterLink to="/">
             <button
@@ -86,10 +88,14 @@ onMounted(async () => {
         >
 
         <!-- User info -->
-        <div v-if="currentUser.firstName" class="user flex flex-col items-center gap-3 font-bold">
+        <div
+          v-if="currentUser.firstName"
+          class="user flex flex-col items-center gap-3 font-bold"
+          @click="isUserInfoDropDown = !isUserInfoDropDown"
+        >
           <div class="user__photo-box flex gap-4 items-center">
             <img
-              class="card__picture-img object-cover w-11 h-11 inline-block rounded-full"
+              class="card__picture-img object-cover w-11 h-11 inline-block rounded-full cursor-pointer"
               :src="currentUser.photo !== '' ? currentUser.photo : userAnonym"
               :alt="currentUser.firstName + ' image'"
             />
@@ -99,21 +105,55 @@ onMounted(async () => {
           </div>
 
           <!-- Drop down modal -->
-          <div class="account bg-white flex flex-col text-base gap-2 rounded-md w-max">
-            <RouterLink v-if="currentUser.role === 'admin'" class="nav__link" to="/dashboard"
-              >Dashboard</RouterLink
-            >
-            <RouterLink class="nav__link" to="/me"> Account </RouterLink>
-            <RouterLink class="nav__link" to="/products"> My reviews </RouterLink>
-            <RouterLink class="nav__link" to="/products"> Help & support </RouterLink>
-            <RouterLink class="nav__link" to="/products"> Display & accesibility </RouterLink>
-            <RouterLink class="nav__link" to="/products"> Give feedback</RouterLink>
+          <div
+            :class="
+              isUserInfoDropDown
+                ? 'account account-active bg-white flex flex-col text-base gap-2 rounded-md w-max visible opacity-100'
+                : 'account bg-white flex flex-col text-base gap-2 rounded-md w-max invisible opacity-0'
+            "
+          >
+            <RouterLink class="nav__link inline-block" to="/">
+              <div class="flex items-center gap-2">
+                <p class="bg-gray-200 rounded-full h-9 w-9 flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </p>
+                <p>My profile</p>
+              </div>
+            </RouterLink>
+
             <button
               v-if="currentUser.firstName"
               class="nav__link text-start"
               @click.prevent="logoutHandler(router, toast, setCurrentUser)"
             >
-              Log out
+              <div class="flex items-center gap-2">
+                <p class="bg-gray-200 rounded-full h-9 w-9 flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M7.5 3.75A1.5 1.5 0 006 5.25v13.5a1.5 1.5 0 001.5 1.5h6a1.5 1.5 0 001.5-1.5V15a.75.75 0 011.5 0v3.75a3 3 0 01-3 3h-6a3 3 0 01-3-3V5.25a3 3 0 013-3h6a3 3 0 013 3V9A.75.75 0 0115 9V5.25a1.5 1.5 0 00-1.5-1.5h-6zm10.72 4.72a.75.75 0 011.06 0l3 3a.75.75 0 010 1.06l-3 3a.75.75 0 11-1.06-1.06l1.72-1.72H9a.75.75 0 010-1.5h10.94l-1.72-1.72a.75.75 0 010-1.06z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </p>
+                <p>Log out</p>
+              </div>
             </button>
           </div>
         </div>
@@ -125,47 +165,41 @@ onMounted(async () => {
 <style scoped>
 .header-nav {
   transition: all 0.3s;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
   position: fixed;
+  background-color: #fff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
-.header-nav.sticky {
-  background-color: rgba(255, 255, 255, 0.95);
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
 .user {
   position: absolute;
   right: 5%;
-  top: 6.5%;
-  padding-bottom: 2rem;
 }
 
 .account {
   -webkit-box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.1);
   box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.1);
   max-height: 0;
-  visibility: hidden;
-  transition: max-height 0.3s;
-  overflow: hidden;
+  transition: all 0.1s ease-in-out;
 }
 
 .account {
   position: absolute;
-  top: 78%;
+  top: 110%;
   right: 0.3%;
 }
 
-.user:hover > .account {
-  visibility: visible;
-  transform-origin: top;
-  padding: 1rem;
+.account-active {
+  padding: 0.8rem;
+
   max-height: 300px;
+}
+.nav__link {
+  padding: 0.4rem 4rem 0.4rem 0.4rem;
+  border-radius: 6px;
 }
 
 .nav__link:hover {
   transition: all 0.2s;
-  color: #4f46e5;
+  background-color: #edf2ff;
 }
 </style>
