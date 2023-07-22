@@ -1,7 +1,7 @@
-import mongoose, { Document, Types } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export type UserType = Document & {
-  name: string;
+  firstName: string;
   lastName: string;
   email: string;
   photo: string;

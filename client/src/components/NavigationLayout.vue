@@ -3,6 +3,7 @@ import useGetUserStore from '../hooks/useGetUserStore'
 import { onMounted, ref } from 'vue'
 import useAppNavigation from '../composables/useAppNavigation'
 import logoutHandler from '../helpers/logoutHandler'
+import userAnonym from '../utils/anonym.png'
 
 const { currentUser, setCurrentUser } = useGetUserStore()
 const { router, toast } = useAppNavigation()
@@ -25,19 +26,47 @@ onMounted(async () => {
 <template>
   <header class="header-nav absolute top-0 left-0 w-full z-40">
     <nav
-      class="nav pb-3 relative h-full px-14 flex items-center justify-between text-base lg:text-lg font-medium"
+      class="nav pb-3 relative h-full px-6 flex items-center justify-between text-base lg:text-lg font-medium"
     >
       <!-- Logo and page navigation -->
       <div class="flex items-center">
         <div class="logo flex items-center gap-2">
-          <!-- <img :src="logo" alt="jumbo bowls logo" class="inline-block h-10 w-10 object-cover" /> -->
-          <h1 class="capitalize font-bold mr-20 text-xl lg:text-2xl">Socialis</h1>
-        </div>
-        <div v-if="currentUser.firstName" class="flex gap-10">
-          <RouterLink class="inline-block" to="/products"> Products</RouterLink>
-          <RouterLink class="inline-block" to="/products"> About us</RouterLink>
-          <RouterLink class="inline-block" to="/products"> How it works</RouterLink>
-          <RouterLink class="inline-block" to="/products"> Bowls and pricing</RouterLink>
+          <RouterLink to="/">
+            <button
+              class="capitalize font-semibold mr-4 w-11 h-11 rounded-full bg-indigo-600 flex items-center justify-center relative"
+            >
+              <span class="absolute text-4xl font-semibold text-white">S</span>
+            </button>
+          </RouterLink>
+
+          <!-- Search input -->
+          <label for="default-search" class="mb-2 text-sm font-medium sr-only">Search</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <svg
+                class="w-4 h-4 text-gray-500"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                />
+              </svg>
+            </div>
+            <input
+              type="search"
+              id="default-search"
+              class="block w-full py-[0.6rem] px-6 pl-10 text-sm border border-gray-300 rounded-full bg-gray-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+              placeholder="Search"
+              required
+            />
+          </div>
         </div>
       </div>
 
@@ -60,9 +89,9 @@ onMounted(async () => {
         <div v-if="currentUser.firstName" class="user flex flex-col items-center gap-3 font-bold">
           <div class="user__photo-box flex gap-4 items-center">
             <img
-              class="card__picture-img object-cover h-12 w-12 inline-block rounded-full"
-              :src="currentUser.photo"
-              :alt="currentUser.photo + ' image'"
+              class="card__picture-img object-cover w-11 h-11 inline-block rounded-full"
+              :src="currentUser.photo !== '' ? currentUser.photo : userAnonym"
+              :alt="currentUser.firstName + ' image'"
             />
             <p class="username inline-block font-semibold cursor-pointer">
               {{ currentUser.firstName }}
@@ -94,6 +123,18 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+.header-nav {
+  transition: all 0.3s;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  position: fixed;
+}
+
+.header-nav.sticky {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
 .user {
   position: absolute;
   right: 5%;
@@ -125,6 +166,6 @@ onMounted(async () => {
 
 .nav__link:hover {
   transition: all 0.2s;
-  color: rgba(234 88 12 / 1);
+  color: #4f46e5;
 }
 </style>

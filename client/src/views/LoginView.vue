@@ -63,7 +63,9 @@ async function loginUserHandler() {
         user as UserType
 
       // grant access
-      router.push('/products')
+      router.push('/')
+
+      console.log(user)
 
       // set user in the state
       setCurrentUser({

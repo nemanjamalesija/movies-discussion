@@ -4,7 +4,7 @@ import { UserType } from '../types/User.ts';
 
 const userSchema = new Schema<UserType>(
   {
-    name: {
+    firstName: {
       type: String,
       required: [true, 'User must have a name'],
     },

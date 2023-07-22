@@ -13,7 +13,7 @@ const { toast, router } = useAppNavigation()
 const { loading, setLoading } = useGetUserStore()
 
 const signUpUser = ref<SignUpUserType>({
-  name: '',
+  firstName: '',
   lastName: '',
   email: '',
   password: '',
@@ -28,7 +28,7 @@ const allFieldsCompleted = computed(() => {
 async function signUpHandler() {
   try {
     const tryUser = signUpUserSchema.parse({
-      name: signUpUser.value.name,
+      firstName: signUpUser.value.firstName,
       lastName: signUpUser.value.lastName,
       email: signUpUser.value.email,
       password: signUpUser.value.password,
@@ -54,7 +54,7 @@ async function signUpHandler() {
       router.push('/login')
     }
 
-    signUpUser.value.name = ''
+    signUpUser.value.firstName = ''
     signUpUser.value.email = ''
     signUpUser.value.password = ''
     signUpUser.value.passwordConfirm = ''
@@ -71,7 +71,7 @@ async function signUpHandler() {
 </script>
 
 <template>
-  <section class="my-16 singup">
+  <section class="my-12 singup">
     <LoadingSpinner v-if="loading" />
     <div v-else class="form__container">
       <div>
@@ -85,18 +85,18 @@ async function signUpHandler() {
           <div class="form__group">
             <label class="form__label" for="name">Your name</label>
             <input
-              id="name"
+              id="firstName"
               class="form__input"
               type="text"
               placeholder="John"
               required
-              v-model="signUpUser.name"
+              v-model="signUpUser.firstName"
             />
           </div>
           <div class="form__group">
             <label class="form__label" for="name">Your last name</label>
             <input
-              id="name"
+              id="lastName"
               class="form__input"
               type="text"
               placeholder="John"

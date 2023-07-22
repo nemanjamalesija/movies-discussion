@@ -26,28 +26,6 @@ body {
 }
 
 /* NAVIGATION */
-.header-nav {
-  transition: all 0.3s;
-  color: #222;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-  position: fixed;
-}
-
-.header-nav.sticky {
-  background-color: rgba(255, 255, 255, 0.95);
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-
-.header-nav.sticky .btn-signup {
-  background-color: #f9791f;
-  color: #fff;
-}
-
-.header-nav.sticky .btn-signup:hover {
-  background-color: #e06d1c;
-}
 
 .heading-gradient {
   background: #ffe8cc;
@@ -122,12 +100,18 @@ body {
   border-radius: 5px;
 }
 
+.singup-form,
+.login-form {
+  width: 85%;
+  justify-self: end;
+}
+
 .form__container {
   margin: 0 auto;
   display: grid;
   grid-template-columns: 500px 1fr;
-  gap: 12rem;
-  width: 1333px;
+  gap: 10rem;
+  width: 1280px;
 }
 
 @media only screen and (max-width: 1000px) {
