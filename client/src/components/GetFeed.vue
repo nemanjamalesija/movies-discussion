@@ -7,9 +7,4 @@ const isPostingPhoto = ref<boolean>(false)
 
 const { currentUser } = useGetUserStore()
 </script>
-<template>
-  <main>
-    <CreatePostFeed />
-    <GetFeed />
-  </main>
-</template>
+<template>GetFeed</template>

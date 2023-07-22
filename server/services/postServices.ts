@@ -15,7 +15,15 @@ async function getUsersFeed(userId: string, offset: number, limit: number) {
   const posts = await Post.find()
     .populate({
       path: 'author',
-      select: ['-password', '-passwordConfirm'],
+      select: [
+        '-password',
+        '-passwordConfirm',
+        '-email',
+        '-role',
+        '-active',
+        '--v',
+        '-friends',
+      ],
     })
     .populate({
       path: 'likes',
