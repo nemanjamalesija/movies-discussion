@@ -15,7 +15,7 @@ export default async function useGetSession() {
     return undefined
   } else {
     try {
-      const response = await fetch(`${baseUrl}/api/v1/users/getUserWithToken`, {
+      const response = await fetch(`${baseUrl}/users/getUserWithToken`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
