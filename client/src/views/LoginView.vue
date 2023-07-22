@@ -65,8 +65,6 @@ async function loginUserHandler() {
       // grant access
       router.push('/')
 
-      console.log(user)
-
       // set user in the state
       setCurrentUser({
         id,

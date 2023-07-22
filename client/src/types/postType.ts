@@ -1,6 +1,6 @@
 import type { UserType } from './userType'
 
-export type Post = {
+export type PostFeed = {
   id: string
   text: string
   image: string

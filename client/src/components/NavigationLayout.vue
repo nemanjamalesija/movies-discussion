@@ -97,7 +97,7 @@ onMounted(async () => {
               :src="currentUser.photo"
               :alt="currentUser.firstName + ' image'"
             />
-            <buton
+            <button
               class="bg-slate-300 rounded-full h-10 w-10 flex items-center justify-center cursor-pointer"
               v-if="!currentUser.photo"
             >
@@ -113,7 +113,7 @@ onMounted(async () => {
                   clip-rule="evenodd"
                 />
               </svg>
-            </buton>
+            </button>
             <p class="username inline-block font-semibold cursor-pointer">
               {{ currentUser.firstName }}
             </p>

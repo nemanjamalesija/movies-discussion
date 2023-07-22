@@ -1,10 +1,60 @@
 <script setup lang="ts">
-import CreatePostFeed from './CreatePostFeed.vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import useGetUserStore from '../hooks/useGetUserStore'
+import useAppNavigation from '@/composables/useAppNavigation'
+import { baseUrl } from '@/constants/baseUrl'
+import type { PostFeed } from '../types/postType'
 
-const isPostingPhoto = ref<boolean>(false)
+const { currentUser, loading, setLoading } = useGetUserStore()
+const { toast, router } = useAppNavigation()
 
-const { currentUser } = useGetUserStore()
+const postsFeed = ref([] as PostFeed[])
+
+async function getFeed() {
+  const jwtToken = localStorage.getItem('jwt')
+
+  if (!jwtToken) {
+    toast.error('Could not get your session! Please log in.')
+    router.push('/')
+  }
+  setLoading(true)
+
+  try {
+    const response = await fetch(`${baseUrl}/posts/feed?offset=0&limit=10`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtToken
+      }
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      toast.error(error.message)
+      router.push('/login')
+      return
+    } else {
+      const {
+        data: { posts }
+      } = await response.json()
+
+      console.log(posts)
+
+      postsFeed.value = posts as PostFeed[]
+      console.log(postsFeed.value)
+      setLoading(false)
+    }
+  } catch (error) {
+    toast.error('Oop, something went wrong!')
+    console.log(error)
+    setLoading(false)
+  } finally {
+    setLoading(false)
+  }
+}
+
+onMounted(async () => {
+  await getFeed()
+})
 </script>
 <template>GetFeed</template>

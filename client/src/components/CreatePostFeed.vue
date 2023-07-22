@@ -16,7 +16,7 @@ const { currentUser } = useGetUserStore()
         :src="currentUser.photo"
         :alt="currentUser.firstName + ' image'"
       />
-      <buton
+      <button
         class="bg-gray-300 rounded-full h-10 w-10 flex items-center justify-center cursor-pointer"
         v-if="!currentUser.photo"
       >
@@ -27,7 +27,7 @@ const { currentUser } = useGetUserStore()
             clip-rule="evenodd"
           />
         </svg>
-      </buton>
+      </button>
       <form action="" class="w-full">
         <label for="default-search" class="mb-2 text-sm font-medium sr-only">Search</label>
         <div>
