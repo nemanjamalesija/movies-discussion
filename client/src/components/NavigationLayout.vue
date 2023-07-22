@@ -26,7 +26,7 @@ onMounted(async () => {
 <template>
   <header class="header-nav absolute top-0 left-0 w-full z-40">
     <nav
-      class="nav relative h-full px-6 flex items-center justify-between text-base lg:text-lg font-medium"
+      class="nav relative h-full px-5 flex items-center justify-between text-base lg:text-lg font-medium"
     >
       <!-- Logo and page navigation -->
       <div class="flex items-center py-2">

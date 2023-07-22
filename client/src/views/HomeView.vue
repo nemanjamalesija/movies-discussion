@@ -5,7 +5,7 @@ import HomeFriends from '../components/HomeFriends.vue'
 </script>
 
 <template>
-  <section class="grid grid-cols-[1fr 1.5fr 1fr] mt-24 px-6">
+  <section class="grid grid-cols-[1fr 1.5fr 1fr] mt-20 px-5">
     <HomeLinks />
     <HomeFeed />
     <HomeFriends />
