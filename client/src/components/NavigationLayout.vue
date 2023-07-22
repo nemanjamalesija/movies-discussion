@@ -24,7 +24,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <header class="header-nav absolute top-0 left-0 w-full z-40">
+  <header class="header-nav absolute top-0 left-0 w-full z-40 max-w-screen-2xl">
     <nav
       class="nav relative h-full px-5 flex items-center justify-between text-base lg:text-lg font-medium"
     >
@@ -64,7 +64,6 @@ onMounted(async () => {
               id="default-search"
               class="block w-full py-[0.5rem] px-6 pl-10 text-sm border border-slate-300 rounded-full bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
               placeholder="Search"
-              required
             />
           </div>
         </div>

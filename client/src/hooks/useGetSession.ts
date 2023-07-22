@@ -37,7 +37,7 @@ export default async function useGetSession() {
           friendRequests: [],
           active: true
         })
-        router.push('/')
+        router.push('/login')
         return undefined
       }
 
@@ -55,7 +55,7 @@ export default async function useGetSession() {
     } catch (error) {
       console.log(error)
       toast.error('Sorry, could not get your session! Please log in or try again... ')
-      router.push('/')
+      router.push('/login')
       return undefined
     }
   }
