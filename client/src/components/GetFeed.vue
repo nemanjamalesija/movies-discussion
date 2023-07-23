@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import useGetUserStore from '../hooks/useGetUserStore'
-import useAppNavigation from '@/composables/useAppNavigation'
-import { baseUrl } from '@/constants/baseUrl'
+import useAppNavigation from '../composables/useAppNavigation'
+import SinglePostFeed from './SinglePostFeed.vue'
+import LoadingSpinner from './LoadingSpinner.vue'
+import { baseUrl } from '../constants/baseUrl'
 import type { PostFeed } from '../types/postType'
 
-const { currentUser, loading, setLoading } = useGetUserStore()
+const { loading, setLoading } = useGetUserStore()
 const { toast, router } = useAppNavigation()
 
 const postsFeed = ref([] as PostFeed[])
@@ -57,4 +59,9 @@ onMounted(async () => {
   await getFeed()
 })
 </script>
-<template>GetFeed</template>
+<template>
+  <LoadingSpinner v-if="loading" />
+  <div v-else class="flex gap-3 flex-col">
+    <SinglePostFeed v-for="post in postsFeed" :key="post.id" :post="post" />
+  </div>
+</template>

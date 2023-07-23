@@ -24,7 +24,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <header class="header-nav absolute top-0 left-0 w-full z-40 max-w-screen-2xl">
+  <header class="header-nav shadow absolute top-0 left-0 w-full z-40 max-w-screen-2xl">
     <nav
       class="nav relative h-full px-5 flex items-center justify-between text-base lg:text-lg font-medium"
     >
@@ -69,55 +69,35 @@ onMounted(async () => {
         </div>
       </div>
 
-      <!-- User related -->
-      <div class="nav__user flex items-center gap-10">
-        <RouterLink
-          class="font-semibold uppercase text-base"
-          v-if="!currentUser.firstName"
-          to="/login"
-          >Log in</RouterLink
-        >
-        <RouterLink
-          v-if="!currentUser.firstName"
-          to="/signup"
-          class="btn-signup py-3 px-6 rounded-full transition-all duration-300 hover:-translate-y-[3px] flex items-center justify-center text-base bg-white hover:bg-[#f8f9fa] font-semibold uppercase"
-          >Sign up</RouterLink
-        >
-
-        <!-- User info -->
-        <div
-          v-if="currentUser.firstName"
-          class="user flex flex-col items-center gap-3 font-bold"
-          @click="isUserInfoDropDown = !isUserInfoDropDown"
-        >
-          <div class="user__photo-box flex gap-4 items-center">
-            <img
-              v-if="currentUser.photo"
-              class="card__picture-img object-cover h-10 w-10 inline-block rounded-full cursor-pointer"
-              :src="currentUser.photo"
-              :alt="currentUser.firstName + ' image'"
-            />
-            <button
-              class="bg-slate-300 rounded-full h-10 w-10 flex items-center justify-center cursor-pointer"
-              v-if="!currentUser.photo"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="#fff"
-                class="w-8 h-8"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </button>
-            <p class="username inline-block font-semibold cursor-pointer">
-              {{ currentUser.firstName }}
-            </p>
-          </div>
+      <!-- User info -->
+      <!-- TODO - set link to "/me" -->
+      <div
+        v-if="currentUser.firstName"
+        class="user flex flex-col items-center gap-3 font-bold"
+        @click="isUserInfoDropDown = !isUserInfoDropDown"
+      >
+        <div class="user__photo-box flex gap-3 items-center">
+          <img
+            v-if="currentUser.photo"
+            class="card__picture-img object-cover h-10 w-10 inline-block rounded-full cursor-pointer"
+            :src="currentUser.photo"
+            :alt="currentUser.firstName + ' image'"
+          />
+          <button
+            class="bg-slate-300 rounded-full h-10 w-10 flex items-center justify-center cursor-pointer"
+            v-if="!currentUser.photo"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff" class="w-8 h-8">
+              <path
+                fill-rule="evenodd"
+                d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+          <p class="username inline-block font-semibold cursor-pointer">
+            {{ currentUser.firstName }}
+          </p>
 
           <!-- Drop down modal -->
           <div
@@ -182,7 +162,6 @@ onMounted(async () => {
   transition: all 0.3s;
   position: fixed;
   background-color: #fff;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
 .user {

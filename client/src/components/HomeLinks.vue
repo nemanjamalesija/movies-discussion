@@ -1,39 +1,24 @@
 <script setup lang="ts">
 import useGetUserStore from '../hooks/useGetUserStore'
+import UserPhotoAndName from './ui/UserPhotoAndName.vue'
 
 const { currentUser } = useGetUserStore()
 </script>
 <template>
   <!-- user profile -->
+  <!-- TODO - set link to "/me" -->
   <aside>
-    <RouterLink to="/" class="block w-full">
-      <div
-        class="user__photo-box flex gap-3 items-center hover:bg-slate-200 py-1 px-2 -ml-2 rounded-md cursor-pointer mb-2"
-      >
-        <img
-          v-if="currentUser.photo"
-          class="card__picture-img object-cover h-10 w-10 inline-block rounded-full"
-          :src="currentUser.photo"
-          :alt="currentUser.firstName + ' image'"
-        />
-        <button
-          class="bg-gray-300 rounded-full h-10 w-10 flex items-center justify-center cursor-pointer"
-          v-if="!currentUser.photo"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff" class="w-8 h-8">
-            <path
-              fill-rule="evenodd"
-              d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </button>
-        <p class="username flex items-center gap-1 font-semibold text-base">
+    <UserPhotoAndName
+      class="flex gap-3 items-center hover:bg-slate-200 py-1 px-2 -ml-2 rounded-md cursor-pointer mb-2"
+      :currentUser="currentUser"
+    >
+      <template #user-photo-adjacent>
+        <h2 class="flex items-center gap-1 font-semibold text-base">
           <span>{{ currentUser.firstName }}</span>
           <span>{{ currentUser.lastName }}</span>
-        </p>
-      </div>
-    </RouterLink>
+        </h2>
+      </template>
+    </UserPhotoAndName>
 
     <!-- friends dummy -->
     <div class="link__group py-1 px-2 -ml-2 mb-2 rounded-md hover:bg-slate-200 cursor-pointer">

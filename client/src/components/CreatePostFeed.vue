@@ -1,46 +1,35 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import useGetUserStore from '../hooks/useGetUserStore'
+import UserPhotoAndName from './ui/UserPhotoAndName.vue'
 
 const isPostingPhoto = ref<boolean>(false)
 const { currentUser } = useGetUserStore()
 </script>
 <template>
   <div>
-    <div
-      class="flex gap-3 items-center rounded-t-md cursor-pointer border-b-2 border-b-slate-100 bg-white px-3 py-4"
+    <UserPhotoAndName
+      class="flex gap-3 items-center rounded-t-md cursor-pointer border-b border-b-slate-100 bg-white px-3 py-4"
+      :currentUser="currentUser"
     >
-      <img
-        v-if="currentUser.photo"
-        class="card__picture-img object-cover h-10 w-10 inline-block rounded-full"
-        :src="currentUser.photo"
-        :alt="currentUser.firstName + ' image'"
-      />
-      <button
-        class="bg-gray-300 rounded-full h-10 w-10 flex items-center justify-center cursor-pointer"
-        v-if="!currentUser.photo"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff" class="w-8 h-8">
-          <path
-            fill-rule="evenodd"
-            d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      </button>
-      <form action="" class="w-full">
-        <label for="default-search" class="mb-2 text-sm font-medium sr-only">Search</label>
-        <div>
-          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"></div>
-          <input
-            type="search"
-            id="default-search"
-            class="block w-full py-[0.5rem] px-6 pl-10 text-sm border border-slate-300 rounded-full bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-            :placeholder="`What's on your mind, ${currentUser.firstName} ?`"
-          />
-        </div>
-      </form>
-    </div>
+      <template #user-photo-adjacent>
+        <form action="" class="w-full">
+          <label for="default-search" class="mb-2 text-sm font-medium sr-only">Search</label>
+          <div>
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"></div>
+            <input
+              type="search"
+              id="default-search"
+              class="block w-full py-[0.5rem] px-6 pl-10 text-sm border border-slate-300 rounded-full bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+              :placeholder="`What's on your mind, ${currentUser.firstName} ?`"
+            />
+          </div>
+        </form>
+      </template>
+    </UserPhotoAndName>
+
+    <hr aria-orientation="horizontal" class="h-[1px] w-full bg-slate-100" />
+    <div></div>
     <div class="bg-white px-3 py-4 rounded-b-md">
       <button
         v-if="!isPostingPhoto"

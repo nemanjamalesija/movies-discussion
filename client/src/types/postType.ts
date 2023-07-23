@@ -7,4 +7,5 @@ export type PostFeed = {
   author: UserType
   friends: UserType | []
   friendRequests: UserType | []
+  createdAt: string
 }
