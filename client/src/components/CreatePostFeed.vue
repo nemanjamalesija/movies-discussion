@@ -22,7 +22,7 @@ const { currentUser } = useGetUserStore()
             <input
               type="search"
               id="default-search"
-              class="block w-full py-[0.5rem] px-6 pl-10 text-sm border border-slate-300 rounded-full bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+              class="block w-full py-[0.5rem] px-4 text-sm border border-slate-300 rounded-full bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
               :placeholder="`What's on your mind, ${currentUser.firstName} ?`"
             />
           </div>

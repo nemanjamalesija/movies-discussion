@@ -3,9 +3,12 @@ import type { PostFeed } from '@/types/postType'
 import { toRefs } from 'vue'
 import formatDate from '../helpers/formatDate'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
+import UserComments from './UserComments.vue'
+import useGetUserStore from '../hooks/useGetUserStore'
 
 const props = defineProps<{ post: PostFeed }>()
 const postRef = toRefs(props.post)
+const { currentUser } = useGetUserStore()
 </script>
 <template>
   <div class="shadow-sm rounded-md bg-white px-3 py-4 mt-3">
@@ -73,13 +76,45 @@ const postRef = toRefs(props.post)
         </p>
       </div>
 
-      <!-- comments -->
+      <!-- comments number -->
       <div>
         <p class="flex items-center gap-1 text-slate-500">
           <span>{{ postRef.comments.value.length }}</span>
           <span>{{ postRef.comments.value.length > 0 ? 'Comment' : 'Comments' }} </span>
         </p>
       </div>
+    </div>
+
+    <!-- user comments -->
+    <div class="flex flex-col gap-3">
+      <UserPhotoAndName
+        containerClass="flex gap-3 items-center rounded-t-md cursor-pointer border-b border-b-slate-100 bg-white px-3 py-4"
+        :currentUser="currentUser"
+        :wrapperSize="{ height: '2.2rem', width: '2.2rem' }"
+        :imageSize="{ height: '1.6rem', width: '1.6rem' }"
+      >
+        <template #user-photo-adjacent>
+          <form action="" class="w-full">
+            <label for="default-search" class="mb-2 text-sm font-medium sr-only">Search</label>
+            <div>
+              <div
+                class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+              ></div>
+              <input
+                type="search"
+                id="default-search"
+                class="block w-full py-[0.5rem] px-4 text-sm border border-slate-300 rounded-full bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                placeholder="Write a comment..."
+              />
+            </div>
+          </form>
+        </template>
+      </UserPhotoAndName>
+      <UserComments
+        v-for="comment in postRef.comments.value"
+        :key="comment._id"
+        :comment="comment"
+      />
     </div>
   </div>
 </template>

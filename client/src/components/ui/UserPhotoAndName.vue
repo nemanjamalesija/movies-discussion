@@ -9,7 +9,7 @@ const props = defineProps<{
 }>()
 </script>
 <template>
-  <RouterLink to="/me" class="block w-full">
+  <RouterLink to="/" class="block w-full">
     <div :class="props.containerClass">
       <div
         v-if="props.currentUser.photo"
