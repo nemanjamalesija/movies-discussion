@@ -5,7 +5,7 @@ export type PostFeed = {
   text: string
   image: string
   author: UserType
-  friends: UserType | []
-  friendRequests: UserType | []
+  likes: UserType[] | []
+  comments: UserType[] | []
   createdAt: string
 }

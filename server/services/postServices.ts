@@ -27,14 +27,14 @@ async function getUsersFeed(userId: string, offset: number, limit: number) {
     })
     .populate({
       path: 'likes',
-      select: ['name', 'lastName', 'photo'],
+      select: ['firstName', 'lastName', 'photo'],
     })
     .populate({
       path: 'comments',
       select: ['text', 'author'],
       populate: {
         path: 'author',
-        select: ['name', 'lastName', 'photo'],
+        select: ['firstName', 'lastName', 'photo'],
       },
     })
     .where('author')
