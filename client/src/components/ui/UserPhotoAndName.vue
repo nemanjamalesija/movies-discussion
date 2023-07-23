@@ -1,21 +1,39 @@
 <script setup lang="ts">
+import { string } from 'zod'
 import type { UserType } from '../../types/userType'
-const props = defineProps<{ class: string; currentUser: UserType }>()
+const props = defineProps<{
+  containerClass: string
+  currentUser: UserType
+  wrapperSize: { height: string; width: string }
+  imageSize: { height: string; width: string }
+}>()
 </script>
 <template>
-  <RouterLink to="/" class="block w-full">
-    <div :class="props.class">
-      <img
+  <RouterLink to="/me" class="block w-full">
+    <div :class="props.containerClass">
+      <div
         v-if="props.currentUser.photo"
-        class="object-cover h-10 w-10 inline-block rounded-full"
-        :src="props.currentUser.photo"
-        :alt="props.currentUser.firstName + ' image'"
-      />
-      <button
-        class="bg-gray-300 rounded-full h-10 w-10 flex items-center justify-center cursor-pointer"
-        v-if="!props.currentUser.photo"
+        class="bg-gray-300 rounded-full flex items-center justify-center cursor-pointer"
+        :style="{ height: props.wrapperSize.height, width: props.wrapperSize.width }"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff" class="w-8 h-8">
+        <img
+          class="object-cover inline-block rounded-full"
+          :src="props.currentUser.photo"
+          :alt="props.currentUser.firstName + ' image'"
+          :style="{ height: props.imageSize.height, width: props.imageSize.width }"
+        />
+      </div>
+      <button
+        v-if="!props.currentUser.photo"
+        class="bg-gray-300 rounded-full flex items-center justify-center cursor-pointer"
+        :style="{ height: props.wrapperSize.height, width: props.wrapperSize.width }"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="#fff"
+          :style="{ height: props.imageSize.height, width: props.imageSize.width }"
+        >
           <path
             fill-rule="evenodd"
             d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"

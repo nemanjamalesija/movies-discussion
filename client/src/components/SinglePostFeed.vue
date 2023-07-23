@@ -10,8 +10,10 @@ const postRef = toRefs(props.post)
 <template>
   <div class="shadow-sm rounded-md bg-white px-3 py-4 mt-3">
     <UserPhotoAndName
-      class="flex gap-3 items-center cursor-pointer"
+      containerClass="flex gap-3 items-center cursor-pointer"
       :currentUser="postRef.author.value"
+      :wrapperSize="{ height: '2.5rem', width: '2.5rem' }"
+      :imageSize="{ height: '2rem', width: '2rem' }"
     >
       <template #user-photo-adjacent>
         <div>

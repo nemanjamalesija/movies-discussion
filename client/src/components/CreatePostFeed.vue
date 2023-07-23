@@ -9,8 +9,10 @@ const { currentUser } = useGetUserStore()
 <template>
   <div>
     <UserPhotoAndName
-      class="flex gap-3 items-center rounded-t-md cursor-pointer border-b border-b-slate-100 bg-white px-3 py-4"
+      containerClass="flex gap-3 items-center rounded-t-md cursor-pointer border-b border-b-slate-100 bg-white px-3 py-4"
       :currentUser="currentUser"
+      :wrapperSize="{ height: '2.5rem', width: '2.5rem' }"
+      :imageSize="{ height: '2rem', width: '2rem' }"
     >
       <template #user-photo-adjacent>
         <form action="" class="w-full">
