@@ -72,12 +72,12 @@ const { currentUser } = useGetUserStore()
           </p>
           <div class="flex items-center gap-3">
             <button
-              class="block w-full py-3 px-6 bg-indigo-600 text-base hover:bg-indigo-700 cursor-pointer rounded-md text-white capitalize font-semibold disabled:bg-gray-500"
+              class="block w-full py-2 px-4 bg-indigo-600 text-base hover:bg-indigo-700 cursor-pointer rounded-md text-white capitalize font-semibold disabled:bg-gray-500 transition-all duration-150"
             >
               submit
             </button>
             <button
-              class="block w-full py-3 px-6 bg-slate-200 text-base hover:bg-slate-300 cursor-pointer rounded-md capitalize font-semibold"
+              class="block w-full py-2 px-4 bg-slate-200 text-base hover:bg-slate-300 cursor-pointer rounded-md capitalize font-semibold transition-all duration-150"
               @click.prevent="isPostingPhoto = false"
             >
               Cancel

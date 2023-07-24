@@ -16,14 +16,14 @@ console.log(props.comment)
 </script>
 <template>
   <UserPhotoAndName
-    containerClass="flex gap-3 items-center rounded-t-md cursor-pointer bg-white  pb-4 relative"
+    containerClass="flex gap-3 items-center rounded-t-md cursor-pointer bg-white  pb-2 "
     :currentUser="props.currentUser"
     :wrapperSize="{ height: '2.2rem', width: '2.2rem' }"
     :imageSize="{ height: '1.6rem', width: '1.6rem' }"
   >
     <template #user-photo-adjacent>
       <div
-        class="flex items-center gap-4"
+        class="flex items-center gap-4 w-[92%]"
         @mouseover="isEditCommentVisibile = true"
         @mouseout="isEditCommentVisibile = false"
       >
@@ -38,7 +38,11 @@ console.log(props.comment)
         </div>
         <div v-if="currentUser.id === comment.author.id" class="relative">
           <button
-            :class="isEditCommentVisibile ? 'bg-slate-100 rounded-full visible ' : 'invisible'"
+            :class="
+              isEditCommentVisibile
+                ? 'bg-slate-100 hover:bg-slate-200 rounded-full visible '
+                : 'invisible'
+            "
             @click="isEditModalVisibile = !isEditModalVisibile"
           >
             <svg
@@ -61,7 +65,7 @@ console.log(props.comment)
                 : 'flex-1 px-4 py-4 overflow-y-auto absolute text-sm edit-delete-comment invisible'
             "
           >
-            <!-- chat message -->
+            <!-- popup edit / delete comment -->
 
             <div class="flex items-center mb-4">
               <div class="flex-1 bg-white p-2 rounded-lg mb-2 relative shadow-xl">
