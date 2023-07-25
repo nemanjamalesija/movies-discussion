@@ -4,8 +4,8 @@ export type UserType = {
   lastName: string
   email?: string
   photo: string
-  friendRequests: UserType[]
-  friends: UserType[]
+  friendRequests?: UserType[]
+  friends?: UserType[]
   role?: string
   active?: boolean
 }

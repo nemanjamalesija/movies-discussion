@@ -9,7 +9,7 @@ const createComment = catchAsync(async (req: Request, res: Response) => {
   const targetPostId = req.params.id;
   const newCommentText = req.body.text;
 
-  const updatedPost = await commentServices.createComment(
+  const newComment = await commentServices.createComment(
     currentUserId,
     targetPostId,
     newCommentText
@@ -17,7 +17,7 @@ const createComment = catchAsync(async (req: Request, res: Response) => {
 
   res.status(200).json({
     message: 'success',
-    data: { updatedPost },
+    data: { newComment },
   });
 });
 

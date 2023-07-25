@@ -29,7 +29,7 @@ async function createComment(
 
   await targetPost.save();
 
-  return targetPost;
+  return newComment;
 }
 
 async function deleteComment(targetPostId: string) {

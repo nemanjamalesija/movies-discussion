@@ -1,15 +1,61 @@
 <script setup lang="ts">
-import type { PostFeed } from '@/types/postType'
+import type { CommentType, PostFeed } from '@/types/postType'
 import { toRefs, ref } from 'vue'
 import formatDate from '../helpers/formatDate'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
 import UserComments from './UserComments.vue'
+import useAppNavigation from '../composables/useAppNavigation'
 import useGetUserStore from '../hooks/useGetUserStore'
+import { baseUrl } from '../constants/baseUrl'
 
 const props = defineProps<{ post: PostFeed }>()
 const postRef = toRefs(props.post)
 const areCommentsVisible = ref<boolean>(false)
 const textAreaComment = ref<any>('')
+const emit = defineEmits(['updatePostComments'])
+const { toast, router } = useAppNavigation()
+const { loading, setLoading } = useGetUserStore()
+const newCommentText = ref<string>('')
+
+async function addComment(postId: string) {
+  const jwtToken = localStorage.getItem('jwt')
+
+  if (!jwtToken) {
+    toast.error('Could not get your session! Please log in.')
+    router.push('/')
+  }
+
+  try {
+    const response = await fetch(`${baseUrl}/comments/${postId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtToken
+      },
+      body: JSON.stringify({
+        text: newCommentText.value
+      })
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      toast.error(error.message)
+      router.push('/login')
+      return
+    } else {
+      const {
+        data: { newComment }
+      } = await response.json()
+
+      emit('updatePostComments', postId, newComment as CommentType)
+    }
+  } catch (error) {
+    toast.error('Oop, something went wrong!')
+    console.log(error)
+  } finally {
+    setLoading(false)
+  }
+}
 
 const { currentUser } = useGetUserStore()
 </script>
@@ -137,17 +183,17 @@ const { currentUser } = useGetUserStore()
         :imageSize="{ height: '1.6rem', width: '1.6rem' }"
       >
         <template #user-photo-adjacent>
-          <form action="" class="w-full">
+          <form @submit.prevent="addComment('64bc5e27b0dcfd2c7ad4e2a0')" class="w-full">
             <label for="default-search" class="mb-2 text-sm font-medium sr-only">Search</label>
             <div>
               <div
                 class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
               ></div>
-              <textarea
+              <input
                 class="block w-full py-[0.5rem] px-4 text-sm border border-slate-300 rounded-md bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
                 placeholder="Write a comment..."
-                :ref="textAreaComment"
-              ></textarea>
+                v-model="newCommentText"
+              />
             </div>
           </form>
         </template>
@@ -157,6 +203,7 @@ const { currentUser } = useGetUserStore()
         v-for="comment in postRef.comments.value"
         :key="comment._id"
         :comment="comment"
+        :author="comment.author.id"
         :currentUser="currentUser"
       />
     </div>
