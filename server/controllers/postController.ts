@@ -28,7 +28,7 @@ const getUsersFeed = catchAsync(async (req: Request, res: Response) => {
 const createPost = catchAsync(async (req: Request, res: Response) => {
   const { text, photo } = req.body;
 
-  const post = await postServices.createPost(
+  const newPost = await postServices.createPost(
     req.body.currentUser.id,
     text,
     photo
@@ -36,7 +36,7 @@ const createPost = catchAsync(async (req: Request, res: Response) => {
 
   res.status(200).json({
     message: 'sucess',
-    data: { post },
+    data: { newPost },
   });
 });
 

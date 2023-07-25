@@ -6,6 +6,10 @@ export default function formatDate(dateString: string) {
 
   const seconds = Math.floor((now.getTime() - date.getTime()) / 1000)
 
+  if (seconds === 0) {
+    return 'Just now'
+  }
+
   if (seconds < 60) {
     return `${seconds} second${seconds === 1 ? '' : 's'} ago`
   }

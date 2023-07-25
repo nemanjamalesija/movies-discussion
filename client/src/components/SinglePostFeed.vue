@@ -7,7 +7,7 @@ import UserComments from './UserComments.vue'
 import useAppNavigation from '../composables/useAppNavigation'
 import useGetUserStore from '../hooks/useGetUserStore'
 import { baseUrl } from '../constants/baseUrl'
-import useGetPostFeedStore from '../hooks/useGetPostFeedStore'
+import useGetPostsFeedStore from '../hooks/useGetPostsFeedStore'
 
 const props = defineProps<{ post: PostFeed }>()
 const postRef = toRefs(props.post)
@@ -15,7 +15,8 @@ const areCommentsVisible = ref<boolean>(false)
 const { toast, router } = useAppNavigation()
 const { setLoading } = useGetUserStore()
 const newCommentText = ref<string>('')
-const { postsFeed, handleUpdatePostComments } = useGetPostFeedStore()
+const { postsFeed, handleUpdatePostComments } = useGetPostsFeedStore()
+const { currentUser } = useGetUserStore()
 
 async function addComment(postId: string) {
   const jwtToken = localStorage.getItem('jwt')
@@ -57,8 +58,6 @@ async function addComment(postId: string) {
     setLoading(false)
   }
 }
-
-const { currentUser } = useGetUserStore()
 </script>
 <template>
   <div class="shadow-md rounded-md bg-white px-4 py-4 mt-3">
@@ -211,3 +210,4 @@ const { currentUser } = useGetUserStore()
 </template>
 
 <style scoped></style>
+../hooks/useGetPostsFeedStore

@@ -3,14 +3,16 @@ import { ref } from 'vue'
 import useGetUserStore from '../hooks/useGetUserStore'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
 import useAppNavigation from '../composables/useAppNavigation'
-import { baseUrl } from '@/constants/baseUrl'
+import { baseUrl } from '../constants/baseUrl'
+import useGetPostsFeedStore from '../hooks/useGetPostsFeedStore'
 
 const isPostingPhoto = ref<boolean>(false)
 const newPostText = ref<string>('')
 const { currentUser } = useGetUserStore()
 const { toast, router } = useAppNavigation()
+const { postsFeed } = useGetPostsFeedStore()
 
-async function createNewPost(postId: string) {
+async function createNewPost() {
   const jwtToken = localStorage.getItem('jwt')
 
   if (!jwtToken) {
@@ -19,7 +21,7 @@ async function createNewPost(postId: string) {
   }
 
   try {
-    const response = await fetch(`${baseUrl}/api/v1/posts`, {
+    const response = await fetch(`${baseUrl}/posts`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -37,11 +39,21 @@ async function createNewPost(postId: string) {
       return
     } else {
       const {
-        data: { post }
+        data: { newPost }
       } = await response.json()
 
-      // emit('updatePostComments', postId, newComment as CommentType)
-      // newCommentText.value = ''
+      postsFeed.value.unshift({
+        ...newPost,
+        author: {
+          _id: currentUser.value._id,
+          firstName: currentUser.value.firstName,
+          lastName: currentUser.value.lastName,
+          photo: currentUser.value.photo
+        }
+      })
+      newPostText.value = ''
+
+      console.log(postsFeed.value)
     }
   } catch (error) {
     toast.error('Oop, something went wrong!')
@@ -58,7 +70,7 @@ async function createNewPost(postId: string) {
       :imageSize="{ height: '2rem', width: '2rem' }"
     >
       <template #user-photo-adjacent>
-        <form action="" class="w-full">
+        <form action="" class="w-full" @submit.prevent="createNewPost">
           <label for="default-search" class="mb-2 text-sm font-medium sr-only">Search</label>
           <div>
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"></div>
@@ -67,6 +79,7 @@ async function createNewPost(postId: string) {
               id="default-search"
               class="block w-full py-[0.5rem] px-4 text-sm border border-slate-300 rounded-full bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
               :placeholder="`What's on your mind, ${currentUser.firstName} ?`"
+              v-model="newPostText"
             />
           </div>
         </form>

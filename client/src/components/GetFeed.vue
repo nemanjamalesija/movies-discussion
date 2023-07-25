@@ -6,12 +6,12 @@ import SinglePostFeed from './SinglePostFeed.vue'
 import LoadingSpinner from './LoadingSpinner.vue'
 import { baseUrl } from '../constants/baseUrl'
 import type { PostFeed } from '../types/postType'
-import useGetPostFeedStore from '../hooks/useGetPostFeedStore'
+import useGetPostsFeedStore from '../hooks/useGetPostsFeedStore'
 
 const { loading, setLoading } = useGetUserStore()
 const { toast, router } = useAppNavigation()
 
-const { postsFeed } = useGetPostFeedStore()
+const { postsFeed } = useGetPostsFeedStore()
 
 async function getFeed() {
   const jwtToken = localStorage.getItem('jwt')
@@ -64,3 +64,4 @@ onMounted(async () => {
     <SinglePostFeed v-for="post in postsFeed" :key="post._id" :post="post" />
   </div>
 </template>
+../hooks/useGetPostsFeedStore
