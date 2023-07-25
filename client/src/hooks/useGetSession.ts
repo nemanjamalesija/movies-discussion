@@ -27,7 +27,7 @@ export default async function useGetSession() {
         const error = await response.json()
         toast.error(error.message)
         setCurrentUser({
-          id: '',
+          _id: '',
           firstName: '',
           lastName: '',
           email: '',

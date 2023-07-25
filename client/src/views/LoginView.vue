@@ -59,7 +59,7 @@ async function loginUserHandler() {
         data: { user }
       } = data
 
-      const { id, firstName, lastName, email, friendRequests, friends, role, photo, active } =
+      const { _id, firstName, lastName, email, friendRequests, friends, role, photo, active } =
         user as UserType
 
       // grant access
@@ -67,7 +67,7 @@ async function loginUserHandler() {
 
       // set user in the state
       setCurrentUser({
-        id,
+        _id,
         firstName,
         lastName,
         email,

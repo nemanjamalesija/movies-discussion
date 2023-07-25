@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import useGetUserStore from '../hooks/useGetUserStore'
 import useAppNavigation from '../composables/useAppNavigation'
 import SinglePostFeed from './SinglePostFeed.vue'
 import LoadingSpinner from './LoadingSpinner.vue'
 import { baseUrl } from '../constants/baseUrl'
-import type { CommentType, PostFeed } from '../types/postType'
+import type { PostFeed } from '../types/postType'
+import useGetPostFeedStore from '../hooks/useGetPostFeedStore'
 
-const { loading, setLoading, currentUser } = useGetUserStore()
+const { loading, setLoading } = useGetUserStore()
 const { toast, router } = useAppNavigation()
 
-const postsFeed = ref([] as PostFeed[])
+const { postsFeed } = useGetPostFeedStore()
 
 async function getFeed() {
   const jwtToken = localStorage.getItem('jwt')
@@ -40,8 +41,6 @@ async function getFeed() {
         data: { posts }
       } = await response.json()
 
-      console.log(posts)
-
       postsFeed.value = posts as PostFeed[]
       console.log(postsFeed.value)
       setLoading(false)
@@ -55,28 +54,6 @@ async function getFeed() {
   }
 }
 
-function handleUpdatePostComments(id: string, newComment: CommentType) {
-  const currentPostIndex = postsFeed.value.findIndex((post) => post._id === id)
-
-  if (currentPostIndex !== -1) {
-    // Update the comments of the current post
-    postsFeed.value[currentPostIndex].comments.push({
-      _id: newComment._id,
-      text: newComment.text,
-      author: {
-        _id: currentUser.value._id,
-        firstName: currentUser.value.firstName,
-        lastName: currentUser.value.lastName,
-        photo: currentUser.value.photo
-      }
-    })
-
-    // Keep the post in the same position in the array, remove the post and add the updated post at the same index.
-    const currentPost = postsFeed.value[currentPostIndex]
-    postsFeed.value.splice(currentPostIndex, 1, currentPost)
-  }
-}
-
 onMounted(async () => {
   await getFeed()
 })
@@ -84,11 +61,6 @@ onMounted(async () => {
 <template>
   <LoadingSpinner v-if="loading" />
   <div v-else class="flex gap-3 flex-col">
-    <SinglePostFeed
-      @updatePostComments="handleUpdatePostComments"
-      v-for="post in postsFeed"
-      :key="post._id"
-      :post="post"
-    />
+    <SinglePostFeed v-for="post in postsFeed" :key="post._id" :post="post" />
   </div>
 </template>
