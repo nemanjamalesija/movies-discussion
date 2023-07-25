@@ -64,7 +64,7 @@ function handleUpdatePostComments(id: string, newComment: CommentType) {
       _id: newComment._id,
       text: newComment.text,
       author: {
-        id: currentUser.value.id,
+        _id: currentUser.value._id,
         firstName: currentUser.value.firstName,
         lastName: currentUser.value.lastName,
         photo: currentUser.value.photo

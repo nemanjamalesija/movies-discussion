@@ -11,10 +11,10 @@ import { baseUrl } from '../constants/baseUrl'
 const props = defineProps<{ post: PostFeed }>()
 const postRef = toRefs(props.post)
 const areCommentsVisible = ref<boolean>(false)
-const textAreaComment = ref<any>('')
+
 const emit = defineEmits(['updatePostComments'])
 const { toast, router } = useAppNavigation()
-const { loading, setLoading } = useGetUserStore()
+const { setLoading } = useGetUserStore()
 const newCommentText = ref<string>('')
 
 async function addComment(postId: string) {
@@ -48,6 +48,7 @@ async function addComment(postId: string) {
       } = await response.json()
 
       emit('updatePostComments', postId, newComment as CommentType)
+      newCommentText.value = ''
     }
   } catch (error) {
     toast.error('Oop, something went wrong!')
@@ -183,7 +184,7 @@ const { currentUser } = useGetUserStore()
         :imageSize="{ height: '1.6rem', width: '1.6rem' }"
       >
         <template #user-photo-adjacent>
-          <form @submit.prevent="addComment('64bc5e27b0dcfd2c7ad4e2a0')" class="w-full">
+          <form @submit.prevent="addComment(postRef._id.value)" class="w-full">
             <label for="default-search" class="mb-2 text-sm font-medium sr-only">Search</label>
             <div>
               <div
@@ -203,7 +204,6 @@ const { currentUser } = useGetUserStore()
         v-for="comment in postRef.comments.value"
         :key="comment._id"
         :comment="comment"
-        :author="comment.author.id"
         :currentUser="currentUser"
       />
     </div>
