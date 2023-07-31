@@ -30,5 +30,5 @@ export default function formatDate(dateString: string) {
   }
 
   // If it's more than 4 days, display the actual date in the format "YYYY-MM-DD"
-  return format(date, 'yyyy-MM-dd')
+  return format(date, 'd MMMM yyyy')
 }

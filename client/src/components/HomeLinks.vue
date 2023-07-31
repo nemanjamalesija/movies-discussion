@@ -11,8 +11,8 @@ const { currentUser } = useGetUserStore()
     <UserPhotoAndName
       containerClass="flex gap-3 items-center hover:bg-slate-200 py-1 px-2 -ml-2 rounded-md cursor-pointer mb-2"
       :currentUser="currentUser"
-      :wrapperSize="{ height: '2.5rem', width: '2.5rem' }"
-      :imageSize="{ height: '2rem', width: '2rem' }"
+      :wrapperSize="{ height: '3rem', width: '3rem' }"
+      :imageSize="{ height: '2.4rem', width: '2.4rem' }"
     >
       <template #user-photo-adjacent>
         <h2 class="flex items-center gap-1 font-semibold text-base">

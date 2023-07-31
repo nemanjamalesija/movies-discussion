@@ -26,10 +26,6 @@ async function getOneUser(targetUserId: string) {
     .populate({
       path: 'friends',
       select: ['name', 'lastName', 'photo'],
-    })
-    .populate({
-      path: 'friendRequests',
-      select: ['name', 'lastName', 'photo'],
     });
 
   if (!targetUser) {

@@ -9,7 +9,7 @@ const props = defineProps<{
 }>()
 </script>
 <template>
-  <RouterLink to="/" class="block w-full">
+  <RouterLink :to="`/${props.currentUser._id}`" class="block">
     <div :class="props.containerClass">
       <div
         v-if="props.currentUser.photo"
@@ -25,7 +25,7 @@ const props = defineProps<{
       </div>
       <button
         v-if="!props.currentUser.photo"
-        class="bg-gray-300 rounded-full flex items-center justify-center cursor-pointer"
+        class="bg-gray-300 rounded-full flex items-center justify-center cursor-pointer border-2 border-white"
         :style="{ height: props.wrapperSize.height, width: props.wrapperSize.width }"
       >
         <svg

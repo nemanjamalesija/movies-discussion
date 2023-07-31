@@ -63,29 +63,29 @@ async function createNewPost() {
 </script>
 <template>
   <div>
-    <UserPhotoAndName
-      containerClass="flex gap-3 items-center rounded-t-md cursor-pointer border-b border-b-slate-100 bg-white px-4  py-4"
-      :currentUser="currentUser"
-      :wrapperSize="{ height: '2.5rem', width: '2.5rem' }"
-      :imageSize="{ height: '2rem', width: '2rem' }"
-    >
-      <template #user-photo-adjacent>
-        <form action="" class="w-full" @submit.prevent="createNewPost">
-          <label for="default-search" class="mb-2 text-sm font-medium sr-only">Search</label>
-          <div>
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"></div>
-            <input
-              type="search"
-              id="default-search"
-              class="block w-full py-[0.5rem] px-4 text-sm border border-slate-300 rounded-full bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-              :placeholder="`What's on your mind, ${currentUser.firstName} ?`"
-              v-model="newPostText"
-            />
-          </div>
-        </form>
-      </template>
-    </UserPhotoAndName>
-
+    <div class="flex w-full px-3 py-4 items-center border-b border-b-slate-100 bg-white">
+      <UserPhotoAndName
+        containerClass="flex gap-3 items-center rounded-t-md cursor-pointer  "
+        :currentUser="currentUser"
+        :wrapperSize="{ height: '3rem', width: '3rem' }"
+        :imageSize="{ height: '2.4rem', width: '2.4rem' }"
+      >
+        <template #user-photo-adjacent> </template>
+      </UserPhotoAndName>
+      <form action="" class="w-full" @submit.prevent="createNewPost">
+        <label for="default-search" class="mb-2 text-sm font-medium sr-only">Search</label>
+        <div>
+          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"></div>
+          <input
+            type="search"
+            id="default-search"
+            class="block w-full py-[0.5rem] px-4 text-sm border border-slate-300 rounded-full bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+            :placeholder="`What's on your mind, ${currentUser.firstName} ?`"
+            v-model="newPostText"
+          />
+        </div>
+      </form>
+    </div>
     <hr aria-orientation="horizontal" class="h-[1px] w-full bg-slate-100" />
     <div></div>
     <div class="bg-white px-3 py-4 rounded-b-md">

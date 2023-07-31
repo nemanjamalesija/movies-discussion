@@ -64,4 +64,3 @@ onMounted(async () => {
     <SinglePostFeed v-for="post in postsFeed" :key="post._id" :post="post" />
   </div>
 </template>
-../hooks/useGetPostsFeedStore

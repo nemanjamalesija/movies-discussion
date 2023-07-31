@@ -64,8 +64,8 @@ async function addComment(postId: string) {
     <UserPhotoAndName
       containerClass="flex gap-3 items-center cursor-pointer"
       :currentUser="postRef.author.value"
-      :wrapperSize="{ height: '2.5rem', width: '2.5rem' }"
-      :imageSize="{ height: '2rem', width: '2rem' }"
+      :wrapperSize="{ height: '3rem', width: '3rem' }"
+      :imageSize="{ height: '2.4rem', width: '2.4rem' }"
     >
       <template #user-photo-adjacent>
         <div>
