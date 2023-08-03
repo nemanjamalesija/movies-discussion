@@ -20,6 +20,8 @@ router
   .post(userController.createUser)
   .patch(userController.acceptFriendRequest);
 
+router.get('/getSearched', userController.getSearched);
+
 router.get('/:id', userController.getOneUser);
 
 /* USER FRIENDS RELATED */

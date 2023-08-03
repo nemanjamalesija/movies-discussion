@@ -35,6 +35,27 @@ async function getOneUser(targetUserId: string) {
   return targetUser;
 }
 
+async function getSearched(firstName: string, lastName: string, limit: number) {
+  if (limit < 0 || Number.isNaN(limit))
+    throw new AppError('Must provide limit in query string', 400);
+
+  const users = await User.find({
+    $and: [
+      { firstName: { $regex: new RegExp(firstName, 'i') } },
+      { firstName: { $ne: 'Test' } },
+    ],
+    lastName: { $regex: new RegExp(lastName, 'i') },
+  })
+    .select(['firstName', 'lastName', 'photo'])
+    .limit(limit)
+    .sort({
+      firstName: 'asc',
+      lastName: 'asc',
+    });
+
+  return users;
+}
+
 async function addFriend(currentUserId: string, targetUserId: string) {
   const currentUser = await User.findById(currentUserId);
   const targetUser = await User.findById(targetUserId);
@@ -131,6 +152,7 @@ async function removeFriend(currentUserId: string, targetUserId: string) {
 
 export default {
   getOneUser,
+  getSearched,
   addFriend,
   acceptFriendRequest,
   dennyFriendRequest,

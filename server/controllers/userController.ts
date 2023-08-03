@@ -37,6 +37,18 @@ const getOneUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+async function getSearched(req: Request, res: Response) {
+  const { firstName, lastName, limit } = req.query;
+
+  const users = await userServices.getSearched(
+    firstName as string,
+    lastName as string,
+    parseInt(limit as string)
+  );
+
+  res.json(users);
+}
+
 const addFriend = catchAsync(async (req: Request, res: Response) => {
   const currentUserId = req.body.currentUser.id;
   const targetUserId = req.body.id;
@@ -88,6 +100,7 @@ const removeFriend = catchAsync(async (req: Request, res: Response) => {
 export default {
   getAllUsers,
   createUser,
+  getSearched,
   addFriend,
   acceptFriendRequest,
   getOneUser,
