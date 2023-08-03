@@ -40,10 +40,7 @@ async function getSearched(firstName: string, lastName: string, limit: number) {
     throw new AppError('Must provide limit in query string', 400);
 
   const users = await User.find({
-    $and: [
-      { firstName: { $regex: new RegExp(firstName, 'i') } },
-      { firstName: { $ne: 'Test' } },
-    ],
+    $and: [{ firstName: { $regex: new RegExp(firstName, 'i') } }],
     lastName: { $regex: new RegExp(lastName, 'i') },
   })
     .select(['firstName', 'lastName', 'photo'])
