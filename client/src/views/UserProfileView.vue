@@ -5,10 +5,18 @@ import { baseUrl } from '@/constants/baseUrl'
 import type { UserType } from '../types/userType'
 import { onMounted, ref } from 'vue'
 import UserPhotoAndName from '../components/ui/UserPhotoAndName.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
 const { route, router, toast } = useAppNavigation()
 const { loading, setLoading } = useGetUserStore()
+
+type visitedUserAditionalInfoType = {
+  isAlreadyFriends?: boolean
+  isFriendRequested?: boolean
+}
+
 const visitedUser = ref({} as UserType)
+const visitedUserAditionalInfo = ref({} as visitedUserAditionalInfoType)
 
 async function getVisitedUser() {
   const jwtToken = localStorage.getItem('jwt')
@@ -35,12 +43,14 @@ async function getVisitedUser() {
       return
     } else {
       const {
-        data: { targetUser }
+        data: { isAlreadyFriends, isFriendRequested, targetUser }
       } = await response.json()
 
       setLoading(false)
       visitedUser.value = targetUser as UserType
+      visitedUserAditionalInfo.value = { isAlreadyFriends, isFriendRequested }
       console.log(visitedUser.value)
+      console.log(visitedUserAditionalInfo.value)
     }
   } catch (error) {
     toast.error('Oop, something went wrong!')
@@ -56,7 +66,8 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <header class="bg-white h-[70vh] pt-0 pl-32 pb-32 pr-32 shadow-sm relative">
+  <LoadingSpinner v-if="loading" class="mt-40" />
+  <header v-else class="bg-white h-[70vh] pt-0 pl-32 pb-32 pr-32 shadow-sm relative">
     <div class="bg-gray-200 h-full rounded-md"></div>
     <UserPhotoAndName
       containerClass="flex gap-5 items-center absolute bottom-[2%] left-[10%] cursor-default"
@@ -78,5 +89,22 @@ onMounted(async () => {
         </div>
       </template>
     </UserPhotoAndName>
+
+    <!-- conditional rendering based on friend status and current user -->
+    <button class="px-6 py-3 bg-gray-200 absolute bottom-[2%] right-[10%] font-bold rounded-md">
+      <p class="flex items-center gap-2 text-base">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="w-4 h-4"
+        >
+          <path
+            d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z"
+          />
+        </svg>
+        <span>Edit profile</span>
+      </p>
+    </button>
   </header>
 </template>

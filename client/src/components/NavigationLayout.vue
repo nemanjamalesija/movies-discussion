@@ -107,7 +107,7 @@ onMounted(async () => {
                 : 'account bg-white flex flex-col text-base gap-2 rounded-md w-max invisible opacity-0'
             "
           >
-            <RouterLink class="nav__link inline-block" to="/">
+            <RouterLink class="nav__link inline-block" :to="`/${currentUser._id}`">
               <div class="flex items-center gap-2">
                 <p class="bg-slate-300 rounded-full h-9 w-9 flex items-center justify-center">
                   <svg
