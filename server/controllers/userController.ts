@@ -46,7 +46,10 @@ async function getSearched(req: Request, res: Response) {
     parseInt(limit as string)
   );
 
-  res.json(users);
+  res.status(200).json({
+    message: 'sucess',
+    data: { users },
+  });
 }
 
 const addFriend = catchAsync(async (req: Request, res: Response) => {

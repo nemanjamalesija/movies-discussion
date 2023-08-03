@@ -3,6 +3,7 @@ import useGetUserStore from '../hooks/useGetUserStore'
 import { onMounted, ref } from 'vue'
 import useAppNavigation from '../composables/useAppNavigation'
 import logoutHandler from '../helpers/logoutHandler'
+import SearchUserInput from './ui/SearchUserInput.vue'
 
 const { currentUser, setCurrentUser } = useGetUserStore()
 const { router, toast } = useAppNavigation()
@@ -40,32 +41,7 @@ onMounted(async () => {
           </RouterLink>
 
           <!-- Search input -->
-          <label for="default-search" class="mb-2 text-sm font-medium sr-only">Search</label>
-          <div class="relative">
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <svg
-                class="w-4 h-4 text-slate-500"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                />
-              </svg>
-            </div>
-            <input
-              type="search"
-              id="default-search"
-              class="block w-full py-[0.5rem] px-6 pl-10 text-sm border border-slate-300 rounded-full bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-              placeholder="Search"
-            />
-          </div>
+          <SearchUserInput />
         </div>
       </div>
 
