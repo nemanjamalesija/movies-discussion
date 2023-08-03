@@ -9,22 +9,26 @@ import NavInputSearchedUser from '../NavInputSearchedUser.vue'
 const tryUser = ref<string>()
 const searchedUsers = ref([] as UserType[])
 const loadingUsers = ref<boolean>(false)
+const showSearchedUsers = ref<boolean>(false)
 const { toast, router } = useAppNavigation()
 
 async function getSearchedUSers() {
   const jwtToken = localStorage.getItem('jwt')
 
-  if (!tryUser.value) {
-    searchedUsers.value = []
-    return
-  }
-
-  const [firstName, lastName] = tryUser.value.split(' ')
-
   if (!jwtToken) {
     toast.error('Could not get your session! Please log in.')
     router.push('/')
   }
+
+  showSearchedUsers.value = true
+
+  if (!tryUser.value) {
+    searchedUsers.value = []
+    showSearchedUsers.value = false
+    return
+  }
+
+  const [firstName, lastName] = tryUser.value.split(' ')
 
   loadingUsers.value = true
 
@@ -94,7 +98,10 @@ async function getSearchedUSers() {
         />
       </div>
     </div>
-    <div class="bg-white absolute top-[105%] left-0 w-full rounded-md shadow-lg p-3">
+    <div
+      v-if="showSearchedUsers"
+      class="bg-white absolute top-[105%] left-0 w-full rounded-md shadow-lg p-3"
+    >
       <LoadingSpinner v-if="loadingUsers" />
       <p
         v-if="searchedUsers?.length === 0 && !loadingUsers"
@@ -102,7 +109,8 @@ async function getSearchedUSers() {
       >
         No results found
       </p>
-      <template v-else>
+
+      <template v-if="!loadingUsers && searchedUsers.length >= 0">
         <NavInputSearchedUser v-for="user in searchedUsers" :key="user._id" :user="user" />
       </template>
     </div>
