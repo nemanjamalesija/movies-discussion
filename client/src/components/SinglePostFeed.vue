@@ -176,28 +176,26 @@ async function addComment(postId: string) {
 
     <!-- user comments -->
     <div v-show="areCommentsVisible" class="flex flex-col gap-3">
-      <UserPhotoAndName
-        containerClass="flex gap-3 items-center rounded-t-md cursor-pointer border-b border-b-slate-100 bg-white  py-4"
-        :currentUser="currentUser"
-        :wrapperSize="{ height: '2.2rem', width: '2.2rem' }"
-        :imageSize="{ height: '1.6rem', width: '1.6rem' }"
-      >
-        <template #user-photo-adjacent>
-          <form @submit.prevent="addComment(postRef._id.value)" class="w-full">
-            <label for="default-search" class="mb-2 text-sm font-medium sr-only">Search</label>
-            <div>
-              <div
-                class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
-              ></div>
-              <input
-                class="block w-full py-[0.5rem] px-4 text-sm border border-slate-300 rounded-md bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-                placeholder="Write a comment..."
-                v-model="newCommentText"
-              />
-            </div>
-          </form>
-        </template>
-      </UserPhotoAndName>
+      <div class="flex items-center">
+        <UserPhotoAndName
+          containerClass="flex gap-3 items-center rounded-t-md cursor-pointer  bg-white  py-4"
+          :currentUser="currentUser"
+          :wrapperSize="{ height: '2.5rem', width: '2.5rem' }"
+          :imageSize="{ height: '2rem', width: '2rem' }"
+        >
+        </UserPhotoAndName>
+        <form @submit.prevent="addComment(postRef._id.value)" class="w-full">
+          <label for="default-search" class="mb-2 text-sm font-medium sr-only">Search</label>
+          <div>
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"></div>
+            <input
+              class="block w-full py-[0.5rem] px-4 text-sm border border-slate-300 rounded-md bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+              placeholder="Write a comment..."
+              v-model="newCommentText"
+            />
+          </div>
+        </form>
+      </div>
 
       <UserComments
         v-for="comment in postRef.comments.value"

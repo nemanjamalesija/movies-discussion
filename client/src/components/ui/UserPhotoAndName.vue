@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { string } from 'zod'
 import type { UserType } from '../../types/userType'
 const props = defineProps<{
   containerClass: string
