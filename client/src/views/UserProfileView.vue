@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import useGetUserStore from '../hooks/useGetUserStore'
 import useAppNavigation from '../composables/useAppNavigation'
-import { baseUrl } from '@/constants/baseUrl'
+import { baseUrl } from '../constants/baseUrl'
 import type { UserType } from '../types/userType'
 import { onMounted, ref } from 'vue'
 import UserPhotoAndName from '../components/ui/UserPhotoAndName.vue'
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import LoadingSpinner from '../components/LoadingSpinner.vue'
+import { watch } from 'vue'
 
 const { route, router, toast } = useAppNavigation()
 const { loading, setLoading, currentUser } = useGetUserStore()
@@ -65,6 +66,15 @@ async function getVisitedUser() {
 onMounted(async () => {
   await getVisitedUser()
 })
+
+watch(
+  () => route.params.id,
+  async (newId, oldId) => {
+    if (newId !== oldId) {
+      await getVisitedUser()
+    }
+  }
+)
 </script>
 <template>
   <LoadingSpinner v-if="loading" class="mt-40" />

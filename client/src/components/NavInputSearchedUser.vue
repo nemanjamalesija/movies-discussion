@@ -5,7 +5,7 @@ import UserPhotoAndName from './ui/UserPhotoAndName.vue'
 const props = defineProps<{ user: UserType }>()
 </script>
 <template>
-  <div class="searched-user">
+  <div class="searched-user" @click="$emit('onClose')">
     <UserPhotoAndName
       containerClass="flex gap-3 items-center rounded-t-md cursor-pointer "
       :currentUser="props.user"

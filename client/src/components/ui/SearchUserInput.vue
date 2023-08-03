@@ -12,6 +12,11 @@ const loadingUsers = ref<boolean>(false)
 const showSearchedUsers = ref<boolean>(false)
 const { toast, router } = useAppNavigation()
 
+function closeShowSeachedUsers() {
+  showSearchedUsers.value = false
+  tryUser.value = ''
+}
+
 async function getSearchedUSers() {
   const jwtToken = localStorage.getItem('jwt')
 
@@ -111,7 +116,12 @@ async function getSearchedUSers() {
       </p>
 
       <template v-if="!loadingUsers && searchedUsers.length >= 0">
-        <NavInputSearchedUser v-for="user in searchedUsers" :key="user._id" :user="user" />
+        <NavInputSearchedUser
+          v-for="user in searchedUsers"
+          :key="user._id"
+          :user="user"
+          @onClose="closeShowSeachedUsers"
+        />
       </template>
     </div>
   </div>
