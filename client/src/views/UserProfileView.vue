@@ -75,10 +75,10 @@ watch(
 <template>
   <LoadingSpinner v-if="loading" class="mt-40" />
   <section v-else class="bg-white">
-    <header class="h-[70vh] max-w-7xl pb-32 shadow-sm relative mx-auto">
+    <header class="h-[70vh] max-w-7xl pb-32 relative mx-auto">
       <div class="bg-gray-200 h-full rounded-md"></div>
       <UserPhotoAndName
-        containerClass="flex gap-5 items-center absolute bottom-[2%] left-[10%] cursor-default"
+        containerClass="flex gap-5 items-center absolute bottom-[2%] left-[2%] cursor-default"
         :currentUser="visitedUser"
         :wrapperSize="{ height: '10rem', width: '10rem' }"
         :imageSize="{ height: '9rem', width: '9rem' }"
@@ -101,7 +101,7 @@ watch(
       <!-- conditional rendering based on friend status and current user -->
 
       <!-- if current user is the target user -->
-      <div v-if="currentUser._id === visitedUser._id" class="absolute bottom-[2%] right-[10%]">
+      <div v-if="currentUser._id === visitedUser._id" class="absolute bottom-[2%] right-[1.2%]">
         <button class="px-5 py-2 bg-gray-200 font-bold rounded-md">
           <p class="flex items-center gap-2 text-base">
             <svg
@@ -122,7 +122,7 @@ watch(
       <!-- if target user is already a friend -->
       <div
         v-if="visitedUserAditionalInfo.isAlreadyFriends"
-        class="absolute bottom-[2%] right-[10%]"
+        class="absolute bottom-[2%] right-[1.2%]"
       >
         <button class="px-5 py-2 bg-gray-200 font-bold rounded-md">
           <p class="flex items-center gap-2 text-base">
@@ -146,9 +146,9 @@ watch(
     </header>
   </section>
   <section>
-    <div class="grid grid-cols-[2fr,3fr] gap-5 max-w-7xl mx-auto">
+    <div class="grid grid-cols-[2.2fr,3fr] gap-5 max-w-[1250px] mx-auto">
       <!-- user friends -->
-      <section class="shadow-md rounded-md bg-white px-4 py-4 mt-3">
+      <section class="shadow-md rounded-md bg-white px-4 py-4 mt-3 h-fit">
         <div class="mb-3">
           <h3 class="font-semibold text-lg">Friends</h3>
           <p class="flex items-center gap-1 text-slate-500 text-base -mt-1">
@@ -164,7 +164,6 @@ watch(
       </section>
 
       <!-- user posts -->
-
       <div class="w-full" v-if="visitedUser.posts">
         <SinglePostFeed
           v-for="post in visitedUser.posts"
@@ -173,7 +172,10 @@ watch(
           :currentUser="visitedUser"
           :posts="visitedUser.posts"
         />
+        <p class="text-slate-500 font-semibold text-base text-center mt-4">No more posts to show</p>
       </div>
     </div>
   </section>
 </template>
+
+<style scoped></style>
