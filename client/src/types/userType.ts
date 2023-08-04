@@ -1,3 +1,5 @@
+import type { PostFeed } from './postType'
+
 export type UserType = {
   _id: string
   firstName: string
@@ -6,6 +8,7 @@ export type UserType = {
   photo: string
   friendRequests?: UserType[]
   friends?: UserType[]
+  posts?: PostFeed[]
   role?: string
   active?: boolean
 }
