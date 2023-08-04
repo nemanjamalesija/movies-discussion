@@ -123,6 +123,11 @@ const getUserWithToken = catchAsync(
     const currentUser = await authenticateUser(req, res, next);
 
     if (currentUser) {
+      await currentUser.populate({
+        path: 'friendRequests',
+        select: ['firstName', 'lastName', 'photo'],
+      });
+
       res.status(200).json({
         status: 'success',
         data: {

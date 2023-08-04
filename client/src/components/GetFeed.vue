@@ -12,8 +12,6 @@ const { loading, setLoading, currentUser } = useGetUserStore()
 const { toast, router } = useAppNavigation()
 const { postsFeed } = useGetPostsFeedStore()
 
-console.log(currentUser.value)
-
 async function getFeed() {
   const jwtToken = localStorage.getItem('jwt')
 
