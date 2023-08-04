@@ -44,16 +44,53 @@ async function getVisitedUser() {
 
       setLoading(false)
       visitedUser.value = targetUser as UserType
-      console.log(visitedUser.value)
-
+      console.log(isFriendRequested)
       visitedUserAditionalInfo.value = { isAlreadyFriends, isFriendRequested }
-
-      console.log(visitedUser.value.posts)
+      console.log(visitedUserAditionalInfo.value)
     }
   } catch (error) {
     toast.error('Oop, something went wrong!')
     console.log(error)
     setLoading(false)
+  } finally {
+    setLoading(false)
+  }
+}
+
+// /users/add
+async function addFriend(userId: string) {
+  const jwtToken = localStorage.getItem('jwt')
+
+  if (!jwtToken) {
+    toast.error('Could not get your session! Please log in.')
+    router.push('/')
+  }
+
+  try {
+    const response = await fetch(`${baseUrl}/users/add`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtToken
+      },
+      body: JSON.stringify({
+        id: userId
+      })
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      toast.error(error.message)
+      router.push('/login')
+      return
+    } else {
+      await response.json()
+
+      visitedUserAditionalInfo.value = { isAlreadyFriends: undefined, isFriendRequested: true }
+    }
+  } catch (error) {
+    toast.error('Oop, something went wrong!')
+    console.log(error)
   } finally {
     setLoading(false)
   }
@@ -143,6 +180,59 @@ watch(
           </p>
         </button>
       </div>
+
+      <!-- if target user is NOT a friend -->
+      <div
+        v-if="!visitedUserAditionalInfo.isAlreadyFriends"
+        class="absolute bottom-[2%] right-[1.2%]"
+      >
+        <button
+          class="px-5 py-2 bg-indigo-600 font-bold rounded-md"
+          @click="addFriend(visitedUser._id)"
+        >
+          <p class="flex items-center gap-2 text-base text-white">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="w-5 h-5"
+            >
+              <path
+                d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"
+              />
+            </svg>
+
+            <span>Add friend</span>
+          </p>
+        </button>
+      </div>
+
+      <!-- friend request is sent -->
+      <div
+        v-if="
+          !visitedUserAditionalInfo.isAlreadyFriends && visitedUserAditionalInfo.isFriendRequested
+        "
+        class="absolute bottom-[2%] right-[1.2%]"
+      >
+        <button class="px-5 py-2 bg-indigo-600 font-bold rounded-md">
+          <p class="flex items-center gap-2 text-base text-white">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="w-5 h-5"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z"
+                clip-rule="evenodd"
+              />
+            </svg>
+
+            <span>Invitation sent</span>
+          </p>
+        </button>
+      </div>
     </header>
   </section>
   <section>
@@ -172,7 +262,12 @@ watch(
           :currentUser="visitedUser"
           :posts="visitedUser.posts"
         />
-        <p class="text-slate-500 font-semibold text-base text-center mt-4">No more posts to show</p>
+        <p
+          v-if="visitedUser.posts.length > 0"
+          class="text-slate-500 font-semibold text-base text-center mt-4"
+        >
+          No more posts to show
+        </p>
       </div>
     </div>
   </section>

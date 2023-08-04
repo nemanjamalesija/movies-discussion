@@ -12,11 +12,16 @@ const getOneUser = catchAsync(async (req: Request, res: Response) => {
 
   if (req.body.currentUser.id !== targetUser.id) {
     const isFriendRequested = targetUser.friendRequests.some(
-      (friend) => friend.id === req.body.currentUser.id
+      (requestId) => requestId.toString() === req.body.currentUser.id
     );
 
+    console.log(isFriendRequested);
+
+    targetUser.friendRequests.forEach((f) => console.log(f.toString()));
+    console.log(req.body.currentUser.id);
+
     const isAlreadyFriends = targetUser.friends.some(
-      (friend) => friend.id === req.body.currentUser.id
+      (friendId) => friendId.toString() === req.body.currentUser.id
     );
 
     res.status(200).json({
@@ -27,14 +32,13 @@ const getOneUser = catchAsync(async (req: Request, res: Response) => {
         targetUser,
       },
     });
-  }
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      targetUser,
-    },
-  });
+  } else
+    res.status(200).json({
+      status: 'success',
+      data: {
+        targetUser,
+      },
+    });
 });
 
 async function getSearched(req: Request, res: Response) {
