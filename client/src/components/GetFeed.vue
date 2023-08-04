@@ -8,9 +8,8 @@ import { baseUrl } from '../constants/baseUrl'
 import type { PostFeed } from '../types/postType'
 import useGetPostsFeedStore from '../hooks/useGetPostsFeedStore'
 
-const { loading, setLoading } = useGetUserStore()
+const { loading, setLoading, currentUser } = useGetUserStore()
 const { toast, router } = useAppNavigation()
-
 const { postsFeed } = useGetPostsFeedStore()
 
 async function getFeed() {
@@ -61,6 +60,12 @@ onMounted(async () => {
 <template>
   <LoadingSpinner v-if="loading" />
   <div v-else class="flex gap-3 flex-col">
-    <SinglePostFeed v-for="post in postsFeed" :key="post._id" :post="post" />
+    <SinglePostFeed
+      v-for="post in postsFeed"
+      :key="post._id"
+      :posts="postsFeed"
+      :post="post"
+      :currentUser="currentUser"
+    />
   </div>
 </template>

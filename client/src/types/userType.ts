@@ -12,3 +12,8 @@ export type UserType = {
   role?: string
   active?: boolean
 }
+
+export type visitedUserAditionalInfoType = {
+  isAlreadyFriends?: boolean
+  isFriendRequested?: boolean
+}

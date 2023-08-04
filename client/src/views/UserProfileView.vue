@@ -11,15 +11,8 @@ import SinglePostFeed from '../components/SinglePostFeed.vue'
 import VisitedUsersFriends from '../components/VisitedUsersFriends.vue'
 
 const { route, router, toast } = useAppNavigation()
-const { loading, setLoading, currentUser } = useGetUserStore()
-
-type visitedUserAditionalInfoType = {
-  isAlreadyFriends?: boolean
-  isFriendRequested?: boolean
-}
-
-const visitedUser = ref({} as UserType)
-const visitedUserAditionalInfo = ref({} as visitedUserAditionalInfoType)
+const { loading, setLoading, currentUser, visitedUser, visitedUserAditionalInfo } =
+  useGetUserStore()
 
 async function getVisitedUser() {
   const jwtToken = localStorage.getItem('jwt')
@@ -51,11 +44,11 @@ async function getVisitedUser() {
 
       setLoading(false)
       visitedUser.value = targetUser as UserType
+      console.log(visitedUser.value)
 
       visitedUserAditionalInfo.value = { isAlreadyFriends, isFriendRequested }
 
-      console.log(visitedUser.value)
-      console.log(visitedUserAditionalInfo.value)
+      console.log(visitedUser.value.posts)
     }
   } catch (error) {
     toast.error('Oop, something went wrong!')
@@ -172,8 +165,14 @@ watch(
 
       <!-- user posts -->
       <RouterLink :to="`/${visitedUser._id}`">
-        <div class="w-full">
-          <SinglePostFeed v-for="post in visitedUser.posts" :key="post._id" :post="post" />
+        <div class="w-full" v-if="visitedUser.posts">
+          <SinglePostFeed
+            v-for="post in visitedUser.posts"
+            :key="post._id"
+            :post="post"
+            :currentUser="visitedUser"
+            :posts="visitedUser.posts"
+          />
         </div>
       </RouterLink>
     </div>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { CommentType, PostFeed } from '@/types/postType'
+import type { CommentType, PostFeed } from '../types/postType'
+import type { UserType } from '../types/userType'
 import { toRefs, ref } from 'vue'
 import formatDate from '../helpers/formatDate'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
@@ -9,14 +10,13 @@ import useGetUserStore from '../hooks/useGetUserStore'
 import { baseUrl } from '../constants/baseUrl'
 import useGetPostsFeedStore from '../hooks/useGetPostsFeedStore'
 
-const props = defineProps<{ post: PostFeed }>()
+const props = defineProps<{ post: PostFeed; posts: PostFeed[]; currentUser: UserType }>()
 const postRef = toRefs(props.post)
 const areCommentsVisible = ref<boolean>(false)
 const { toast, router } = useAppNavigation()
 const { setLoading } = useGetUserStore()
 const newCommentText = ref<string>('')
 const { postsFeed, handleUpdatePostComments } = useGetPostsFeedStore()
-const { currentUser } = useGetUserStore()
 
 async function addComment(postId: string) {
   const jwtToken = localStorage.getItem('jwt')
@@ -48,7 +48,7 @@ async function addComment(postId: string) {
         data: { newComment }
       } = await response.json()
 
-      handleUpdatePostComments(currentUser.value, postId, newComment as CommentType)
+      handleUpdatePostComments(props.currentUser, props.posts, postId, newComment as CommentType)
       newCommentText.value = ''
     }
   } catch (error) {
@@ -179,7 +179,7 @@ async function addComment(postId: string) {
       <div class="flex items-center">
         <UserPhotoAndName
           containerClass="flex gap-3 items-center rounded-t-md cursor-pointer  bg-white  py-4"
-          :currentUser="currentUser"
+          :currentUser="postRef.author.value"
           :wrapperSize="{ height: '2.5rem', width: '2.5rem' }"
           :imageSize="{ height: '2rem', width: '2rem' }"
         >
@@ -201,7 +201,7 @@ async function addComment(postId: string) {
         v-for="comment in postRef.comments.value"
         :key="comment._id"
         :comment="comment"
-        :currentUser="currentUser"
+        :currentUser="comment.author"
       />
     </div>
   </div>

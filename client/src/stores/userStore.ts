@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { UserType } from '../types/userType'
+import type { UserType, visitedUserAditionalInfoType } from '../types/userType'
 
 export const useUserStore = defineStore('user', () => {
   const currentUser = ref({} as UserType)
@@ -15,5 +15,8 @@ export const useUserStore = defineStore('user', () => {
     currentUser.value = userAPI
   }
 
-  return { loading, setLoading, currentUser, setCurrentUser }
+  const visitedUser = ref({} as UserType)
+  const visitedUserAditionalInfo = ref({} as visitedUserAditionalInfoType)
+
+  return { loading, setLoading, currentUser, setCurrentUser, visitedUser, visitedUserAditionalInfo }
 })

@@ -25,6 +25,11 @@ async function getOneUser(targetUserId: string) {
       populate: {
         path: 'comments',
         select: ['text', 'author'],
+
+        populate: {
+          path: 'author',
+          select: ['firstName', 'lastName', 'photo'],
+        },
       },
     })
     .populate({
