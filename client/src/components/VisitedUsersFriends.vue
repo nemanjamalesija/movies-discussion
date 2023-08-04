@@ -7,7 +7,7 @@ console.log(props)
 </script>
 <template>
   <div>
-    <figure>
+    <figure class="mb-2">
       <div
         v-if="props.user.photo"
         class="bg-gray-300 rounded-full flex items-center justify-center cursor-pointer"
@@ -32,7 +32,7 @@ console.log(props)
       </button>
       <!-- user photo adjacent element -->
     </figure>
-    <h2 class="flex items-center gap-1 font-semibold text-base">
+    <h2 class="flex items-center gap-1 font-semibold text-sm">
       <span>{{ props.user.firstName }}</span>
       <span>{{ props.user.lastName }}</span>
     </h2>

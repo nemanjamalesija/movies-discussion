@@ -51,6 +51,7 @@ async function getVisitedUser() {
 
       setLoading(false)
       visitedUser.value = targetUser as UserType
+
       visitedUserAditionalInfo.value = { isAlreadyFriends, isFriendRequested }
 
       console.log(visitedUser.value)
@@ -152,12 +153,12 @@ watch(
     </header>
   </section>
   <section>
-    <div class="grid grid-cols-[2.5fr,3fr] gap-5 max-w-7xl mx-auto">
+    <div class="grid grid-cols-[2fr,3fr] gap-5 max-w-7xl mx-auto">
       <!-- user friends -->
       <section class="shadow-md rounded-md bg-white px-4 py-4 mt-3">
-        <div class="">
+        <div class="mb-3">
           <h3 class="font-semibold text-lg">Friends</h3>
-          <p class="flex items-center gap-1 text-slate-500 text-base">
+          <p class="flex items-center gap-1 text-slate-500 text-base -mt-1">
             <span>{{ visitedUser.friends?.length }}</span>
             <span>friends</span>
           </p>
@@ -170,16 +171,11 @@ watch(
       </section>
 
       <!-- user posts -->
-      <div class="w-full">
-        <SinglePostFeed
-          v-for="post in visitedUser.posts"
-          :key="post._id"
-          :post="{
-            ...post,
-            author: { ...visitedUser }
-          }"
-        />
-      </div>
+      <RouterLink :to="`/${visitedUser._id}`">
+        <div class="w-full">
+          <SinglePostFeed v-for="post in visitedUser.posts" :key="post._id" :post="post" />
+        </div>
+      </RouterLink>
     </div>
   </section>
 </template>

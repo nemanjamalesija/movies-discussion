@@ -208,4 +208,4 @@ async function addComment(postId: string) {
 </template>
 
 <style scoped></style>
-../hooks/useGetPostsFeedStore
+s

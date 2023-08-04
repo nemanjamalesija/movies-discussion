@@ -7,8 +7,16 @@ async function getOneUser(targetUserId: string) {
       path: 'posts',
       strictPopulate: false,
       populate: {
+        path: 'author',
+        select: ['firstName', 'lastName', 'photo'],
+      },
+    })
+    .populate({
+      path: 'posts',
+      strictPopulate: false,
+      populate: {
         path: 'likes',
-        select: ['name', 'lastName', 'photo'],
+        select: ['firstName', 'lastName', 'photo'],
       },
     })
     .populate({
@@ -17,10 +25,6 @@ async function getOneUser(targetUserId: string) {
       populate: {
         path: 'comments',
         select: ['text', 'author'],
-        populate: {
-          path: 'author',
-          select: ['name', 'lastName', 'photo'],
-        },
       },
     })
     .populate({
