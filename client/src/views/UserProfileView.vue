@@ -164,17 +164,16 @@ watch(
       </section>
 
       <!-- user posts -->
-      <RouterLink :to="`/${visitedUser._id}`">
-        <div class="w-full" v-if="visitedUser.posts">
-          <SinglePostFeed
-            v-for="post in visitedUser.posts"
-            :key="post._id"
-            :post="post"
-            :currentUser="visitedUser"
-            :posts="visitedUser.posts"
-          />
-        </div>
-      </RouterLink>
+
+      <div class="w-full" v-if="visitedUser.posts">
+        <SinglePostFeed
+          v-for="post in visitedUser.posts"
+          :key="post._id"
+          :post="post"
+          :currentUser="visitedUser"
+          :posts="visitedUser.posts"
+        />
+      </div>
     </div>
   </section>
 </template>
