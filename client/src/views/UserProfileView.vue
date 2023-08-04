@@ -8,6 +8,7 @@ import UserPhotoAndName from '../components/ui/UserPhotoAndName.vue'
 import LoadingSpinner from '../components/LoadingSpinner.vue'
 import { watch } from 'vue'
 import SinglePostFeed from '../components/SinglePostFeed.vue'
+import VisitedUsersFriends from '../components/VisitedUsersFriends.vue'
 
 const { route, router, toast } = useAppNavigation()
 const { loading, setLoading, currentUser } = useGetUserStore()
@@ -151,9 +152,22 @@ watch(
     </header>
   </section>
   <section>
-    <div class="flex gap-5 max-w-7xl mx-auto">
+    <div class="grid grid-cols-[2.5fr,3fr] gap-5 max-w-7xl mx-auto">
       <!-- user friends -->
-      <div></div>
+      <section class="shadow-md rounded-md bg-white px-4 py-4 mt-3">
+        <div class="">
+          <h3 class="font-semibold text-lg">Friends</h3>
+          <p class="flex items-center gap-1 text-slate-500 text-base">
+            <span>{{ visitedUser.friends?.length }}</span>
+            <span>friends</span>
+          </p>
+        </div>
+
+        <!-- visited users friends -->
+        <div class="grid grid-cols-3 gap-3">
+          <VisitedUsersFriends v-for="user in visitedUser.friends" :key="user._id" :user="user" />
+        </div>
+      </section>
 
       <!-- user posts -->
       <div class="w-full">
