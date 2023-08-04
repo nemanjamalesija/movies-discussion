@@ -67,6 +67,11 @@ const login = catchAsync(
     ) {
       return next(new AppError('Incorrect email or password', 400));
     } else {
+      await currentUser.populate({
+        path: 'friendRequests',
+        select: ['firstName', 'lastName', 'photo'],
+      });
+
       // 3. If everything ok, send token to client
       createSendToken(res, 200, currentUser as UserType);
     }
@@ -125,7 +130,7 @@ const getUserWithToken = catchAsync(
         },
       });
     } else {
-      return next();
+      next(new AppError('Could not get your session. Please log in', 403));
     }
   }
 );
