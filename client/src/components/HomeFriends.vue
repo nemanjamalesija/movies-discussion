@@ -77,21 +77,21 @@ async function dennyFriend(userId: string) {
 }
 </script>
 <template>
-  <div v-for="request in props.currentUser.friendRequests" :key="request._id">
+  <div v-for="requestUser in props.currentUser.friendRequests" :key="requestUser._id">
     <h2 class="text-center font-semibold mb-2 text-lg">Friend requests</h2>
     <div class="flex items-center gap-4">
       <div class="mt-2">
         <UserPhotoAndName
           containerClass="flex gap-3 items-center hover:bg-slate-200 py-1 px-2 -ml-2 rounded-md cursor-pointer mb-2"
-          :currentUser="props.currentUser"
+          :currentUser="requestUser"
           :wrapperSize="{ height: '3rem', width: '3rem' }"
           :imageSize="{ height: '2.4rem', width: '2.4rem' }"
         >
           <template #user-photo-adjacent>
             <div>
               <h2 class="flex items-center gap-1 font-semibold text-base">
-                <span>{{ request.firstName }}</span>
-                <span>{{ request.lastName }}</span>
+                <span>{{ requestUser.firstName }}</span>
+                <span>{{ requestUser.lastName }}</span>
               </h2>
             </div>
           </template>
@@ -99,7 +99,7 @@ async function dennyFriend(userId: string) {
       </div>
 
       <div class="flex items-center gap-1">
-        <button @click="acceptFriend(request._id)">
+        <button @click="acceptFriend(requestUser._id)">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -114,7 +114,7 @@ async function dennyFriend(userId: string) {
             />
           </svg>
         </button>
-        <button @click="dennyFriend(request._id)">
+        <button @click="dennyFriend(requestUser._id)">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"

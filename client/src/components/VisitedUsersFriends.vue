@@ -8,7 +8,7 @@ console.log(props)
 <template>
   <RouterLink :to="`/${props.user._id}`">
     <div>
-      <figure class="mb-2">
+      <figure class="mb-2 hover:brightness-95 transition-all duration-150">
         <div
           v-if="props.user.photo"
           class="bg-gray-300 rounded-full flex items-center justify-center cursor-pointer"

@@ -59,13 +59,18 @@ onMounted(async () => {
 </script>
 <template>
   <LoadingSpinner v-if="loading" />
-  <div v-else class="flex gap-3 flex-col">
-    <SinglePostFeed
-      v-for="post in postsFeed"
-      :key="post._id"
-      :posts="postsFeed"
-      :post="post"
-      :currentUser="currentUser"
-    />
-  </div>
+  <section v-else>
+    <div class="flex gap-3 flex-col">
+      <SinglePostFeed
+        v-for="post in postsFeed"
+        :key="post._id"
+        :posts="postsFeed"
+        :post="post"
+        :currentUser="currentUser"
+      />
+    </div>
+    <p v-if="postsFeed.length > 0" class="text-slate-500 font-semibold text-base text-center mt-4">
+      No more posts to show
+    </p>
+  </section>
 </template>

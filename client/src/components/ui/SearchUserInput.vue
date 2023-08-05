@@ -99,6 +99,7 @@ async function getSearchedUSers() {
           class="block w-full py-[0.5rem] px-6 pl-10 text-sm border border-slate-300 rounded-full bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
           placeholder="Search"
           v-model="tryUser"
+          autocomplete="off"
           @input="getSearchedUSers"
         />
       </div>
