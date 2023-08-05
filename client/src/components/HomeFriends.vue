@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { UserType } from '@/types/userType'
+import type { UserType } from '../types/userType'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
 
 const props = defineProps<{ currentUser: UserType }>()

@@ -15,13 +15,8 @@ const getOneUser = catchAsync(async (req: Request, res: Response) => {
       (requestId) => requestId.toString() === req.body.currentUser.id
     );
 
-    console.log(isFriendRequested);
-
-    targetUser.friendRequests.forEach((f) => console.log(f.toString()));
-    console.log(req.body.currentUser.id);
-
     const isAlreadyFriends = targetUser.friends.some(
-      (friendId) => friendId.toString() === req.body.currentUser.id
+      (friend) => friend._id.toString() === req.body.currentUser.id
     );
 
     res.status(200).json({
