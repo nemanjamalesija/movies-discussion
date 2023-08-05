@@ -19,13 +19,17 @@ export const useUserStore = defineStore('user', () => {
   const visitedUserAditionalInfo = ref({} as visitedUserAditionalInfoType)
 
   // friend requests related
-  function acceptFriendRequest(targetUser: UserType) {
-    const newUserFriendRequests = currentUser.value.friendRequests?.filter(
-      (f) => f._id !== targetUser._id
-    )
-    currentUser.value.friendRequests = newUserFriendRequests
+  function acceptFriendRequest(currentUser: UserType, targetUser: UserType) {
+    currentUser.friendRequests = currentUser.friendRequests?.filter((f) => f._id !== targetUser._id)
+    targetUser.friendRequests = targetUser.friendRequests?.filter((f) => f._id === currentUser._id)
 
-    currentUser.value.friends?.push(targetUser)
+    currentUser.friends?.push(targetUser)
+    targetUser.friends?.push(currentUser)
+  }
+
+  function removeFriend(currentUser: UserType, targetUser: UserType) {
+    currentUser.friends = currentUser.friends?.filter((f) => f._id !== targetUser._id)
+    targetUser.friends = targetUser.friends?.filter((f) => f._id !== currentUser._id)
   }
 
   function dennyFriendRequest(targetUserId: string) {
@@ -43,6 +47,7 @@ export const useUserStore = defineStore('user', () => {
     visitedUser,
     visitedUserAditionalInfo,
     acceptFriendRequest,
-    dennyFriendRequest
+    dennyFriendRequest,
+    removeFriend
   }
 })

@@ -156,6 +156,8 @@ async function removeFriend(currentUserId: string, targetUserId: string) {
 
   await currentUser.save({ validateBeforeSave: false });
   await targetUser.save({ validateBeforeSave: false });
+
+  return targetUser;
 }
 
 export default {

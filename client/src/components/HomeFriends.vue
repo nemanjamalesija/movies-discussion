@@ -40,7 +40,7 @@ async function acceptFriend(userId: string) {
       const {
         data: { targetUser }
       } = await response.json()
-      acceptFriendRequest(targetUser as UserType)
+      acceptFriendRequest(props.currentUser, targetUser as UserType)
       toast.success('User added to your friends list')
     }
   } catch (error) {

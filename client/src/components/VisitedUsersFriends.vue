@@ -2,8 +2,6 @@
 import type { UserType } from '@/types/userType'
 
 const props = defineProps<{ user: UserType }>()
-
-console.log(props)
 </script>
 <template>
   <RouterLink :to="`/${props.user._id}`">

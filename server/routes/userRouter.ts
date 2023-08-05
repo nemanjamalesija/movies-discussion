@@ -27,7 +27,7 @@ router.get('/:id', userController.getOneUser);
 /* USER FRIENDS RELATED */
 router.patch('/add', userController.addFriend);
 router.patch('/accept', userController.acceptFriendRequest);
-router.delete('/denny', userController.denyFriendRequest);
 router.delete('/remove', userController.removeFriend);
+router.delete('/denny', userController.denyFriendRequest);
 
 export default router;

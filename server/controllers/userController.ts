@@ -94,11 +94,14 @@ const removeFriend = catchAsync(async (req: Request, res: Response) => {
   const currentUserId = req.body.currentUser.id;
   const targetUserId = req.body.id;
 
-  await userServices.removeFriend(currentUserId, targetUserId);
+  const targetUser = await userServices.removeFriend(
+    currentUserId,
+    targetUserId
+  );
 
-  res.status(204).json({
-    status: 'sucess',
-    data: null,
+  res.status(200).json({
+    status: 'success',
+    data: { targetUser },
   });
 });
 

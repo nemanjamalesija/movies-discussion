@@ -11,13 +11,15 @@ import SinglePostFeed from '../components/SinglePostFeed.vue'
 import VisitedUsersFriends from '../components/VisitedUsersFriends.vue'
 
 const { route, router, toast } = useAppNavigation()
+
 const {
   loading,
   setLoading,
   currentUser,
   visitedUser,
   visitedUserAditionalInfo,
-  acceptFriendRequest
+  acceptFriendRequest,
+  removeFriend
 } = useGetUserStore()
 
 async function getVisitedUser() {
@@ -50,9 +52,7 @@ async function getVisitedUser() {
       setLoading(false)
       visitedUser.value = targetUser as UserType
 
-      console.log(visitedUser.value)
       visitedUserAditionalInfo.value = { isAlreadyFriends, isFriendRequested }
-      console.log(visitedUserAditionalInfo.value)
     }
   } catch (error) {
     toast.error('Oop, something went wrong!')
@@ -90,7 +90,6 @@ async function addFriend(userId: string) {
       return
     } else {
       await response.json()
-
       visitedUserAditionalInfo.value = { isAlreadyFriends: undefined, isFriendRequested: true }
     }
   } catch (error) {
@@ -130,10 +129,51 @@ async function acceptFriend(userId: string) {
       const {
         data: { targetUser }
       } = await response.json()
-      acceptFriendRequest(targetUser as UserType)
-      visitedUser.value.friends?.push(currentUser.value)
+      acceptFriendRequest(currentUser.value, targetUser as UserType)
+
       visitedUserAditionalInfo.value.isAlreadyFriends = true
       toast.success('User added to your friends list')
+    }
+  } catch (error) {
+    toast.error('Oop, something went wrong!')
+    console.log(error)
+  }
+}
+
+async function deleteFriend(userId: string) {
+  const jwtToken = localStorage.getItem('jwt')
+
+  if (!jwtToken) {
+    toast.error('Could not get your session! Please log in.')
+    router.push('/')
+  }
+
+  try {
+    const response = await fetch(`${baseUrl}/users/remove`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtToken
+      },
+      body: JSON.stringify({
+        id: userId
+      })
+    })
+
+    const {
+      data: { targetUser }
+    } = await response.json()
+
+    if (!response.ok) {
+      const error = await response.json()
+      toast.error(error.message)
+
+      return
+    } else {
+      removeFriend(currentUser.value, targetUser as UserType)
+      visitedUserAditionalInfo.value.isAlreadyFriends = false
+
+      toast.success('User removed from your friends list')
     }
   } catch (error) {
     toast.error('Oop, something went wrong!')
@@ -232,6 +272,7 @@ watch(
             </button>
             <button
               class="px-5 py-2 bg-gray-200 font-semibold rounded-md hover:bg-gray-300 transition-all duration-150"
+              @click="deleteFriend(visitedUser._id)"
             >
               <p class="flex items-center gap-2 text-base">
                 <svg
