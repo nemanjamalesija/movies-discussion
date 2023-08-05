@@ -73,8 +73,12 @@ const isEditModalVisibile = ref<boolean>(false)
               <div
                 class="flex flex-col gap-1 min-w-[120px] items-start justify-between font-semibold hover:font-bold"
               >
-                <button class="w-full text-start hover:bg-slate-100 py-1 px-2">Edit</button>
-                <button class="w-full text-start hover:bg-slate-100 py-1 px-2">Delete</button>
+                <button class="w-full text-start hover:bg-slate-200 py-1 px-2 rounded-md">
+                  Edit
+                </button>
+                <button class="w-full text-start hover:bg-slate-200 py-1 px-2 rounded-md">
+                  Delete
+                </button>
               </div>
               <!-- arrow -->
               <div

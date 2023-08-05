@@ -16,6 +16,7 @@ const areCommentsVisible = ref<boolean>(false)
 const { toast, router } = useAppNavigation()
 const { setLoading } = useGetUserStore()
 const newCommentText = ref<string>('')
+const showDeletePostModal = ref<boolean>(true)
 const isLiked = ref<boolean>(false)
 const { handleUpdatePostComments } = useGetPostsFeedStore()
 
@@ -142,7 +143,7 @@ onMounted(() => {
 console.log(postRef.likes.value)
 </script>
 <template>
-  <div class="shadow-md rounded-md bg-white px-4 py-4 mt-3">
+  <div class="shadow-md rounded-md bg-white px-4 py-4 mt-3 relative">
     <UserPhotoAndName
       containerClass="flex gap-3 items-center cursor-pointer"
       :currentUser="postRef.author.value"
@@ -325,6 +326,45 @@ console.log(postRef.likes.value)
         :comment="comment"
         :currentUser="comment.author"
       />
+    </div>
+    <div v-if="props.currentUser._id === postRef.author.value._id">
+      <button class="absolute top-1 right-1" @click="showDeletePostModal = !showDeletePostModal">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="w-7 h-7"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M4.5 12a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm6 0a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm6 0a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+      <div
+        class="absolute right-4 top-4 flex-1 px-4 py-4 overflow-y-auto ext-sm"
+        :class="showDeletePostModal && ' invisible'"
+      >
+        <!-- popup delete post modal -->
+
+        <div class="flex items-center mb-4">
+          <div class="flex-1 bg-white p-2 rounded-lg mb-2 relative shadow-lg">
+            <div
+              class="flex flex-col gap-1 min-w-[120px] items-start justify-between font-semibold hover:font-bold"
+            >
+              <button class="w-full text-start hover:bg-slate-200 py-1 px-2 rounded-md">
+                Delete
+              </button>
+            </div>
+            <!-- arrow -->
+            <div
+              class="absolute right-0 top-0 transform -translate-x-1/2 -rotate-45 w-2 h-2 bg-white"
+            ></div>
+            <!-- end arrow -->
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
