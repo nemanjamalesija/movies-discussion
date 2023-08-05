@@ -79,10 +79,10 @@ async function dennyFriend(userId: string) {
 <template>
   <div v-for="requestUser in props.currentUser.friendRequests" :key="requestUser._id">
     <h2 class="text-center font-semibold mb-2 text-lg">Friend requests</h2>
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-4 hover:bg-slate-200 rounded-md px-3">
       <div class="mt-2">
         <UserPhotoAndName
-          containerClass="flex gap-3 items-center hover:bg-slate-200 py-1 px-2 -ml-2 rounded-md cursor-pointer mb-2"
+          containerClass="flex gap-3 items-center cursor-pointer mb-2"
           :currentUser="requestUser"
           :wrapperSize="{ height: '3rem', width: '3rem' }"
           :imageSize="{ height: '2.4rem', width: '2.4rem' }"
