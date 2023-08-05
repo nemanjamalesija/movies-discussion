@@ -404,7 +404,7 @@ watch(
             v-for="post in visitedUser.posts"
             :key="post._id"
             :post="post"
-            :currentUser="visitedUser"
+            :currentUser="currentUser"
             :posts="visitedUser.posts"
           />
           <p

@@ -41,7 +41,7 @@ async function getFeed() {
       } = await response.json()
 
       postsFeed.value = posts as PostFeed[]
-      console.log(postsFeed.value)
+
       setLoading(false)
     }
   } catch (error) {

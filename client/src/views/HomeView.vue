@@ -5,8 +5,6 @@ import HomeFriends from '../components/HomeFriends.vue'
 import useGetUserStore from '../hooks/useGetUserStore'
 
 const { currentUser } = useGetUserStore()
-
-console.log(currentUser.value.friendRequests)
 </script>
 
 <template>
