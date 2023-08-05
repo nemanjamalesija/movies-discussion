@@ -18,5 +18,25 @@ export const useUserStore = defineStore('user', () => {
   const visitedUser = ref({} as UserType)
   const visitedUserAditionalInfo = ref({} as visitedUserAditionalInfoType)
 
-  return { loading, setLoading, currentUser, setCurrentUser, visitedUser, visitedUserAditionalInfo }
+  // friend requests related
+  function acceptFriendRequest(targetUser: UserType) {
+    const newUserFriendRequests = currentUser.value.friendRequests?.filter(
+      (f) => f._id !== targetUser._id
+    )
+    currentUser.value.friendRequests = newUserFriendRequests
+
+    currentUser.value.friends?.push(targetUser)
+
+    console.log(currentUser)
+  }
+
+  return {
+    loading,
+    setLoading,
+    currentUser,
+    setCurrentUser,
+    visitedUser,
+    visitedUserAditionalInfo,
+    acceptFriendRequest
+  }
 })

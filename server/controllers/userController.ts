@@ -67,11 +67,14 @@ const acceptFriendRequest = catchAsync(async (req: Request, res: Response) => {
   const currentUserId = req.body.currentUser.id;
   const targetUserId = req.body.id;
 
-  await userServices.acceptFriendRequest(currentUserId, targetUserId);
+  const targetUser = await userServices.acceptFriendRequest(
+    currentUserId,
+    targetUserId
+  );
 
   res.status(200).json({
     status: 'success',
-    data: null,
+    data: { targetUser },
   });
 });
 

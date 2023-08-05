@@ -120,6 +120,8 @@ async function acceptFriendRequest(
 
   await currentUser.save({ validateBeforeSave: false });
   await targetUser.save({ validateBeforeSave: false });
+
+  return targetUser;
 }
 
 async function dennyFriendRequest(currentUserId: string, targetUserId: string) {

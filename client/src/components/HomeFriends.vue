@@ -1,8 +1,53 @@
 <script setup lang="ts">
 import type { UserType } from '../types/userType'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
+import useAppNavigation from '../composables/useAppNavigation'
+import { baseUrl } from '../constants/baseUrl'
+import useGetUserStore from '../hooks/useGetUserStore'
 
 const props = defineProps<{ currentUser: UserType }>()
+const { toast, router } = useAppNavigation()
+const { acceptFriendRequest } = useGetUserStore()
+
+// /users/accept
+
+async function acceptFriend(userId: string) {
+  const jwtToken = localStorage.getItem('jwt')
+
+  if (!jwtToken) {
+    toast.error('Could not get your session! Please log in.')
+    router.push('/')
+  }
+
+  try {
+    const response = await fetch(`${baseUrl}/users/accept`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtToken
+      },
+      body: JSON.stringify({
+        id: userId
+      })
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      toast.error(error.message)
+
+      return
+    } else {
+      const {
+        data: { targetUser }
+      } = await response.json()
+      acceptFriendRequest(targetUser as UserType)
+      toast.success('User added to your friends list')
+    }
+  } catch (error) {
+    toast.error('Oop, something went wrong!')
+    console.log(error)
+  }
+}
 </script>
 <template>
   <div v-for="request in props.currentUser.friendRequests" :key="request._id">
@@ -27,7 +72,7 @@ const props = defineProps<{ currentUser: UserType }>()
       </div>
 
       <div class="flex items-center gap-1">
-        <button>
+        <button @click="acceptFriend(request._id)">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
