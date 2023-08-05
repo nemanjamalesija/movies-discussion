@@ -186,13 +186,15 @@ watch(
 
           <!-- if current user is the target user -->
           <div v-if="currentUser._id === visitedUser._id" class="absolute bottom-[2%] right-[1.2%]">
-            <button class="px-5 py-2 bg-gray-200 font-bold rounded-md">
+            <button
+              class="px-5 py-2 bg-gray-200 font-semibold rounded-md hover:bg-gray-300 transition-all duration-150"
+            >
               <p class="flex items-center gap-2 text-base">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
-                  class="w-4 h-4"
+                  class="w-4 h-4 fill-indigo-600"
                 >
                   <path
                     d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z"
@@ -206,15 +208,17 @@ watch(
           <!-- if target user is already a friend -->
           <div
             v-if="visitedUserAditionalInfo.isAlreadyFriends && visitedUser._id !== currentUser._id"
-            class="absolute bottom-[2%] right-[1.2%]"
+            class="absolute bottom-[2%] right-[1.2%] flex items-center gap-3"
           >
-            <button class="px-5 py-2 bg-gray-200 font-bold rounded-md">
+            <button
+              class="px-5 py-2 bg-gray-200 font-semibold rounded-md hover:bg-gray-300 transition-all duration-150"
+            >
               <p class="flex items-center gap-2 text-base">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
-                  class="w-5 h-5"
+                  class="w-5 h-5 fill-indigo-600"
                 >
                   <path
                     fill-rule="evenodd"
@@ -226,6 +230,24 @@ watch(
                 <span>Message</span>
               </p>
             </button>
+            <button
+              class="px-5 py-2 bg-gray-200 font-semibold rounded-md hover:bg-gray-300 transition-all duration-150"
+            >
+              <p class="flex items-center gap-2 text-base">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="w-5 h-5 fill-red-600"
+                >
+                  <path
+                    d="M10.375 2.25a4.125 4.125 0 100 8.25 4.125 4.125 0 000-8.25zM10.375 12a7.125 7.125 0 00-7.124 7.247.75.75 0 00.363.63 13.067 13.067 0 006.761 1.873c2.472 0 4.786-.684 6.76-1.873a.75.75 0 00.364-.63l.001-.12v-.002A7.125 7.125 0 0010.375 12zM16 9.75a.75.75 0 000 1.5h6a.75.75 0 000-1.5h-6z"
+                  />
+                </svg>
+
+                <span>Remove friend</span>
+              </p>
+            </button>
           </div>
 
           <!-- if target user is NOT a friend  and not current user -->
@@ -234,15 +256,15 @@ watch(
             class="absolute bottom-[2%] right-[1.2%]"
           >
             <button
-              class="px-5 py-2 bg-indigo-600 font-bold rounded-md"
+              class="px-5 py-2 bg-gray-200 hover:bg-gray-300 font-semibold rounded-md transition-all duration-150"
               @click="addFriend(visitedUser._id)"
             >
-              <p class="flex items-center gap-2 text-base text-white">
+              <p class="flex items-center gap-2 text-base">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
-                  class="w-5 h-5"
+                  class="w-5 h-5 fill-indigo-600"
                 >
                   <path
                     d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"
@@ -262,13 +284,15 @@ watch(
             "
             class="absolute bottom-[2%] right-[1.2%]"
           >
-            <button class="px-5 py-2 bg-indigo-600 font-bold rounded-md">
-              <p class="flex items-center gap-2 text-base text-white">
+            <button
+              class="px-5 py-2 bg-gray-200 hover:bg-gray-300 font-semibold rounded-md transition-all duration-150"
+            >
+              <p class="flex items-center gap-2 text-base">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
-                  class="w-5 h-5"
+                  class="w-5 h-5 fill-indigo-600"
                 >
                   <path
                     fill-rule="evenodd"
@@ -291,15 +315,15 @@ watch(
             class="absolute bottom-[2%] right-[1.2%]"
           >
             <button
-              class="px-5 py-2 bg-indigo-600 font-bold rounded-md"
+              class="px-5 py-2 bg-gray-200 hover:bg-gray-300 font-semibold rounded-md"
               @click="acceptFriend(visitedUser._id)"
             >
-              <p class="flex items-center gap-2 text-base text-white">
+              <p class="flex items-center gap-2 text-base">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
-                  class="w-5 h-5"
+                  class="w-5 h-5 fill-indigo-600"
                 >
                   <path
                     fill-rule="evenodd"
@@ -308,7 +332,7 @@ watch(
                   />
                 </svg>
 
-                <span>Accept friend request</span>
+                <span>Accept invitation</span>
               </p>
             </button>
           </div>
