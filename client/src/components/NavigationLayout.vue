@@ -46,7 +46,6 @@ onMounted(async () => {
       </div>
 
       <!-- User info -->
-      <!-- TODO - set link to "/me" -->
       <div
         v-if="currentUser.firstName"
         class="user flex flex-col items-center gap-3 font-bold"

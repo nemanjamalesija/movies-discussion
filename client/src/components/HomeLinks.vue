@@ -6,7 +6,6 @@ const { currentUser } = useGetUserStore()
 </script>
 <template>
   <!-- user profile -->
-  <!-- TODO - set link to "/me" -->
   <aside>
     <UserPhotoAndName
       containerClass="flex gap-3 items-center hover:bg-slate-200 py-1 px-2 -ml-2 rounded-md cursor-pointer mb-2"

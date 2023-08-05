@@ -16,7 +16,7 @@ const areCommentsVisible = ref<boolean>(false)
 const { toast, router } = useAppNavigation()
 const { setLoading } = useGetUserStore()
 const newCommentText = ref<string>('')
-const { postsFeed, handleUpdatePostComments } = useGetPostsFeedStore()
+const { handleUpdatePostComments } = useGetPostsFeedStore()
 
 async function addComment(postId: string) {
   const jwtToken = localStorage.getItem('jwt')

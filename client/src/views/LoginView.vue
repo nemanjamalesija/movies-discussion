@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { baseUrl } from '../constants/baseUrl'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import useGetUserStore from '../hooks/useGetUserStore'
 import useAppNavigation from '../composables/useAppNavigation'
 import { loginSchema } from '../schemas/loginUserSchema'
@@ -11,7 +11,7 @@ import formatZodErrors from '../helpers/formatZodErrors'
 import LoadingSpinner from '../components/LoadingSpinner.vue'
 import type { UserType } from '@/types/userType'
 
-const { setCurrentUser, currentUser, loading, setLoading } = useGetUserStore()
+const { setCurrentUser, loading, setLoading } = useGetUserStore()
 const { toast, router } = useAppNavigation()
 
 const loginUser = ref<LoginUserType>({
