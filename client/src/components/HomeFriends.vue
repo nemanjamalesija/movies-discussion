@@ -7,7 +7,7 @@ import useGetUserStore from '../hooks/useGetUserStore'
 
 const props = defineProps<{ currentUser: UserType }>()
 const { toast, router } = useAppNavigation()
-const { acceptFriendRequest } = useGetUserStore()
+const { acceptFriendRequest, dennyFriendRequest } = useGetUserStore()
 
 // /users/accept
 
@@ -43,6 +43,33 @@ async function acceptFriend(userId: string) {
       acceptFriendRequest(targetUser as UserType)
       toast.success('User added to your friends list')
     }
+  } catch (error) {
+    toast.error('Oop, something went wrong!')
+    console.log(error)
+  }
+}
+
+async function dennyFriend(userId: string) {
+  const jwtToken = localStorage.getItem('jwt')
+
+  if (!jwtToken) {
+    toast.error('Could not get your session! Please log in.')
+    router.push('/')
+  }
+
+  try {
+    await fetch(`${baseUrl}/users/denny`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtToken
+      },
+      body: JSON.stringify({
+        id: userId
+      })
+    })
+
+    dennyFriendRequest(userId)
   } catch (error) {
     toast.error('Oop, something went wrong!')
     console.log(error)
@@ -87,7 +114,7 @@ async function acceptFriend(userId: string) {
             />
           </svg>
         </button>
-        <button>
+        <button @click="dennyFriend(request._id)">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"

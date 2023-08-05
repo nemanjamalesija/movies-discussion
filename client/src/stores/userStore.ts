@@ -26,8 +26,13 @@ export const useUserStore = defineStore('user', () => {
     currentUser.value.friendRequests = newUserFriendRequests
 
     currentUser.value.friends?.push(targetUser)
+  }
 
-    console.log(currentUser)
+  function dennyFriendRequest(targetUserId: string) {
+    const newUserFriendRequests = currentUser.value.friendRequests?.filter(
+      (f) => f._id !== targetUserId
+    )
+    currentUser.value.friendRequests = newUserFriendRequests
   }
 
   return {
@@ -37,6 +42,7 @@ export const useUserStore = defineStore('user', () => {
     setCurrentUser,
     visitedUser,
     visitedUserAditionalInfo,
-    acceptFriendRequest
+    acceptFriendRequest,
+    dennyFriendRequest
   }
 })

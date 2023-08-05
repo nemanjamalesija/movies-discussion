@@ -4,7 +4,7 @@ import { useUserStore } from '../stores/userStore'
 export default function useGetUserStore() {
   const userStore = useUserStore()
   const { currentUser, visitedUser, visitedUserAditionalInfo, loading } = storeToRefs(userStore)
-  const { setCurrentUser, setLoading, acceptFriendRequest } = useUserStore()
+  const { setCurrentUser, setLoading, acceptFriendRequest, dennyFriendRequest } = useUserStore()
 
   return {
     userStore,
@@ -14,6 +14,7 @@ export default function useGetUserStore() {
     setLoading,
     visitedUser,
     visitedUserAditionalInfo,
-    acceptFriendRequest
+    acceptFriendRequest,
+    dennyFriendRequest
   }
 }

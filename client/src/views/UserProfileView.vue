@@ -11,8 +11,14 @@ import SinglePostFeed from '../components/SinglePostFeed.vue'
 import VisitedUsersFriends from '../components/VisitedUsersFriends.vue'
 
 const { route, router, toast } = useAppNavigation()
-const { loading, setLoading, currentUser, visitedUser, visitedUserAditionalInfo } =
-  useGetUserStore()
+const {
+  loading,
+  setLoading,
+  currentUser,
+  visitedUser,
+  visitedUserAditionalInfo,
+  acceptFriendRequest
+} = useGetUserStore()
 
 async function getVisitedUser() {
   const jwtToken = localStorage.getItem('jwt')
@@ -44,7 +50,7 @@ async function getVisitedUser() {
       setLoading(false)
       visitedUser.value = targetUser as UserType
 
-      console.log(isFriendRequested)
+      console.log(visitedUser.value)
       visitedUserAditionalInfo.value = { isAlreadyFriends, isFriendRequested }
       console.log(visitedUserAditionalInfo.value)
     }
@@ -92,6 +98,46 @@ async function addFriend(userId: string) {
     console.log(error)
   } finally {
     setLoading(false)
+  }
+}
+
+async function acceptFriend(userId: string) {
+  const jwtToken = localStorage.getItem('jwt')
+
+  if (!jwtToken) {
+    toast.error('Could not get your session! Please log in.')
+    router.push('/')
+  }
+
+  try {
+    const response = await fetch(`${baseUrl}/users/accept`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtToken
+      },
+      body: JSON.stringify({
+        id: userId
+      })
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      toast.error(error.message)
+
+      return
+    } else {
+      const {
+        data: { targetUser }
+      } = await response.json()
+      acceptFriendRequest(targetUser as UserType)
+      visitedUser.value.friends?.push(currentUser.value)
+      visitedUserAditionalInfo.value.isAlreadyFriends = true
+      toast.success('User added to your friends list')
+    }
+  } catch (error) {
+    toast.error('Oop, something went wrong!')
+    console.log(error)
   }
 }
 
@@ -229,6 +275,37 @@ watch(
             </svg>
 
             <span>Invitation sent</span>
+          </p>
+        </button>
+      </div>
+
+      <!-- if current user && accept friend request -->
+      <div
+        v-if="
+          !visitedUserAditionalInfo.isFriendRequested &&
+          currentUser.friendRequests?.some((fr) => fr._id === visitedUser._id)
+        "
+        class="absolute bottom-[2%] right-[1.2%]"
+      >
+        <button
+          class="px-5 py-2 bg-indigo-600 font-bold rounded-md"
+          @click="acceptFriend(visitedUser._id)"
+        >
+          <p class="flex items-center gap-2 text-base text-white">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="w-5 h-5"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z"
+                clip-rule="evenodd"
+              />
+            </svg>
+
+            <span>Accept friend request</span>
           </p>
         </button>
       </div>
