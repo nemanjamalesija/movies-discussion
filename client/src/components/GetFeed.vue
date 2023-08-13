@@ -66,7 +66,7 @@ onMounted(async () => {
         :key="post._id"
         :posts="postsFeed"
         :post="post"
-        :currentUser="currentUser"
+        :currentUserProp="currentUser"
       />
     </div>
     <p v-if="postsFeed.length > 0" class="text-slate-500 font-semibold text-base text-center mt-4">

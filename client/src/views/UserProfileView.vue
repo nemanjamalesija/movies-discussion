@@ -398,13 +398,22 @@ watch(
           </div>
         </section>
 
+        <!-- return this if there is no posts -->
+        <h2
+          v-if="visitedUser.posts && visitedUser.posts.length === 0"
+          class="text-slate-500 font-semibold text-base text-center mt-32"
+        >
+          This user doesn't have any posts.
+        </h2>
+
+        <!-- else return these posts -->
         <!-- user posts -->
-        <div class="w-full" v-if="visitedUser.posts">
+        <div class="w-full" v-if="visitedUser.posts && visitedUser.posts.length > 0">
           <SinglePostFeed
             v-for="post in visitedUser.posts"
             :key="post._id"
             :post="post"
-            :currentUser="currentUser"
+            :currentUserProp="currentUser"
             :posts="visitedUser.posts"
           />
           <p

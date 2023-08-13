@@ -10,15 +10,15 @@ import useGetUserStore from '../hooks/useGetUserStore'
 import { baseUrl } from '../constants/baseUrl'
 import useGetPostsFeedStore from '../hooks/useGetPostsFeedStore'
 
-const props = defineProps<{ post: PostFeed; posts: PostFeed[]; currentUser: UserType }>()
+const props = defineProps<{ post: PostFeed; posts: PostFeed[]; currentUserProp: UserType }>()
 const postRef = toRefs(props.post)
 const areCommentsVisible = ref<boolean>(false)
 const { toast, router } = useAppNavigation()
-const { setLoading } = useGetUserStore()
+const { setLoading, currentUser, visitedUser } = useGetUserStore()
 const newCommentText = ref<string>('')
-const showDeletePostModal = ref<boolean>(true)
+const showDeletePostModal = ref<boolean>(false)
 const isLiked = ref<boolean>(false)
-const { handleUpdatePostComments } = useGetPostsFeedStore()
+const { handleUpdatePostComments, postsFeed } = useGetPostsFeedStore()
 
 async function addComment(postId: string) {
   const jwtToken = localStorage.getItem('jwt')
@@ -50,7 +50,12 @@ async function addComment(postId: string) {
         data: { newComment }
       } = await response.json()
 
-      handleUpdatePostComments(props.currentUser, props.posts, postId, newComment as CommentType)
+      handleUpdatePostComments(
+        props.currentUserProp,
+        props.posts,
+        postId,
+        newComment as CommentType
+      )
       newCommentText.value = ''
     }
   } catch (error) {
@@ -88,7 +93,7 @@ async function likePost(postId: string) {
 
       return
     } else {
-      postRef.likes.value = [...postRef.likes.value, props.currentUser]
+      postRef.likes.value = [...postRef.likes.value, props.currentUserProp]
       isLiked.value = true
     }
   } catch (error) {
@@ -123,9 +128,35 @@ async function unlikePost(postId: string) {
 
       return
     } else {
-      postRef.likes.value = postRef.likes.value.filter((f) => f._id !== props.currentUser._id)
+      postRef.likes.value = postRef.likes.value.filter((f) => f._id !== props.currentUserProp._id)
       isLiked.value = false
     }
+  } catch (error) {
+    toast.error('Oop, something went wrong!')
+    console.log(error)
+  }
+}
+
+async function deletePost(postId: string) {
+  const jwtToken = localStorage.getItem('jwt')
+
+  if (!jwtToken) {
+    toast.error('Could not get your session! Please log in.')
+    router.push('/')
+  }
+
+  try {
+    await fetch(`${baseUrl}/posts/${postId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtToken
+      }
+    })
+
+    visitedUser.value.posts = visitedUser.value.posts?.filter((p) => p._id !== postId)
+    currentUser.value.posts = currentUser.value.posts?.filter((p) => p._id !== postId)
+    postsFeed.value = postsFeed.value.filter((p) => p._id !== postId)
   } catch (error) {
     toast.error('Oop, something went wrong!')
     console.log(error)
@@ -137,10 +168,8 @@ function toggleComments() {
 }
 
 onMounted(() => {
-  isLiked.value = postRef.likes.value.some((f) => f._id === props.currentUser._id)
+  isLiked.value = postRef.likes.value.some((f) => f._id === props.currentUserProp._id)
 })
-
-console.log(postRef.likes.value)
 </script>
 <template>
   <div class="shadow-md rounded-md bg-white px-4 py-4 mt-3 relative">
@@ -327,33 +356,39 @@ console.log(postRef.likes.value)
         :currentUser="comment.author"
       />
     </div>
-    <div v-if="props.currentUser._id === postRef.author.value._id">
-      <button class="absolute top-1 right-1" @click="showDeletePostModal = !showDeletePostModal">
+    <div v-if="props.currentUserProp._id === postRef.author.value._id">
+      <button
+        class="absolute -top-1 -right-1 p-2 hover:scale-125 transition-all duration-200 rounded-full"
+        @click="showDeletePostModal = !showDeletePostModal"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
-          class="w-7 h-7"
+          class="w-7 h-7 group"
         >
           <path
             fill-rule="evenodd"
             d="M4.5 12a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm6 0a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm6 0a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"
             clip-rule="evenodd"
+            class="fill-gray-600"
           />
         </svg>
       </button>
       <div
-        class="absolute right-4 top-4 flex-1 px-4 py-4 overflow-y-auto ext-sm"
-        :class="showDeletePostModal && ' invisible'"
+        class="absolute right-5 top-4 flex-1 px-4 py-4 overflow-y-auto ext-sm"
+        :class="!showDeletePostModal && ' invisible'"
       >
         <!-- popup delete post modal -->
-
         <div class="flex items-center mb-4">
           <div class="flex-1 bg-white p-2 rounded-lg mb-2 relative shadow-lg">
             <div
               class="flex flex-col gap-1 min-w-[120px] items-start justify-between font-semibold hover:font-bold"
             >
-              <button class="w-full text-start hover:bg-slate-200 py-1 px-2 rounded-md">
+              <button
+                class="w-full text-start hover:bg-slate-200 py-1 px-2 rounded-md"
+                @click="deletePost(postRef._id.value), (showDeletePostModal = false)"
+              >
                 Delete
               </button>
             </div>
@@ -368,5 +403,3 @@ console.log(postRef.likes.value)
     </div>
   </div>
 </template>
-
-<style scoped></style>
