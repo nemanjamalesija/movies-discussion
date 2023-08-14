@@ -9,13 +9,6 @@ import useAppNavigation from '../composables/useAppNavigation'
 import useGetUserStore from '../hooks/useGetUserStore'
 import { baseUrl } from '../constants/baseUrl'
 import useGetPostsFeedStore from '../hooks/useGetPostsFeedStore'
-import addComment from '../api/addComment'
-
-// export default async function addComment
-//   postId: string,
-//   newCommentText: string,
-//   postUser: UserType,
-//   posts: PostFeed[]
 
 const props = defineProps<{ post: PostFeed; posts: PostFeed[]; currentUserProp: UserType }>()
 const postRef = toRefs(props.post)
@@ -25,43 +18,89 @@ const { setLoading, currentUser, visitedUser } = useGetUserStore()
 const newCommentText = ref<string>('')
 const showDeletePostModal = ref<boolean>(false)
 const isLiked = ref<boolean>(false)
-const { postsFeed } = useGetPostsFeedStore()
+const { handleUpdatePostComments, postsFeed } = useGetPostsFeedStore()
+
+async function addComment(postId: string) {
+  const jwtToken = localStorage.getItem('jwt')
+
+  if (!jwtToken) {
+    toast.error('Could not get your session! Please log in.')
+    router.push('/')
+  }
+
+  try {
+    const response = await fetch(`${baseUrl}/comments/${postId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtToken
+      },
+      body: JSON.stringify({
+        text: newCommentText.value
+      })
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      toast.error(error.message)
+      router.push('/login')
+      return
+    } else {
+      const {
+        data: { newComment }
+      } = await response.json()
+
+      handleUpdatePostComments(
+        props.currentUserProp,
+        props.posts,
+        postId,
+        newComment as CommentType
+      )
+      newCommentText.value = ''
+    }
+  } catch (error) {
+    toast.error('Oop, something went wrong!')
+    console.log(error)
+  } finally {
+    setLoading(false)
+  }
+}
 
 // like post
-// async function likePost(postId: string) {
-//   const jwtToken = localStorage.getItem('jwt')
+async function likePost(postId: string) {
+  const jwtToken = localStorage.getItem('jwt')
 
-//   if (!jwtToken) {
-//     toast.error('Could not get your session! Please log in.')
-//     router.push('/')
-//   }
+  if (!jwtToken) {
+    toast.error('Could not get your session! Please log in.')
+    router.push('/')
+  }
 
-//   try {
-//     const response = await fetch(`${baseUrl}/posts/like`, {
-//       method: 'PATCH',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         Authorization: 'Bearer ' + jwtToken
-//       },
-//       body: JSON.stringify({
-//         id: postId
-//       })
-//     })
+  try {
+    const response = await fetch(`${baseUrl}/posts/like`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + jwtToken
+      },
+      body: JSON.stringify({
+        id: postId
+      })
+    })
 
-//     if (!response.ok) {
-//       const error = await response.json()
-//       toast.error(error.message)
+    if (!response.ok) {
+      const error = await response.json()
+      toast.error(error.message)
 
-//       return
-//     } else {
-//       postRef.likes.value = [...postRef.likes.value, props.currentUserProp]
-//       isLiked.value = true
-//     }
-//   } catch (error) {
-//     toast.error('Oop, something went wrong!')
-//     console.log(error)
-//   }
-// }
+      return
+    } else {
+      postRef.likes.value = [...postRef.likes.value, props.currentUserProp]
+      isLiked.value = true
+    }
+  } catch (error) {
+    toast.error('Oop, something went wrong!')
+    console.log(error)
+  }
+}
 
 async function unlikePost(postId: string) {
   const jwtToken = localStorage.getItem('jwt')
@@ -295,13 +334,7 @@ onMounted(() => {
           :imageSize="{ height: '2rem', width: '2rem' }"
         >
         </UserPhotoAndName>
-        <form
-          @submit.prevent="
-            addComment(postRef._id.value, newCommentText, props.currentUserProp, props.posts),
-              (newCommentText = '')
-          "
-          class="w-full"
-        >
+        <form @submit.prevent="addComment(postRef._id.value)" class="w-full">
           <label for="default-search" class="mb-2 text-sm font-medium sr-only">Search</label>
           <div>
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"></div>
@@ -320,7 +353,7 @@ onMounted(() => {
         v-for="comment in postRef.comments.value"
         :key="comment._id"
         :comment="comment"
-        :currentUser="comment.author"
+        :currentUser="props.currentUserProp"
       />
     </div>
     <div v-if="props.currentUserProp._id === postRef.author.value._id">

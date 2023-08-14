@@ -11,6 +11,8 @@ const props = defineProps<{
 
 const isEditCommentVisibile = ref<boolean>(false)
 const isEditModalVisibile = ref<boolean>(false)
+
+console.log(props.currentUser._id, props.comment.author._id)
 </script>
 <template>
   <div class="flex items-center">
@@ -31,13 +33,13 @@ const isEditModalVisibile = ref<boolean>(false)
       <div class="bg-slate-100 py-2 px-4 rounded-lg">
         <div>
           <h2 class="flex items-center gap-1 font-semibold text-sm">
-            <span>{{ currentUser.firstName }}</span>
-            <span>{{ currentUser.lastName }}</span>
+            <span>{{ props.comment.author.firstName }}</span>
+            <span>{{ props.comment.author.lastName }}</span>
           </h2>
           <blockquote class="text-sm">{{ props.comment.text }}</blockquote>
         </div>
       </div>
-      <div v-if="currentUser._id === props.comment.author._id" class="relative">
+      <div v-if="props.currentUser._id === props.comment.author._id" class="relative">
         <button
           :class="
             isEditCommentVisibile
