@@ -12,6 +12,9 @@ import VisitedUsersFriends from '../components/VisitedUsersFriends.vue'
 import EditUsersProfile from '../components/UserProfile/EditUsersProfile.vue'
 import MessageFriend from '../components/UserProfile/MessageFriend.vue'
 import RemoveFriend from '../components/UserProfile/RemoveFriend.vue'
+import AddFriend from '../components/UserProfile/AddFriend.vue'
+import FriendRequestSent from '../components/UserProfile/FriendRequestSent.vue'
+import AcceptFriend from '../components/UserProfile/AcceptFriend.vue'
 
 const { route, router, toast } = useAppNavigation()
 
@@ -246,92 +249,33 @@ watch(
             <RemoveFriend :visitedUserId="visitedUser._id" @onDeleteFriend="deleteFriend" />
           </div>
 
-          <!-- if target user is NOT a friend  and not current user -->
-          <div
+          <!-- if target user is NOT a friend  -->
+          <AddFriend
             v-if="!visitedUserAditionalInfo.isAlreadyFriends && visitedUser._id !== currentUser._id"
             class="absolute bottom-[2%] right-[1.2%]"
-          >
-            <button
-              class="px-5 py-2 bg-gray-200 hover:bg-gray-300 font-semibold rounded-md transition-all duration-150"
-              @click="addFriend(visitedUser._id)"
-            >
-              <p class="flex items-center gap-2 text-base">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 fill-indigo-600"
-                >
-                  <path
-                    d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"
-                  />
-                </svg>
-
-                <span>Add friend</span>
-              </p>
-            </button>
-          </div>
+            :visitedUserId="visitedUser._id"
+            @onAddFriend="addFriend"
+          />
 
           <!-- friend request is already sent -->
-          <div
+          <FriendRequestSent
             v-if="
               !visitedUserAditionalInfo.isAlreadyFriends &&
               visitedUserAditionalInfo.isFriendRequested
             "
             class="absolute bottom-[2%] right-[1.2%]"
-          >
-            <button
-              class="px-5 py-2 bg-gray-200 hover:bg-gray-300 font-semibold rounded-md transition-all duration-150"
-            >
-              <p class="flex items-center gap-2 text-base">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 fill-indigo-600"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
+          />
 
-                <span>Invitation sent</span>
-              </p>
-            </button>
-          </div>
-
-          <!-- if current user and needs to accept friend request from target user -->
-          <div
+          <!-- if user is current user and needs to accept friend request from target user -->
+          <AcceptFriend
             v-if="
               !visitedUserAditionalInfo.isFriendRequested &&
               currentUser.friendRequests?.some((fr) => fr._id === visitedUser._id)
             "
             class="absolute bottom-[2%] right-[1.2%]"
-          >
-            <button
-              class="px-5 py-2 bg-gray-200 hover:bg-gray-300 font-semibold rounded-md"
-              @click="acceptFriend(visitedUser._id)"
-            >
-              <p class="flex items-center gap-2 text-base">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 fill-indigo-600"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-
-                <span>Accept invitation</span>
-              </p>
-            </button>
-          </div>
+            :visitedUserId="visitedUser._id"
+            @onAcceptFriend="acceptFriend"
+          />
         </div>
       </header>
     </section>
