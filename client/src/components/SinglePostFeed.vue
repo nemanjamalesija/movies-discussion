@@ -13,18 +13,18 @@ import PostLikesInfo from './PostLikesInfo.vue'
 import PostCommentsInfo from './PostCommentsInfo.vue'
 import LikeUnlikePost from './LikeUnlikePost.vue'
 import DeletePostModal from './DeletePostModal.vue'
+import AddCommentForm from './AddCommentForm.vue'
 
 const props = defineProps<{ post: PostFeed; posts: PostFeed[]; currentUserProp: UserType }>()
 const postRef = toRefs(props.post)
 const areCommentsVisible = ref<boolean>(false)
 const { toast, router } = useAppNavigation()
 const { setLoading, currentUser, visitedUser } = useGetUserStore()
-const newCommentText = ref<string>('')
 const showDeletePostModal = ref<boolean>(false)
 const isLiked = ref<boolean>(false)
 const { handleUpdatePostComments, postsFeed } = useGetPostsFeedStore()
 
-async function addComment(postId: string) {
+async function addComment(postId: string, newCommentText: string) {
   const jwtToken = localStorage.getItem('jwt')
 
   if (!jwtToken) {
@@ -40,14 +40,14 @@ async function addComment(postId: string) {
         Authorization: 'Bearer ' + jwtToken
       },
       body: JSON.stringify({
-        text: newCommentText.value
+        text: newCommentText
       })
     })
 
     if (!response.ok) {
       const error = await response.json()
       toast.error(error.message)
-      router.push('/login')
+
       return
     } else {
       const {
@@ -60,7 +60,6 @@ async function addComment(postId: string) {
         postId,
         newComment as CommentType
       )
-      newCommentText.value = ''
     }
   } catch (error) {
     toast.error('Oop, something went wrong!')
@@ -229,19 +228,7 @@ onMounted(() => {
           :imageSize="{ height: '2rem', width: '2rem' }"
         >
         </UserPhotoAndName>
-        <form @submit.prevent="addComment(postRef._id.value)" class="w-full">
-          <label for="default-search" class="mb-2 text-sm font-medium sr-only">Search</label>
-          <div>
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"></div>
-            <input
-              type="text"
-              class="`block w-full py-[0.5rem] px-4 text-sm border border-slate-300 rounded-md bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-              :class="'input--' + postRef._id.value"
-              placeholder="Write a comment..."
-              v-model="newCommentText"
-            />
-          </div>
-        </form>
+        <AddCommentForm :postId="postRef._id.value" @onAddComment="addComment" />
       </div>
 
       <UserComments
