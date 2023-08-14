@@ -11,8 +11,6 @@ const props = defineProps<{
 
 const isEditCommentVisibile = ref<boolean>(false)
 const isEditModalVisibile = ref<boolean>(false)
-
-console.log(props.currentUser._id, props.comment.author._id)
 </script>
 <template>
   <div class="flex items-center">

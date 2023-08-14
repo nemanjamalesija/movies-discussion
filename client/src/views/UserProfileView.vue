@@ -101,8 +101,6 @@ async function addFriend(userId: string) {
   } catch (error) {
     toast.error('Oop, something went wrong!')
     console.log(error)
-  } finally {
-    setLoading(false)
   }
 }
 
