@@ -24,6 +24,7 @@ const showDeletePostModal = ref<boolean>(false)
 const isLiked = ref<boolean>(false)
 const { handleUpdatePostComments, postsFeed } = useGetPostsFeedStore()
 
+// ADD COMMENT
 async function addComment(postId: string, newCommentText: string) {
   const jwtToken = localStorage.getItem('jwt')
 
@@ -69,7 +70,7 @@ async function addComment(postId: string, newCommentText: string) {
   }
 }
 
-// like post
+// LIKE POST
 async function likePost(postId: string) {
   const jwtToken = localStorage.getItem('jwt')
 
@@ -105,6 +106,7 @@ async function likePost(postId: string) {
   }
 }
 
+// UNLIKE POST
 async function unlikePost(postId: string) {
   const jwtToken = localStorage.getItem('jwt')
 
@@ -140,6 +142,7 @@ async function unlikePost(postId: string) {
   }
 }
 
+// DELETE POST
 async function deletePost(postId: string) {
   const jwtToken = localStorage.getItem('jwt')
 
@@ -166,10 +169,12 @@ async function deletePost(postId: string) {
   }
 }
 
+// DISPLAY OR HIDE COMMENTS
 function toggleComments() {
   areCommentsVisible.value = !areCommentsVisible.value
 }
 
+// DISPLAY OR HIDE DELETE POST MODAL
 function toggleDeletePostModal() {
   showDeletePostModal.value = !showDeletePostModal.value
 }
@@ -209,7 +214,7 @@ onMounted(() => {
       <PostCommentsInfo :comments="postRef.comments" @click="toggleComments" />
     </div>
 
-    <!-- like and comment user action -->
+    <!-- like, unlike and see or hide comments user actions -->
     <LikeUnlikePost
       :isLiked="isLiked"
       :postRefId="postRef._id.value"
@@ -218,7 +223,7 @@ onMounted(() => {
       @onToggleComments="toggleComments"
     />
 
-    <!-- user comments -->
+    <!-- user comments and add new comment form -->
     <div v-show="areCommentsVisible" class="flex flex-col gap-3">
       <div class="flex items-center">
         <UserPhotoAndName
@@ -239,7 +244,7 @@ onMounted(() => {
       />
     </div>
 
-    <!-- delete post if current user is author of the post -->
+    <!-- delete post component (if current user is author of the post) -->
     <DeletePostModal
       v-if="props.currentUserProp._id === postRef.author.value._id"
       :showDeletePostModal="showDeletePostModal"

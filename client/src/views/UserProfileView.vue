@@ -9,6 +9,9 @@ import LoadingSpinner from '../components/LoadingSpinner.vue'
 import { watch } from 'vue'
 import SinglePostFeed from '../components/SinglePostFeed.vue'
 import VisitedUsersFriends from '../components/VisitedUsersFriends.vue'
+import EditUsersProfile from '../components/UserProfile/EditUsersProfile.vue'
+import MessageFriend from '../components/UserProfile/MessageFriend.vue'
+import RemoveFriend from '../components/UserProfile/RemoveFriend.vue'
 
 const { route, router, toast } = useAppNavigation()
 
@@ -63,7 +66,7 @@ async function getVisitedUser() {
   }
 }
 
-// /users/add
+// ADD FRIEND
 async function addFriend(userId: string) {
   const jwtToken = localStorage.getItem('jwt')
 
@@ -100,6 +103,7 @@ async function addFriend(userId: string) {
   }
 }
 
+// ACCEPT FRIEND
 async function acceptFriend(userId: string) {
   const jwtToken = localStorage.getItem('jwt')
 
@@ -140,6 +144,7 @@ async function acceptFriend(userId: string) {
   }
 }
 
+// REMOVE FRIEND
 async function deleteFriend(userId: string) {
   const jwtToken = localStorage.getItem('jwt')
 
@@ -222,73 +227,23 @@ watch(
             </template>
           </UserPhotoAndName>
 
-          <!-- below, conditional rendering based on friend status and current user -->
+          <!-- below, conditional rendering of the visited user's profile based on: 
+          1. friend status and
+          2. if user visiting is the current user -->
 
-          <!-- if current user is the target user -->
-          <div v-if="currentUser._id === visitedUser._id" class="absolute bottom-[2%] right-[1.2%]">
-            <button
-              class="px-5 py-2 bg-gray-200 font-semibold rounded-md hover:bg-gray-300 transition-all duration-150"
-            >
-              <p class="flex items-center gap-2 text-base">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-4 h-4 fill-indigo-600"
-                >
-                  <path
-                    d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z"
-                  />
-                </svg>
-                <span>Edit profile</span>
-              </p>
-            </button>
-          </div>
+          <!-- if user visiting is the current user -->
+          <EditUsersProfile
+            v-if="currentUser._id === visitedUser._id"
+            class="absolute bottom-[2%] right-[1.2%]"
+          />
 
           <!-- if target user is already a friend -->
           <div
             v-if="visitedUserAditionalInfo.isAlreadyFriends && visitedUser._id !== currentUser._id"
             class="absolute bottom-[2%] right-[1.2%] flex items-center gap-3"
           >
-            <button
-              class="px-5 py-2 bg-gray-200 font-semibold rounded-md hover:bg-gray-300 transition-all duration-150"
-            >
-              <p class="flex items-center gap-2 text-base">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 fill-indigo-600"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 01-.814 1.686.75.75 0 00.44 1.223zM8.25 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM10.875 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875-1.125a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-
-                <span>Message</span>
-              </p>
-            </button>
-            <button
-              class="px-5 py-2 bg-gray-200 font-semibold rounded-md hover:bg-gray-300 transition-all duration-150"
-              @click="deleteFriend(visitedUser._id)"
-            >
-              <p class="flex items-center gap-2 text-base">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="w-5 h-5 fill-red-600"
-                >
-                  <path
-                    d="M10.375 2.25a4.125 4.125 0 100 8.25 4.125 4.125 0 000-8.25zM10.375 12a7.125 7.125 0 00-7.124 7.247.75.75 0 00.363.63 13.067 13.067 0 006.761 1.873c2.472 0 4.786-.684 6.76-1.873a.75.75 0 00.364-.63l.001-.12v-.002A7.125 7.125 0 0010.375 12zM16 9.75a.75.75 0 000 1.5h6a.75.75 0 000-1.5h-6z"
-                  />
-                </svg>
-
-                <span>Remove friend</span>
-              </p>
-            </button>
+            <MessageFriend />
+            <RemoveFriend :visitedUserId="visitedUser._id" @onDeleteFriend="deleteFriend" />
           </div>
 
           <!-- if target user is NOT a friend  and not current user -->
@@ -317,7 +272,7 @@ watch(
             </button>
           </div>
 
-          <!-- friend request is sent -->
+          <!-- friend request is already sent -->
           <div
             v-if="
               !visitedUserAditionalInfo.isAlreadyFriends &&
@@ -347,7 +302,7 @@ watch(
             </button>
           </div>
 
-          <!-- if current user && accept friend request -->
+          <!-- if current user and needs to accept friend request from target user -->
           <div
             v-if="
               !visitedUserAditionalInfo.isFriendRequested &&
@@ -382,8 +337,8 @@ watch(
     </section>
     <section>
       <div class="grid grid-cols-[2.2fr,3fr] gap-5 max-w-[1250px] mx-auto">
-        <!-- user friends -->
-        <section class="shadow-md rounded-md bg-white px-4 py-4 mt-3 h-fit">
+        <!-- user's friends -->
+        <div class="shadow-md rounded-md bg-white px-4 py-4 mt-3 h-fit">
           <div class="mb-3">
             <h3 class="font-semibold text-lg">Friends</h3>
             <p class="flex items-center gap-1 text-slate-500 text-base -mt-1">
@@ -396,7 +351,7 @@ watch(
           <div class="grid grid-cols-3 gap-3">
             <VisitedUsersFriends v-for="user in visitedUser.friends" :key="user._id" :user="user" />
           </div>
-        </section>
+        </div>
 
         <!-- return this if there is no posts -->
         <h2
