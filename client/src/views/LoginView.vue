@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import useGetUserStore from '../hooks/useGetUserStore'
 import useAppNavigation from '../composables/useAppNavigation'
 import { loginSchema } from '../schemas/loginUserSchema'
