@@ -47,10 +47,6 @@ async function loginUserHandler() {
   loginUser.value.email = ''
   loginUser.value.password = ''
 }
-
-onMounted(() => {
-  if (currentUser.value.firstName) router.push('/')
-})
 </script>
 
 <template>

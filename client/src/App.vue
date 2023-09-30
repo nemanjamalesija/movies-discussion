@@ -7,9 +7,8 @@ import useGetSession from './hooks/useGetSession'
 
 const { currentUser } = useGetUserStore()
 
-// controls redirecting when manually changing routes
 onMounted(async () => {
-  await useGetSession()
+  if (!currentUser.value.firstName) await useGetSession()
 })
 </script>
 

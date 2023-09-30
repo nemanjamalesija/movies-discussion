@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import useGetUserStore from '@/hooks/useGetUserStore'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,12 +13,22 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue')
+      component: () => import('../views/LoginView.vue'),
+      beforeEnter: (to, from) => {
+        // reject the navigation
+        const { currentUser } = useGetUserStore()
+        if (currentUser) return { name: 'home' }
+      }
     },
     {
       path: '/signup',
       name: 'signup',
-      component: () => import('../views/SignUpView.vue')
+      component: () => import('../views/SignUpView.vue'),
+      beforeEnter: (to, from) => {
+        // reject the navigation
+        const { currentUser } = useGetUserStore()
+        if (currentUser) return { name: 'home' }
+      }
     },
     {
       path: '/:id',

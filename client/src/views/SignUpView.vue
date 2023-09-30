@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { baseUrl } from '../constants/baseUrl'
 import useAppNavigation from '../composables/useAppNavigation'
 import { signUpUserSchema } from '../schemas/signupUserSchema'
 import type { SignUpUserType } from '../schemas/signupUserSchema'
 import signUp from '../api/signUp'
 import useGetUserStore from '../hooks/useGetUserStore'
 import LoadingSpinner from '../components/LoadingSpinner.vue'
-import { is } from 'date-fns/locale'
 
 const { toast, router } = useAppNavigation()
 const { loading, setLoading } = useGetUserStore()
