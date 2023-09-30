@@ -7,7 +7,7 @@ import type { LoginUserType } from '../schemas/loginUserSchema'
 import LoadingSpinner from '../components/LoadingSpinner.vue'
 import logIn from '../api/logIn'
 
-const { setCurrentUser, currentUser, loading, setLoading } = useGetUserStore()
+const { setCurrentUser, loading, setLoading } = useGetUserStore()
 const { toast, router } = useAppNavigation()
 
 const loginUser = ref<LoginUserType>({

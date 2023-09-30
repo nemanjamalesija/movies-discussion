@@ -34,9 +34,9 @@ async function signUpHandler() {
 
   setLoading(true)
 
-  const isSignup = await signUp(tryUser)
+  const res = await signUp(tryUser)
 
-  if (isSignup) {
+  if (res == "success") {
     toast.success('Account created! Feel free to log in')
     router.push('/login')
   }

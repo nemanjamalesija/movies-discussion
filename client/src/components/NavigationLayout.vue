@@ -1,29 +1,31 @@
 <script setup lang="ts">
 import useGetUserStore from '../hooks/useGetUserStore'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import useAppNavigation from '../composables/useAppNavigation'
-import logoutHandler from '../helpers/logoutHandler'
 import SearchUserInput from './ui/SearchUserInput.vue'
-
+import logOut from '@/api/logOut'
 const { currentUser, setCurrentUser } = useGetUserStore()
-const { router, toast } = useAppNavigation()
+const { router } = useAppNavigation()
 const isUserInfoDropDown = ref<boolean>(false)
 
-onMounted(async () => {
-  const navRef = ref(document.querySelector('.header-nav'))
+async function logOutHandler() {
+  await logOut()
 
-  const handleStickyNav = function () {
-    if (!navRef.value) return
-
-    if (window.scrollY > 50) navRef.value.classList.add('sticky')
-    else navRef.value.classList.remove('sticky')
-  }
-
-  window.addEventListener('scroll', handleStickyNav)
-
-  return () => window.removeEventListener('scroll', handleStickyNav)
-})
+  setCurrentUser({
+    _id: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    photo: '',
+    role: '',
+    friends: [],
+    friendRequests: [],
+    active: true
+  })
+  router.push('/login')
+}
 </script>
+
 <template>
   <header class="header-nav shadow absolute top-0 left-0 w-full z-40 max-w-screen-2xl">
     <nav
@@ -105,7 +107,7 @@ onMounted(async () => {
             <button
               v-if="currentUser.firstName"
               class="nav__link text-start"
-              @click.prevent="logoutHandler(router, toast, setCurrentUser)"
+              @click.prevent="logOutHandler"
             >
               <div class="flex items-center gap-2">
                 <p class="bg-slate-300 rounded-full h-9 w-9 flex items-center justify-center">

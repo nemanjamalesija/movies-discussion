@@ -26,7 +26,7 @@ export default async function signUpHandler(tryUser: {
       toast.error(data.message)
       return
     } else {
-      return true
+      return data.status
     }
   } catch (error) {
     if (error instanceof z.ZodError) {

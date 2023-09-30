@@ -17,7 +17,7 @@ const router = createRouter({
       beforeEnter: (to, from) => {
         // reject the navigation
         const { currentUser } = useGetUserStore()
-        if (currentUser) return { name: 'home' }
+        if (currentUser && to.name !== 'login') return { name: 'home' }
       }
     },
     {
@@ -27,7 +27,7 @@ const router = createRouter({
       beforeEnter: (to, from) => {
         // reject the navigation
         const { currentUser } = useGetUserStore()
-        if (currentUser) return { name: 'home' }
+        if (currentUser && to.name !== 'signup') return { name: 'home' }
       }
     },
     {
