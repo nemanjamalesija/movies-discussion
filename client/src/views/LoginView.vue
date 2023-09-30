@@ -1,17 +1,13 @@
 <script setup lang="ts">
-import { baseUrl } from '../constants/baseUrl'
-import { ref } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import useGetUserStore from '../hooks/useGetUserStore'
 import useAppNavigation from '../composables/useAppNavigation'
 import { loginSchema } from '../schemas/loginUserSchema'
 import type { LoginUserType } from '../schemas/loginUserSchema'
-import { computed } from 'vue'
-import z from 'zod'
-import formatZodErrors from '../helpers/formatZodErrors'
 import LoadingSpinner from '../components/LoadingSpinner.vue'
-import type { UserType } from '@/types/userType'
+import logIn from '../api/logIn'
 
-const { setCurrentUser, loading, setLoading } = useGetUserStore()
+const { setCurrentUser, currentUser, loading, setLoading } = useGetUserStore()
 const { toast, router } = useAppNavigation()
 
 const loginUser = ref<LoginUserType>({
@@ -29,78 +25,32 @@ async function loginUserHandler() {
   if (!loginUser.value.email || !loginUser.value.password)
     return toast.error('Please provide both email and password')
 
-  try {
-    setLoading(true)
+  // zod validation
+  const tryUser = loginSchema.parse({
+    email: loginUser.value.email,
+    password: loginUser.value.password
+  })
 
-    // zod validation
-    const tryUser = loginSchema.parse({
-      email: loginUser.value.email,
-      password: loginUser.value.password
-    })
+  setLoading(true)
+  const user = await logIn(tryUser)
 
-    const response = await fetch(`${baseUrl}/users/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(tryUser)
-    })
+  if (user) {
+    // set user in the state
+    setCurrentUser(user)
 
-    const data = await response.json()
-
-    // throw error from the backend
-    if (!response.ok) {
-      toast.error(data.message)
-      return
-    } else {
-      // get token and current user from the response
-      const { token } = data
-      const {
-        data: { user }
-      } = data
-
-      const { _id, firstName, lastName, email, friendRequests, friends, role, photo, active } =
-        user as UserType
-
-      // grant access
-      router.push('/')
-
-      // set user in the state
-      setCurrentUser({
-        _id,
-        firstName,
-        lastName,
-        email,
-        role,
-        photo,
-        friendRequests,
-        friends,
-        active
-      })
-
-      setLoading(false)
-
-      // set jwt in the local storage
-      localStorage.setItem('jwt', token)
-    }
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return toast.error(formatZodErrors(error))
-    } else {
-      setLoading(false)
-      toast.error('Oop, something went wrong!')
-    }
-  } finally {
-    // clear input form
-    loginUser.value.email = ''
-    loginUser.value.password = ''
-    setLoading(false)
+    // grant access
+    router.push('/')
   }
+  setLoading(false)
+
+  // clear input form
+  loginUser.value.email = ''
+  loginUser.value.password = ''
 }
 
-// watch(currentUser, (newValue) => {
-//   if (newValue.firstName) router.push('/')
-// })
+onMounted(() => {
+  if (currentUser.value.firstName) router.push('/')
+})
 </script>
 
 <template>
