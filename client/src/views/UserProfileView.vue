@@ -17,6 +17,7 @@ import FriendRequestSent from '../components/UserProfile/FriendRequestSent.vue'
 import AcceptFriend from '../components/UserProfile/AcceptFriend.vue'
 import getVisitedProfile from '@/api/getVisitedProfile'
 import addFriend from '../api/addFriend'
+import acceptFriend from '../api/acceptFriend'
 
 const { route, router, toast } = useAppNavigation()
 
@@ -49,52 +50,21 @@ async function getVisitedUserHandler() {
 async function addFriendHandler(userId: string) {
   const res = await addFriend(userId)
 
-  if (!res) return
-
-  const { isAlreadyFriends, isFriendRequested } = res
-
-  visitedUserAditionalInfo.value = { isAlreadyFriends, isFriendRequested }
+  if (res == 'success')
+    visitedUserAditionalInfo.value = { isAlreadyFriends: undefined, isFriendRequested: true }
 }
 
 // ACCEPT FRIEND
-async function acceptFriend(userId: string) {
-  const jwtToken = localStorage.getItem('jwt')
+async function acceptFriendHandler(userId: string) {
+  const res = await acceptFriend(userId)
 
-  if (!jwtToken) {
-    toast.error('Could not get your session! Please log in.')
-    router.push('/')
-  }
+  if (!res) return
 
-  try {
-    const response = await fetch(`${baseUrl}/users/accept`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + jwtToken
-      },
-      body: JSON.stringify({
-        id: userId
-      })
-    })
+  const { targetUser } = res
 
-    if (!response.ok) {
-      const error = await response.json()
-      toast.error(error.message)
+  acceptFriendRequest(currentUser.value, targetUser as UserType)
 
-      return
-    } else {
-      const {
-        data: { targetUser }
-      } = await response.json()
-      acceptFriendRequest(currentUser.value, targetUser as UserType)
-
-      visitedUserAditionalInfo.value.isAlreadyFriends = true
-      toast.success('User added to your friends list')
-    }
-  } catch (error) {
-    toast.error('Oop, something went wrong!')
-    console.log(error)
-  }
+  visitedUserAditionalInfo.value.isAlreadyFriends = true
 }
 
 // REMOVE FRIEND
@@ -224,7 +194,7 @@ watch(
             "
             class="absolute bottom-[2%] right-[1.2%]"
             :visitedUserId="visitedUser._id"
-            @onAcceptFriend="acceptFriend"
+            @onAcceptFriend="acceptFriendHandler"
           />
         </div>
       </header>

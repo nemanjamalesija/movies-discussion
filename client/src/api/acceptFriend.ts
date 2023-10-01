@@ -2,12 +2,12 @@ import { baseUrl } from '@/constants/baseUrl'
 import useGetToken from '@/hooks/useGetToken'
 import { useToast } from 'vue-toastification'
 
-export default async function addFriend(userId: string) {
+export default async function acceptFriend(userId: string) {
   const jwtToken = useGetToken()
   const toast = useToast()
 
   try {
-    const response = await fetch(`${baseUrl}/users/add`, {
+    const response = await fetch(`${baseUrl}/users/accept`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -21,10 +21,14 @@ export default async function addFriend(userId: string) {
     if (!response.ok) {
       const error = await response.json()
       toast.error(error.message)
+
       return
     } else {
-      const data = await response.json()
-      return data.status
+      const {
+        data: { targetUser }
+      } = await response.json()
+      toast.success('User added to your friends list')
+      return { targetUser }
     }
   } catch (error) {
     toast.error('Oop, something went wrong!')
