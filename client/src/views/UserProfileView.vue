@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import useGetUserStore from '../hooks/useGetUserStore'
 import useAppNavigation from '../composables/useAppNavigation'
-import { baseUrl } from '../constants/baseUrl'
 import type { UserType } from '../types/userType'
-import { onMounted } from 'vue'
+import { onMounted, watch } from 'vue'
 import UserPhotoAndName from '../components/ui/UserPhotoAndName.vue'
 import LoadingSpinner from '../components/LoadingSpinner.vue'
-import { watch } from 'vue'
 import SinglePostFeed from '../components/SinglePostFeed.vue'
 import VisitedUsersFriends from '../components/VisitedUsersFriends.vue'
 import EditUsersProfile from '../components/UserProfile/EditUsersProfile.vue'
@@ -18,8 +16,9 @@ import AcceptFriend from '../components/UserProfile/AcceptFriend.vue'
 import getVisitedProfile from '@/api/getVisitedProfile'
 import addFriend from '../api/addFriend'
 import acceptFriend from '../api/acceptFriend'
+import removeFriendAPI from '../api/removeFriend'
 
-const { route, router, toast } = useAppNavigation()
+const { route, router } = useAppNavigation()
 
 const {
   loading,
@@ -59,53 +58,20 @@ async function acceptFriendHandler(userId: string) {
   const res = await acceptFriend(userId)
 
   if (!res) return
-
   const { targetUser } = res
 
   acceptFriendRequest(currentUser.value, targetUser as UserType)
-
   visitedUserAditionalInfo.value.isAlreadyFriends = true
 }
 
 // REMOVE FRIEND
-async function deleteFriend(userId: string) {
-  const jwtToken = localStorage.getItem('jwt')
+async function deleteFriendHandler(userId: string) {
+  const res = await removeFriendAPI(userId)
 
-  if (!jwtToken) {
-    toast.error('Could not get your session! Please log in.')
-    router.push('/')
-  }
-
-  try {
-    const response = await fetch(`${baseUrl}/users/remove`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + jwtToken
-      },
-      body: JSON.stringify({
-        id: userId
-      })
-    })
-
-    const {
-      data: { targetUser }
-    } = await response.json()
-
-    if (!response.ok) {
-      const error = await response.json()
-      toast.error(error.message)
-
-      return
-    } else {
-      removeFriend(currentUser.value, targetUser as UserType)
-      visitedUserAditionalInfo.value.isAlreadyFriends = false
-
-      toast.success('User removed from your friends list')
-    }
-  } catch (error) {
-    toast.error('Oop, something went wrong!')
-    console.log(error)
+  if (res) {
+    const { targetUser } = res
+    removeFriend(currentUser.value, targetUser as UserType)
+    visitedUserAditionalInfo.value.isAlreadyFriends = false
   }
 }
 
@@ -125,80 +91,78 @@ watch(
 <template>
   <LoadingSpinner v-if="loading" class="mt-60" />
   <div v-else class="pb-20">
-    <section>
-      <header class="bg-white">
-        <div class="h-[70vh] max-w-7xl pb-32 relative mx-auto bg-white">
-          <div class="bg-gray-200 h-full rounded-md"></div>
-          <UserPhotoAndName
-            containerClass="flex gap-5 items-center absolute bottom-[2%] left-[2%] cursor-default"
-            :currentUser="visitedUser"
-            :wrapperSize="{ height: '10rem', width: '10rem' }"
-            :imageSize="{ height: '9rem', width: '9rem' }"
-          >
-            <template #user-photo-adjacent>
-              <div class="flex flex-col gap-1 mt-8">
-                <h2 class="flex items-center gap-1 font-semibold text-3xl">
-                  <span>{{ visitedUser.firstName }}</span>
-                  <span>{{ visitedUser.lastName }}</span>
-                </h2>
+    <header class="bg-white">
+      <div class="h-[70vh] max-w-7xl pb-32 relative mx-auto bg-white">
+        <div class="bg-gray-200 h-full rounded-md"></div>
+        <UserPhotoAndName
+          containerClass="flex gap-5 items-center absolute bottom-[2%] left-[2%] cursor-default"
+          :currentUser="visitedUser"
+          :wrapperSize="{ height: '10rem', width: '10rem' }"
+          :imageSize="{ height: '9rem', width: '9rem' }"
+        >
+          <template #user-photo-adjacent>
+            <div class="flex flex-col gap-1 mt-8">
+              <h2 class="flex items-center gap-1 font-semibold text-3xl">
+                <span>{{ visitedUser.firstName }}</span>
+                <span>{{ visitedUser.lastName }}</span>
+              </h2>
 
-                <p class="flex gap-1 text-slate-500 font-semibold">
-                  <span>{{ visitedUser.friends?.length }}</span>
-                  <span>friends</span>
-                </p>
-              </div>
-            </template>
-          </UserPhotoAndName>
+              <p class="flex gap-1 text-slate-500 font-semibold">
+                <span>{{ visitedUser.friends?.length }}</span>
+                <span>friends</span>
+              </p>
+            </div>
+          </template>
+        </UserPhotoAndName>
 
-          <!-- below, conditional rendering of the visited user's profile based on: 
+        <!-- below, conditional rendering of the visited user's profile based on: 
           1. friend status and
           2. if user visiting is the current user -->
 
-          <!-- if user visiting is the current user -->
-          <EditUsersProfile
-            v-if="currentUser._id === visitedUser._id"
-            class="absolute bottom-[2%] right-[1.2%]"
-          />
+        <!-- if user visiting is the current user -->
+        <EditUsersProfile
+          v-if="currentUser._id === visitedUser._id"
+          class="absolute bottom-[2%] right-[1.2%]"
+        />
 
-          <!-- if target user is already a friend -->
-          <div
-            v-if="visitedUserAditionalInfo.isAlreadyFriends && visitedUser._id !== currentUser._id"
-            class="absolute bottom-[2%] right-[1.2%] flex items-center gap-3"
-          >
-            <MessageFriend />
-            <RemoveFriend :visitedUserId="visitedUser._id" @onDeleteFriend="deleteFriend" />
-          </div>
-
-          <!-- if target user is NOT a friend  -->
-          <AddFriend
-            v-if="!visitedUserAditionalInfo.isAlreadyFriends && visitedUser._id !== currentUser._id"
-            class="absolute bottom-[2%] right-[1.2%]"
-            :visitedUserId="visitedUser._id"
-            @onAddFriend="addFriendHandler"
-          />
-
-          <!-- friend request is already sent -->
-          <FriendRequestSent
-            v-if="
-              !visitedUserAditionalInfo.isAlreadyFriends &&
-              visitedUserAditionalInfo.isFriendRequested
-            "
-            class="absolute bottom-[2%] right-[1.2%]"
-          />
-
-          <!-- if user is current user and needs to accept friend request from target user -->
-          <AcceptFriend
-            v-if="
-              !visitedUserAditionalInfo.isFriendRequested &&
-              currentUser.friendRequests?.some((fr) => fr._id === visitedUser._id)
-            "
-            class="absolute bottom-[2%] right-[1.2%]"
-            :visitedUserId="visitedUser._id"
-            @onAcceptFriend="acceptFriendHandler"
-          />
+        <!-- if target user is already a friend -->
+        <div
+          v-if="visitedUserAditionalInfo.isAlreadyFriends && visitedUser._id !== currentUser._id"
+          class="absolute bottom-[2%] right-[1.2%] flex items-center gap-3"
+        >
+          <MessageFriend />
+          <RemoveFriend :visitedUserId="visitedUser._id" @onDeleteFriend="deleteFriendHandler" />
         </div>
-      </header>
-    </section>
+
+        <!-- if target user is NOT a friend  -->
+        <AddFriend
+          v-if="!visitedUserAditionalInfo.isAlreadyFriends && visitedUser._id !== currentUser._id"
+          class="absolute bottom-[2%] right-[1.2%]"
+          :visitedUserId="visitedUser._id"
+          @onAddFriend="addFriendHandler"
+        />
+
+        <!-- friend request is already sent -->
+        <FriendRequestSent
+          v-if="
+            !visitedUserAditionalInfo.isAlreadyFriends && visitedUserAditionalInfo.isFriendRequested
+          "
+          class="absolute bottom-[2%] right-[1.2%]"
+        />
+
+        <!-- if user is current user and needs to accept friend request from target user -->
+        <AcceptFriend
+          v-if="
+            !visitedUserAditionalInfo.isFriendRequested &&
+            currentUser.friendRequests?.some((fr) => fr._id === visitedUser._id)
+          "
+          class="absolute bottom-[2%] right-[1.2%]"
+          :visitedUserId="visitedUser._id"
+          @onAcceptFriend="acceptFriendHandler"
+        />
+      </div>
+    </header>
+
     <section>
       <div class="grid grid-cols-[2.2fr,3fr] gap-5 max-w-[1250px] mx-auto">
         <!-- user's friends -->
@@ -248,4 +212,3 @@ watch(
 </template>
 
 <style scoped></style>
-@/api/getVisitedProfile
