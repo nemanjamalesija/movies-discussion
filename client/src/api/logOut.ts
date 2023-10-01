@@ -1,11 +1,10 @@
 import { baseUrl } from '../constants/baseUrl'
-
 import { useToast } from 'vue-toastification'
 
 export default async function logOut() {
   const toast = useToast()
   try {
-    await fetch(`${baseUrl}/api/v1/users/logout`)
+    await fetch(`${baseUrl}/users/logout`)
 
     localStorage.removeItem('jwt')
   } catch (error) {

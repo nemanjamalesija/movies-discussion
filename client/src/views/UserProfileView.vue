@@ -55,21 +55,19 @@ async function addFriendHandler(userId: string) {
 
 // ACCEPT FRIEND
 async function acceptFriendHandler(userId: string) {
-  const res = await acceptFriend(userId)
+  const targetUser = await acceptFriend(userId)
 
-  if (!res) return
-  const { targetUser } = res
-
-  acceptFriendRequest(currentUser.value, targetUser as UserType)
-  visitedUserAditionalInfo.value.isAlreadyFriends = true
+  if (targetUser) {
+    acceptFriendRequest(currentUser.value, targetUser as UserType)
+    visitedUserAditionalInfo.value.isAlreadyFriends = true
+  }
 }
 
 // REMOVE FRIEND
 async function deleteFriendHandler(userId: string) {
-  const res = await removeFriendAPI(userId)
+  const targetUser = await removeFriendAPI(userId)
 
-  if (res) {
-    const { targetUser } = res
+  if (targetUser) {
     removeFriend(currentUser.value, targetUser as UserType)
     visitedUserAditionalInfo.value.isAlreadyFriends = false
   }
