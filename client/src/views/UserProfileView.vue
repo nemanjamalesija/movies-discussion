@@ -13,7 +13,7 @@ import RemoveFriend from '../components/UserProfile/RemoveFriend.vue'
 import AddFriend from '../components/UserProfile/AddFriend.vue'
 import FriendRequestSent from '../components/UserProfile/FriendRequestSent.vue'
 import AcceptFriend from '../components/UserProfile/AcceptFriend.vue'
-import getVisitedProfile from '@/api/getVisitedProfile'
+import getVisitedProfile from '../api/getVisitedProfile'
 import addFriend from '../api/addFriend'
 import acceptFriend from '../api/acceptFriend'
 import removeFriendAPI from '../api/removeFriend'
@@ -115,7 +115,8 @@ watch(
           </template>
         </UserPhotoAndName>
 
-        <!-- below, conditional rendering of the visited user's profile based on: 
+        <!-- BELOW:
+         - conditional rendering of the visited user's profile based on: 
           1. friend status and
           2. if user visiting is the current user -->
 
@@ -134,7 +135,7 @@ watch(
           <RemoveFriend :visitedUserId="visitedUser._id" @onDeleteFriend="deleteFriendHandler" />
         </div>
 
-        <!-- if target user is NOT a friend  -->
+        <!-- if target user is NOT a friend and no friend requests sent  -->
         <AddFriend
           v-if="!visitedUserAditionalInfo.isAlreadyFriends && visitedUser._id !== currentUser._id"
           class="absolute bottom-[2%] right-[1.2%]"
@@ -142,7 +143,7 @@ watch(
           @onAddFriend="addFriendHandler"
         />
 
-        <!-- friend request is already sent -->
+        <!-- if current user has sent friend request to the target user -->
         <FriendRequestSent
           v-if="
             !visitedUserAditionalInfo.isAlreadyFriends && visitedUserAditionalInfo.isFriendRequested
@@ -150,7 +151,7 @@ watch(
           class="absolute bottom-[2%] right-[1.2%]"
         />
 
-        <!-- if user is current user and needs to accept friend request from target user -->
+        <!-- if target user has sent friend request to the current user -->
         <AcceptFriend
           v-if="
             !visitedUserAditionalInfo.isFriendRequested &&
@@ -165,7 +166,7 @@ watch(
 
     <section>
       <div class="grid grid-cols-[2.2fr,3fr] gap-5 max-w-[1250px] mx-auto">
-        <!-- user's friends -->
+        <!-- target user's friends -->
         <div class="shadow-md rounded-md bg-white px-4 py-4 mt-3 h-fit">
           <div class="mb-3">
             <h3 class="font-semibold text-lg">Friends</h3>
@@ -175,13 +176,12 @@ watch(
             </p>
           </div>
 
-          <!-- visited users friends -->
           <div class="grid grid-cols-3 gap-3">
             <VisitedUsersFriends v-for="user in visitedUser.friends" :key="user._id" :user="user" />
           </div>
         </div>
 
-        <!-- return this if there is no posts -->
+        <!-- return this if target user has no posts -->
         <h2
           v-if="visitedUser.posts && visitedUser.posts.length === 0"
           class="text-slate-500 font-semibold text-base text-center mt-32"
@@ -189,8 +189,7 @@ watch(
           This user doesn't have any posts.
         </h2>
 
-        <!-- else return these posts -->
-        <!-- user posts -->
+        <!-- else return target user's posts -->
         <div class="w-full" v-if="visitedUser.posts && visitedUser.posts.length > 0">
           <SinglePostFeed
             v-for="post in visitedUser.posts"
@@ -199,6 +198,7 @@ watch(
             :currentUserProp="currentUser"
             :posts="visitedUser.posts"
           />
+
           <p
             v-if="visitedUser.posts.length > 0"
             class="text-slate-500 font-semibold text-base text-center mt-4"
