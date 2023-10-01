@@ -15,6 +15,8 @@ import RemoveFriend from '../components/UserProfile/RemoveFriend.vue'
 import AddFriend from '../components/UserProfile/AddFriend.vue'
 import FriendRequestSent from '../components/UserProfile/FriendRequestSent.vue'
 import AcceptFriend from '../components/UserProfile/AcceptFriend.vue'
+import getVisitedProfile from '@/api/getVisitedProfile'
+import addFriend from '../api/addFriend'
 
 const { route, router, toast } = useAppNavigation()
 
@@ -28,80 +30,30 @@ const {
   removeFriend
 } = useGetUserStore()
 
-async function getVisitedUser() {
-  const jwtToken = localStorage.getItem('jwt')
-
-  if (!jwtToken) {
-    toast.error('Could not get your session! Please log in.')
-    router.push('/')
-  }
+async function getVisitedUserHandler() {
   setLoading(true)
-
-  try {
-    const response = await fetch(`${baseUrl}/users/${route.params.id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + jwtToken
-      }
-    })
-
-    if (!response.ok) {
-      const error = await response.json()
-      toast.error(error.message)
-      return
-    } else {
-      const {
-        data: { isAlreadyFriends, isFriendRequested, targetUser }
-      } = await response.json()
-
-      setLoading(false)
-      visitedUser.value = targetUser as UserType
-
-      visitedUserAditionalInfo.value = { isAlreadyFriends, isFriendRequested }
-    }
-  } catch (error) {
-    toast.error('Oop, something went wrong!')
-    console.log(error)
-    setLoading(false)
-  } finally {
-    setLoading(false)
+  const res = await getVisitedProfile(route.params.id as string)
+  if (!res) {
+    router.push('/')
+    return
   }
+
+  const { isAlreadyFriends, isFriendRequested, targetUser } = res
+
+  setLoading(false)
+  visitedUser.value = targetUser as UserType
+  visitedUserAditionalInfo.value = { isAlreadyFriends, isFriendRequested }
 }
 
 // ADD FRIEND
-async function addFriend(userId: string) {
-  const jwtToken = localStorage.getItem('jwt')
+async function addFriendHandler(userId: string) {
+  const res = await addFriend(userId)
 
-  if (!jwtToken) {
-    toast.error('Could not get your session! Please log in.')
-    router.push('/')
-  }
+  if (!res) return
 
-  try {
-    const response = await fetch(`${baseUrl}/users/add`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + jwtToken
-      },
-      body: JSON.stringify({
-        id: userId
-      })
-    })
+  const { isAlreadyFriends, isFriendRequested } = res
 
-    if (!response.ok) {
-      const error = await response.json()
-      toast.error(error.message)
-      return
-    } else {
-      await response.json()
-      visitedUserAditionalInfo.value = { isAlreadyFriends: undefined, isFriendRequested: true }
-    }
-  } catch (error) {
-    toast.error('Oop, something went wrong!')
-    console.log(error)
-  }
+  visitedUserAditionalInfo.value = { isAlreadyFriends, isFriendRequested }
 }
 
 // ACCEPT FRIEND
@@ -188,14 +140,14 @@ async function deleteFriend(userId: string) {
 }
 
 onMounted(async () => {
-  await getVisitedUser()
+  await getVisitedUserHandler()
 })
 
 watch(
   () => route.params.id,
   async (newId, oldId) => {
     if (newId !== oldId) {
-      await getVisitedUser()
+      await getVisitedUserHandler()
     }
   }
 )
@@ -252,7 +204,7 @@ watch(
             v-if="!visitedUserAditionalInfo.isAlreadyFriends && visitedUser._id !== currentUser._id"
             class="absolute bottom-[2%] right-[1.2%]"
             :visitedUserId="visitedUser._id"
-            @onAddFriend="addFriend"
+            @onAddFriend="addFriendHandler"
           />
 
           <!-- friend request is already sent -->
@@ -326,3 +278,4 @@ watch(
 </template>
 
 <style scoped></style>
+@/api/getVisitedProfile

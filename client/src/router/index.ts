@@ -14,7 +14,7 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginView.vue'),
-      beforeEnter: (to, from) => {
+      beforeEnter: (to) => {
         // reject the navigation
         const { currentUser } = useGetUserStore()
         if (currentUser && to.name !== 'login') return { name: 'home' }
@@ -24,8 +24,9 @@ const router = createRouter({
       path: '/signup',
       name: 'signup',
       component: () => import('../views/SignUpView.vue'),
-      beforeEnter: (to, from) => {
+      beforeEnter: (to) => {
         // reject the navigation
+
         const { currentUser } = useGetUserStore()
         if (currentUser && to.name !== 'signup') return { name: 'home' }
       }
