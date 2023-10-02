@@ -5,9 +5,7 @@ import { toRefs, ref, onMounted } from 'vue'
 import formatDate from '../helpers/formatDate'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
 import UserComments from './UserComments.vue'
-import useAppNavigation from '../composables/useAppNavigation'
 import useGetUserStore from '../hooks/useGetUserStore'
-import { baseUrl } from '../constants/baseUrl'
 import useGetPostsFeedStore from '../hooks/useGetPostsFeedStore'
 import PostLikesInfo from './PostLikesInfo.vue'
 import PostCommentsInfo from './PostCommentsInfo.vue'
@@ -17,11 +15,11 @@ import AddCommentForm from './AddCommentForm.vue'
 import addComment from '../api/addComment'
 import likePost from '../api/likePost'
 import unlikePost from '../api/unlikePost'
+import deletePost from '../api/deletePost'
 
 const props = defineProps<{ post: PostFeed; posts: PostFeed[]; currentUserProp: UserType }>()
 const postRef = toRefs(props.post)
 const areCommentsVisible = ref<boolean>(false)
-const { toast, router } = useAppNavigation()
 const { currentUser, visitedUser } = useGetUserStore()
 const showDeletePostModal = ref<boolean>(false)
 const isLiked = ref<boolean>(false)
@@ -30,8 +28,8 @@ const { handleUpdatePostComments, postsFeed } = useGetPostsFeedStore()
 // ADD COMMENT
 async function addCommentHandler(postId: string, newCommentText: string) {
   const newComment = await addComment(postId, newCommentText)
-  if (!newComment) return
 
+  if (!newComment) return
   handleUpdatePostComments(props.currentUserProp, props.posts, postId, newComment)
 }
 
@@ -40,7 +38,6 @@ async function likePostHandler(postId: string) {
   const res = await likePost(postId)
 
   if (res != 'success') return
-
   postRef.likes.value = [...postRef.likes.value, props.currentUserProp]
   isLiked.value = true
 }
@@ -55,30 +52,14 @@ async function unlikePostHandler(postId: string) {
 }
 
 // DELETE POST
-async function deletePost(postId: string) {
-  const jwtToken = localStorage.getItem('jwt')
+async function deletePostHandler(postId: string) {
+  const res = await deletePost(postId)
 
-  if (!jwtToken) {
-    toast.error('Could not get your session! Please log in.')
-    router.push('/')
-  }
+  if (res != 'success') return
 
-  try {
-    await fetch(`${baseUrl}/posts/${postId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + jwtToken
-      }
-    })
-
-    visitedUser.value.posts = visitedUser.value.posts?.filter((p) => p._id !== postId)
-    currentUser.value.posts = currentUser.value.posts?.filter((p) => p._id !== postId)
-    postsFeed.value = postsFeed.value.filter((p) => p._id !== postId)
-  } catch (error) {
-    toast.error('Oop, something went wrong!')
-    console.log(error)
-  }
+  visitedUser.value.posts = visitedUser.value.posts?.filter((p) => p._id !== postId)
+  currentUser.value.posts = currentUser.value.posts?.filter((p) => p._id !== postId)
+  postsFeed.value = postsFeed.value.filter((p) => p._id !== postId)
 }
 
 // DISPLAY OR HIDE COMMENTS
@@ -161,7 +142,7 @@ onMounted(() => {
       v-if="props.currentUserProp._id === postRef.author.value._id"
       :showDeletePostModal="showDeletePostModal"
       :postId="postRef._id.value"
-      @onDeletePost="deletePost"
+      @onDeletePost="deletePostHandler"
       @onToggleDeletePostModal="toggleDeletePostModal"
     />
   </div>
