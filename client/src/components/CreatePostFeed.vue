@@ -2,63 +2,28 @@
 import { ref } from 'vue'
 import useGetUserStore from '../hooks/useGetUserStore'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
-import useAppNavigation from '../composables/useAppNavigation'
-import { baseUrl } from '../constants/baseUrl'
 import useGetPostsFeedStore from '../hooks/useGetPostsFeedStore'
+import createNewPostAPI from '../api/createNewPost'
 
 const isPostingPhoto = ref<boolean>(false)
 const newPostText = ref<string>('')
 const { currentUser } = useGetUserStore()
-const { toast, router } = useAppNavigation()
 const { postsFeed } = useGetPostsFeedStore()
 
 async function createNewPost() {
-  const jwtToken = localStorage.getItem('jwt')
+  const newPost = await createNewPostAPI(newPostText.value)
 
-  if (!jwtToken) {
-    toast.error('Could not get your session! Please log in.')
-    router.push('/')
-  }
-
-  try {
-    const response = await fetch(`${baseUrl}/posts`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + jwtToken
-      },
-      body: JSON.stringify({
-        text: newPostText.value
-      })
-    })
-
-    if (!response.ok) {
-      const error = await response.json()
-      toast.error(error.message)
-      router.push('/login')
-      return
-    } else {
-      const {
-        data: { newPost }
-      } = await response.json()
-
-      postsFeed.value.unshift({
-        ...newPost,
-        author: {
-          _id: currentUser.value._id,
-          firstName: currentUser.value.firstName,
-          lastName: currentUser.value.lastName,
-          photo: currentUser.value.photo
-        }
-      })
-      newPostText.value = ''
-
-      console.log(postsFeed.value)
+  if (!newPost) return
+  postsFeed.value.unshift({
+    ...newPost,
+    author: {
+      _id: currentUser.value._id,
+      firstName: currentUser.value.firstName,
+      lastName: currentUser.value.lastName,
+      photo: currentUser.value.photo
     }
-  } catch (error) {
-    toast.error('Oop, something went wrong!')
-    console.log(error)
-  }
+  })
+  newPostText.value = ''
 }
 </script>
 <template>
