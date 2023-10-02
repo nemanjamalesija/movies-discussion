@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CommentType, PostFeed } from '../types/postType'
+import type { PostFeed } from '../types/postType'
 import type { UserType } from '../types/userType'
 import { toRefs, ref, onMounted } from 'vue'
 import formatDate from '../helpers/formatDate'
@@ -14,132 +14,44 @@ import PostCommentsInfo from './PostCommentsInfo.vue'
 import LikeUnlikePost from './LikeUnlikePost.vue'
 import DeletePostModal from './DeletePostModal.vue'
 import AddCommentForm from './AddCommentForm.vue'
+import addComment from '../api/addComment'
+import likePost from '../api/likePost'
+import unlikePost from '../api/unlikePost'
 
 const props = defineProps<{ post: PostFeed; posts: PostFeed[]; currentUserProp: UserType }>()
 const postRef = toRefs(props.post)
 const areCommentsVisible = ref<boolean>(false)
 const { toast, router } = useAppNavigation()
-const { setLoading, currentUser, visitedUser } = useGetUserStore()
+const { currentUser, visitedUser } = useGetUserStore()
 const showDeletePostModal = ref<boolean>(false)
 const isLiked = ref<boolean>(false)
 const { handleUpdatePostComments, postsFeed } = useGetPostsFeedStore()
 
 // ADD COMMENT
-async function addComment(postId: string, newCommentText: string) {
-  const jwtToken = localStorage.getItem('jwt')
+async function addCommentHandler(postId: string, newCommentText: string) {
+  const newComment = await addComment(postId, newCommentText)
+  if (!newComment) return
 
-  if (!jwtToken) {
-    toast.error('Could not get your session! Please log in.')
-    router.push('/')
-  }
-
-  try {
-    const response = await fetch(`${baseUrl}/comments/${postId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + jwtToken
-      },
-      body: JSON.stringify({
-        text: newCommentText
-      })
-    })
-
-    if (!response.ok) {
-      const error = await response.json()
-      toast.error(error.message)
-
-      return
-    } else {
-      const {
-        data: { newComment }
-      } = await response.json()
-
-      handleUpdatePostComments(
-        props.currentUserProp,
-        props.posts,
-        postId,
-        newComment as CommentType
-      )
-    }
-  } catch (error) {
-    toast.error('Oop, something went wrong!')
-    console.log(error)
-  } finally {
-    setLoading(false)
-  }
+  handleUpdatePostComments(props.currentUserProp, props.posts, postId, newComment)
 }
 
 // LIKE POST
-async function likePost(postId: string) {
-  const jwtToken = localStorage.getItem('jwt')
+async function likePostHandler(postId: string) {
+  const res = await likePost(postId)
 
-  if (!jwtToken) {
-    toast.error('Could not get your session! Please log in.')
-    router.push('/')
-  }
+  if (res != 'success') return
 
-  try {
-    const response = await fetch(`${baseUrl}/posts/like`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + jwtToken
-      },
-      body: JSON.stringify({
-        id: postId
-      })
-    })
-
-    if (!response.ok) {
-      const error = await response.json()
-      toast.error(error.message)
-
-      return
-    } else {
-      postRef.likes.value = [...postRef.likes.value, props.currentUserProp]
-      isLiked.value = true
-    }
-  } catch (error) {
-    toast.error('Oop, something went wrong!')
-    console.log(error)
-  }
+  postRef.likes.value = [...postRef.likes.value, props.currentUserProp]
+  isLiked.value = true
 }
 
 // UNLIKE POST
-async function unlikePost(postId: string) {
-  const jwtToken = localStorage.getItem('jwt')
+async function unlikePostHandler(postId: string) {
+  const res = await unlikePost(postId)
 
-  if (!jwtToken) {
-    toast.error('Could not get your session! Please log in.')
-    router.push('/')
-  }
-
-  try {
-    const response = await fetch(`${baseUrl}/posts/unlike`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + jwtToken
-      },
-      body: JSON.stringify({
-        id: postId
-      })
-    })
-
-    if (!response.ok) {
-      const error = await response.json()
-      toast.error(error.message)
-
-      return
-    } else {
-      postRef.likes.value = postRef.likes.value.filter((f) => f._id !== props.currentUserProp._id)
-      isLiked.value = false
-    }
-  } catch (error) {
-    toast.error('Oop, something went wrong!')
-    console.log(error)
-  }
+  if (res != 'success') return
+  postRef.likes.value = postRef.likes.value.filter((f) => f._id !== props.currentUserProp._id)
+  isLiked.value = false
 }
 
 // DELETE POST
@@ -218,8 +130,8 @@ onMounted(() => {
     <LikeUnlikePost
       :isLiked="isLiked"
       :postRefId="postRef._id.value"
-      @onLike="likePost"
-      @onUnlike="unlikePost"
+      @onLike="likePostHandler"
+      @onUnlike="unlikePostHandler"
       @onToggleComments="toggleComments"
     />
 
@@ -233,7 +145,7 @@ onMounted(() => {
           :imageSize="{ height: '2rem', width: '2rem' }"
         >
         </UserPhotoAndName>
-        <AddCommentForm :postId="postRef._id.value" @onAddComment="addComment" />
+        <AddCommentForm :postId="postRef._id.value" @onAddComment="addCommentHandler" />
       </div>
 
       <UserComments
