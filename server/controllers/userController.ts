@@ -85,8 +85,8 @@ const denyFriendRequest = catchAsync(async (req: Request, res: Response) => {
   await userServices.dennyFriendRequest(currentUserId, targetUserId);
 
   res.status(204).json({
-    status: 'sucess',
-    data: null,
+    status: 'success',
+    data: { sir: 'blir' },
   });
 });
 

@@ -1,5 +1,5 @@
-import { baseUrl } from '@/constants/baseUrl'
-import useGetToken from '@/hooks/useGetToken'
+import { baseUrl } from '../constants/baseUrl'
+import useGetToken from '../hooks/useGetToken'
 import { useToast } from 'vue-toastification'
 
 export default async function acceptFriend(userId: string) {

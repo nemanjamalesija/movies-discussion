@@ -1,79 +1,21 @@
 <script setup lang="ts">
 import type { UserType } from '../types/userType'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
-import useAppNavigation from '../composables/useAppNavigation'
-import { baseUrl } from '../constants/baseUrl'
 import useGetUserStore from '../hooks/useGetUserStore'
+import acceptFriend from '../api/acceptFriend'
+import dennyFriend from '../api/dennyFriend'
 
 const props = defineProps<{ currentUser: UserType }>()
-const { toast, router } = useAppNavigation()
 const { acceptFriendRequest, dennyFriendRequest } = useGetUserStore()
 
-// /users/accept
-
-async function acceptFriend(userId: string) {
-  const jwtToken = localStorage.getItem('jwt')
-
-  if (!jwtToken) {
-    toast.error('Could not get your session! Please log in.')
-    router.push('/')
-  }
-
-  try {
-    const response = await fetch(`${baseUrl}/users/accept`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + jwtToken
-      },
-      body: JSON.stringify({
-        id: userId
-      })
-    })
-
-    if (!response.ok) {
-      const error = await response.json()
-      toast.error(error.message)
-
-      return
-    } else {
-      const {
-        data: { targetUser }
-      } = await response.json()
-      acceptFriendRequest(props.currentUser, targetUser as UserType)
-      toast.success('User added to your friends list')
-    }
-  } catch (error) {
-    toast.error('Oop, something went wrong!')
-    console.log(error)
-  }
+async function acceptFriendHandler(userId: string) {
+  const targetUser = await acceptFriend(userId)
+  if (targetUser) acceptFriendRequest(props.currentUser, targetUser as UserType)
 }
 
-async function dennyFriend(userId: string) {
-  const jwtToken = localStorage.getItem('jwt')
-
-  if (!jwtToken) {
-    toast.error('Could not get your session! Please log in.')
-    router.push('/')
-  }
-
-  try {
-    await fetch(`${baseUrl}/users/denny`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + jwtToken
-      },
-      body: JSON.stringify({
-        id: userId
-      })
-    })
-
-    dennyFriendRequest(userId)
-  } catch (error) {
-    toast.error('Oop, something went wrong!')
-    console.log(error)
-  }
+async function dennyFriendHandler(userId: string) {
+  const res = await dennyFriend('s')
+  if (res == 'success') dennyFriendRequest(userId)
 }
 </script>
 <template>
@@ -99,7 +41,7 @@ async function dennyFriend(userId: string) {
       </div>
 
       <div class="flex items-center gap-1">
-        <button @click="acceptFriend(requestUser._id)">
+        <button @click="acceptFriendHandler(requestUser._id)">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -114,7 +56,7 @@ async function dennyFriend(userId: string) {
             />
           </svg>
         </button>
-        <button @click="dennyFriend(requestUser._id)">
+        <button @click="dennyFriendHandler(requestUser._id)">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"

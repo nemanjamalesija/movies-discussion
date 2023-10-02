@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import HomeLinks from '../components/HomeLinks.vue'
 import HomeFeed from '../components/HomeFeed.vue'
-import HomeFriends from '../components/HomeFriends.vue'
+import HomeIncomingRequests from '../components/HomeIncomingRequests.vue'
 import useGetUserStore from '../hooks/useGetUserStore'
 
 const { currentUser } = useGetUserStore()
@@ -12,7 +12,7 @@ const { currentUser } = useGetUserStore()
     <HomeLinks />
     <HomeFeed />
     <div v-if="currentUser.friendRequests">
-      <HomeFriends :currentUser="currentUser" />
+      <HomeIncomingRequests :currentUser="currentUser" />
     </div>
   </section>
 </template>
