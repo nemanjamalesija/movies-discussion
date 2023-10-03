@@ -53,7 +53,7 @@ async function createNewPost() {
       </form>
     </div>
     <hr aria-orientation="horizontal" class="h-[1px] w-full bg-slate-100" />
-    <div></div>
+
     <div class="bg-white px-3 py-4 rounded-b-md">
       <button
         v-if="!isPostingPhoto"

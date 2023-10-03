@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import useGetUserStore from '../hooks/useGetUserStore'
 import { ref } from 'vue'
-import useAppNavigation from '../composables/useAppNavigation'
 import SearchUserInput from './ui/SearchUserInput.vue'
 import logOut from '@/api/logOut'
+import { useRouter } from 'vue-router'
 const { currentUser, setCurrentUser } = useGetUserStore()
-const { router } = useAppNavigation()
+const router = useRouter()
 const isUserInfoDropDown = ref<boolean>(false)
 
 async function logOutHandler() {
@@ -27,7 +27,10 @@ async function logOutHandler() {
 </script>
 
 <template>
-  <header class="header-nav shadow absolute top-0 left-0 w-full z-40 max-w-screen-2xl">
+  <header
+    v-if="currentUser.firstName"
+    class="header-nav shadow absolute top-0 left-0 w-full z-40 max-w-screen-2xl"
+  >
     <nav
       class="nav relative h-full px-5 flex items-center justify-between text-base lg:text-lg font-medium"
     >
@@ -173,3 +176,4 @@ async function logOutHandler() {
   background-color: #e2e8f0;
 }
 </style>
+../hooks/useAppNavigation

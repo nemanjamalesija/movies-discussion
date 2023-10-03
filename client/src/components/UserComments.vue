@@ -66,8 +66,7 @@ const isEditModalVisibile = ref<boolean>(false)
               : 'flex-1 px-4 py-4 overflow-y-auto absolute text-sm edit-delete-comment invisible'
           "
         >
-          <!-- popup edit / delete comment -->
-
+          <!-- POPUP EDIT / DELETE COMMENT -->
           <div class="flex items-center mb-4">
             <div class="flex-1 bg-white p-2 rounded-lg mb-2 relative shadow-xl">
               <div

@@ -26,13 +26,7 @@ export const usePostFeedStore = defineStore('postFeed', () => {
           photo: currentUser.photo
         }
       })
-
-      // Keep the post in the same position in the array, remove the post and add the updated post at the same index.
-      const currentPost = posts[currentPostIndex]
-      posts.splice(currentPostIndex, 1, currentPost)
     }
-
-    //////////////////////////////////////
   }
 
   return { postsFeed, handleUpdatePostComments }

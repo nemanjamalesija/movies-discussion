@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import useAppNavigation from '../../composables/useAppNavigation'
+import useAppNavigation from '../../hooks/useAppNavigation'
 import { baseUrl } from '../../constants/baseUrl'
 import type { UserType } from '../../types/userType'
 import { ref } from 'vue'
@@ -127,3 +127,4 @@ async function getSearchedUSers() {
     </div>
   </div>
 </template>
+../../hooks/useAppNavigation

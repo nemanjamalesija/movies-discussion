@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import useGetUserStore from '../hooks/useGetUserStore'
-import useAppNavigation from '../composables/useAppNavigation'
 import { loginSchema } from '../schemas/loginUserSchema'
 import type { LoginUserType } from '../schemas/loginUserSchema'
 import LoadingSpinner from '../components/LoadingSpinner.vue'
+import useAppNavigation from '../hooks/useAppNavigation'
 import logIn from '../api/logIn'
 
 const { setCurrentUser, loading, setLoading } = useGetUserStore()
@@ -68,6 +68,7 @@ async function loginUserHandler() {
               class="form__input"
               type="email"
               placeholder="you@example.com"
+              autocomplete="email"
               required
               v-model="loginUser.email"
             />
@@ -80,6 +81,7 @@ async function loginUserHandler() {
               type="password"
               placeholder="••••••••"
               minlength="8"
+              autocomplete="current-password"
               required
               v-model="loginUser.password"
             />
@@ -107,4 +109,4 @@ async function loginUserHandler() {
     </div>
   </section>
 </template>
-../schemas/loginUserType../schemas/loginUserType
+../hooks/useAppNavigation

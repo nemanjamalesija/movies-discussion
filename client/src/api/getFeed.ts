@@ -16,8 +16,7 @@ export default async function getFeed() {
     })
 
     if (!response.ok) {
-      const error = await response.json()
-      toast.error(error.message)
+      toast.error('Could not fetch posts')
       return
     } else {
       const {

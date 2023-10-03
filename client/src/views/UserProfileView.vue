@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import useGetUserStore from '../hooks/useGetUserStore'
-import useAppNavigation from '../composables/useAppNavigation'
+import useAppNavigation from '../hooks/useAppNavigation'
 import type { UserType } from '../types/userType'
 import { onMounted, watch } from 'vue'
 import UserPhotoAndName from '../components/ui/UserPhotoAndName.vue'
@@ -19,7 +19,6 @@ import acceptFriend from '../api/acceptFriend'
 import removeFriendAPI from '../api/removeFriend'
 
 const { route, router } = useAppNavigation()
-
 const {
   loading,
   setLoading,

@@ -23,7 +23,7 @@ const props = defineProps<{
         </svg>
       </button>
 
-      <!-- likes info -->
+      <!-- LIKES INFO -->
       <!-- no likes -->
       <p v-if="props.likes.value.length === 0" class="text-slate-500 text-sm">
         <span class="text-slate-500"> 0 people like this. </span>

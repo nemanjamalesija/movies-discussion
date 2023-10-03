@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import useAppNavigation from '../composables/useAppNavigation'
+import useAppNavigation from '../hooks/useAppNavigation'
 import { signUpUserSchema } from '../schemas/signupUserSchema'
 import type { SignUpUserType } from '../schemas/signupUserSchema'
 import signUp from '../api/signUp'
@@ -36,7 +36,7 @@ async function signUpHandler() {
 
   const res = await signUp(tryUser)
 
-  if (res == "success") {
+  if (res == 'success') {
     toast.success('Account created! Feel free to log in')
     router.push('/login')
   }
@@ -142,3 +142,4 @@ async function signUpHandler() {
     </div>
   </section>
 </template>
+../hooks/useAppNavigation
