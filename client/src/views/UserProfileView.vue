@@ -8,7 +8,6 @@ import LoadingSpinner from '../components/LoadingSpinner.vue'
 import SinglePostFeed from '../components/SinglePostFeed.vue'
 import VisitedUsersFriends from '../components/VisitedUsersFriends.vue'
 import EditUsersProfile from '../components/UserProfile/EditUsersProfile.vue'
-import MessageFriend from '../components/UserProfile/MessageFriend.vue'
 import RemoveFriend from '../components/UserProfile/RemoveFriend.vue'
 import AddFriend from '../components/UserProfile/AddFriend.vue'
 import FriendRequestSent from '../components/UserProfile/FriendRequestSent.vue'
@@ -17,6 +16,7 @@ import getVisitedProfile from '../api/getVisitedProfile'
 import addFriend from '../api/addFriend'
 import acceptFriend from '../api/acceptFriend'
 import removeFriendAPI from '../api/removeFriend'
+import LogInSignUpConditional from '@/components/LogInSignUpConditional.vue'
 
 const { route, router } = useAppNavigation()
 const {
@@ -77,6 +77,7 @@ async function deleteFriendHandler(userId: string) {
 
 onMounted(async () => {
   await getVisitedUserHandler()
+  console.log(visitedUser.value._id, currentUser.value._id)
 })
 
 watch(
@@ -93,27 +94,7 @@ watch(
   <div v-else class="pb-20">
     <!-- if visiting profile without user logged in, 
     display link to log in and sign up pages -->
-    <RouterLink v-if="!currentUser.firstName" to="/login">
-      <div class="absolute right-[37.5px] top-4">
-        <p
-          class="capitalize font-semibold mr-1 h-10 w-10 rounded-full bg-slate-600 hover:bg-slate-700 flex items-center justify-center transition-all duration-200"
-        >
-          <span class="text-3xl font-semibold text-white">S</span>
-        </p>
-        <span class="text-[#555] hover:text-[#444] font-semibold text-base">Log in</span>
-      </div>
-    </RouterLink>
-
-    <RouterLink v-if="!currentUser.firstName" to="/signup">
-      <div class="absolute right-8 top-24">
-        <p
-          class="capitalize font-semibold mr-1 h-10 w-10 rounded-full bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center transition-all duration-200"
-        >
-          <span class="text-3xl font-semibold text-white">S</span>
-        </p>
-        <span class="text-[#555] hover:text-[#444] font-semibold text-base">Sign up</span>
-      </div>
-    </RouterLink>
+    <LogInSignUpConditional v-if="!currentUser.firstName" />
 
     <header class="bg-white">
       <div class="h-[55vh] lg:h-[70vh] max-w-7xl pb-32 relative mx-auto bg-white">
@@ -152,16 +133,23 @@ watch(
 
         <!-- if target user is already a friend -->
         <div
-          v-if="visitedUserAditionalInfo.isAlreadyFriends && visitedUser._id !== currentUser._id"
+          v-if="
+            currentUser.firstName &&
+            visitedUserAditionalInfo.isAlreadyFriends &&
+            visitedUser._id !== currentUser._id
+          "
           class="absolute bottom-[2%] right-[1.2%] flex items-center gap-3"
         >
-          <MessageFriend />
           <RemoveFriend :visitedUserId="visitedUser._id" @onDeleteFriend="deleteFriendHandler" />
         </div>
 
         <!-- if target user is NOT a friend and no friend requests sent  -->
         <AddFriend
-          v-if="!visitedUserAditionalInfo.isAlreadyFriends && visitedUser._id !== currentUser._id"
+          v-if="
+            currentUser.firstName &&
+            !visitedUserAditionalInfo.isAlreadyFriends &&
+            visitedUser._id !== currentUser._id
+          "
           class="absolute bottom-[2%] right-[1.2%]"
           :visitedUserId="visitedUser._id"
           @onAddFriend="addFriendHandler"

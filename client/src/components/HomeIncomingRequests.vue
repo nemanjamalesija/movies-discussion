@@ -19,9 +19,11 @@ async function dennyFriendHandler(userId: string) {
 </script>
 <template>
   <section v-if="currentUser.friendRequests">
+    <h2 v-if="currentUser.friendRequests.length > 0" class="text-center font-semibold mb-2 text-lg">
+      Friend requests
+    </h2>
     <div v-for="requestUser in currentUser.friendRequests" :key="requestUser._id">
-      <h2 class="text-center font-semibold mb-2 text-lg">Friend requests</h2>
-      <div class="flex items-center gap-4 hover:bg-slate-200 rounded-md px-3">
+      <div class="flex items-center justify-between hover:bg-slate-200 rounded-md px-3">
         <div class="mt-2">
           <UserPhotoAndName
             containerClass="flex gap-3 items-center cursor-pointer mb-2"

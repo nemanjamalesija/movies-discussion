@@ -4,11 +4,13 @@ import useGetUserStore from '../hooks/useGetUserStore'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
 import useGetPostsFeedStore from '../hooks/useGetPostsFeedStore'
 import createNewPostAPI from '../api/createNewPost'
+import useAppNavigation from '@/hooks/useAppNavigation'
 
 const isPostingPhoto = ref<boolean>(false)
 const newPostText = ref<string>('')
 const { currentUser } = useGetUserStore()
 const { postsFeed } = useGetPostsFeedStore()
+const { toast } = useAppNavigation()
 
 async function createNewPost() {
   const newPost = await createNewPostAPI(newPostText.value)
@@ -24,6 +26,11 @@ async function createNewPost() {
     }
   })
   newPostText.value = ''
+}
+
+function uploadPhotoHandler() {
+  toast.info('Feature still not fully implemented 🔧')
+  isPostingPhoto.value = false
 }
 </script>
 <template>
@@ -77,7 +84,11 @@ async function createNewPost() {
 
         <span class="text-base font-semibold">Add photo</span>
       </button>
-      <form v-if="isPostingPhoto" enctype="multipart/form-data">
+      <form
+        v-if="isPostingPhoto"
+        enctype="multipart/form-data"
+        @submit.prevent="uploadPhotoHandler"
+      >
         <div class="form-group">
           <input
             id="photo"
