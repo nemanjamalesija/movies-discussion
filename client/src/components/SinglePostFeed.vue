@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PostFeed } from '../types/postType'
+import type { PostType } from '../types/postType'
 import type { UserType } from '../types/userType'
 import { toRefs, ref, onMounted } from 'vue'
 import formatDate from '../helpers/formatDate'
@@ -12,29 +12,30 @@ import PostCommentsInfo from './PostCommentsInfo.vue'
 import LikeUnlikePost from './LikeUnlikePost.vue'
 import DeletePostModal from './DeletePostModal.vue'
 import AddCommentForm from './AddCommentForm.vue'
-import addComment from '../api/addComment'
+import addCommentAPI from '../api/addCommentAPI'
 import likePost from '../api/likePost'
 import unlikePost from '../api/unlikePost'
 import deletePost from '../api/deletePost'
 
-const props = defineProps<{ post: PostFeed; posts: PostFeed[]; currentUserProp: UserType }>()
+const props = defineProps<{ post: PostType; posts: PostType[]; currentUserProp: UserType }>()
 const postRef = toRefs(props.post)
 const areCommentsVisible = ref<boolean>(false)
 const { currentUser, visitedUser } = useGetUserStore()
 const showDeletePostModal = ref<boolean>(false)
 const isLiked = ref<boolean>(false)
-const { handleUpdatePostComments, postsFeed } = useGetPostsFeedStore()
+const { addComment, postsFeed } = useGetPostsFeedStore()
 
 // ADD COMMENT
 async function addCommentHandler(postId: string, newCommentText: string) {
-  const newComment = await addComment(postId, newCommentText)
+  const newComment = await addCommentAPI(postId, newCommentText)
 
   if (!newComment) return
-  handleUpdatePostComments(props.currentUserProp, props.posts, postId, newComment)
+  addComment(props.currentUserProp, props.posts, postId, newComment)
 }
 
 // LIKE POST
 async function likePostHandler(postId: string) {
+  if (!currentUser.value.firstName) return
   const res = await likePost(postId)
 
   if (res != 'success') return
@@ -44,6 +45,7 @@ async function likePostHandler(postId: string) {
 
 // UNLIKE POST
 async function unlikePostHandler(postId: string) {
+  if (!currentUser.value.firstName) return
   const res = await unlikePost(postId)
 
   if (res != 'success') return
@@ -124,14 +126,20 @@ onMounted(() => {
           :currentUser="postRef.author.value"
           :wrapperSize="{ height: '2.5rem', width: '2.5rem' }"
           :imageSize="{ height: '2rem', width: '2rem' }"
+          v-if="currentUser.firstName"
         >
         </UserPhotoAndName>
-        <AddCommentForm :postId="postRef._id.value" @onAddComment="addCommentHandler" />
+        <AddCommentForm
+          v-if="currentUser.firstName"
+          :postId="postRef._id.value"
+          @onAddComment="addCommentHandler"
+        />
       </div>
 
       <UserComments
         v-for="comment in postRef.comments.value"
         :key="comment._id"
+        :comments="postRef.comments"
         :comment="comment"
         :currentUser="props.currentUserProp"
       />

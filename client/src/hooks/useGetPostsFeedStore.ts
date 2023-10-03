@@ -1,10 +1,10 @@
 import { storeToRefs } from 'pinia'
-import { usePostFeedStore } from '../stores/postsFeedStore'
+import { usePostFeedStore } from '../stores/postsStore'
 
 export default function useGetPostsFeedStore() {
   const postFeedStore = usePostFeedStore()
   const { postsFeed } = storeToRefs(postFeedStore)
-  const { handleUpdatePostComments } = usePostFeedStore()
+  const { addComment, deleteComment } = usePostFeedStore()
 
-  return { postsFeed, handleUpdatePostComments }
+  return { postsFeed, addComment, deleteComment }
 }

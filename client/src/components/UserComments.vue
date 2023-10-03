@@ -1,13 +1,25 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import type { Ref } from 'vue'
 import type { CommentType } from '../types/postType'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
 import type { UserType } from '../types/userType'
+import deleteCommentAPI from '@/api/deleteCommentAPI'
+import useGetPostsFeedStore from '../hooks/useGetPostsFeedStore'
 
 const props = defineProps<{
+  comments: Ref<CommentType[]>
   comment: CommentType
   currentUser: UserType
 }>()
+
+const { deleteComment } = useGetPostsFeedStore()
+
+async function deleteCommentHandler(comments: Ref<CommentType[]>, commentId: string) {
+  const res = await deleteCommentAPI(commentId)
+  if (res != 'success') return
+  deleteComment(comments, commentId)
+}
 
 const isEditCommentVisibile = ref<boolean>(false)
 const isEditModalVisibile = ref<boolean>(false)
@@ -75,7 +87,10 @@ const isEditModalVisibile = ref<boolean>(false)
                 <button class="w-full text-start hover:bg-slate-200 py-1 px-2 rounded-md">
                   Edit
                 </button>
-                <button class="w-full text-start hover:bg-slate-200 py-1 px-2 rounded-md">
+                <button
+                  class="w-full text-start hover:bg-slate-200 py-1 px-2 rounded-md"
+                  @click="deleteCommentHandler(props.comments, props.comment._id)"
+                >
                   Delete
                 </button>
               </div>

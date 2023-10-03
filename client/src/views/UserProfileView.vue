@@ -31,6 +31,7 @@ const {
 
 async function getVisitedUserHandler() {
   setLoading(true)
+
   const res = await getVisitedProfile(route.params.id as string)
   if (!res) {
     router.push('/')
@@ -46,6 +47,8 @@ async function getVisitedUserHandler() {
 
 // ADD FRIEND
 async function addFriendHandler(userId: string) {
+  if (!currentUser.value.firstName) return
+
   const res = await addFriend(userId)
 
   if (res == 'success')
@@ -88,6 +91,30 @@ watch(
 <template>
   <LoadingSpinner v-if="loading" class="mt-60" />
   <div v-else class="pb-20">
+    <!-- if visiting profile without user logged in, 
+    display link to log in and sign up pages -->
+    <RouterLink v-if="!currentUser.firstName" to="/login">
+      <div class="absolute right-[37.5px] top-4">
+        <p
+          class="capitalize font-semibold mr-1 h-10 w-10 rounded-full bg-slate-600 hover:bg-slate-700 flex items-center justify-center transition-all duration-200"
+        >
+          <span class="text-3xl font-semibold text-white">S</span>
+        </p>
+        <span class="text-[#555] hover:text-[#444] font-semibold text-base">Log in</span>
+      </div>
+    </RouterLink>
+
+    <RouterLink v-if="!currentUser.firstName" to="/signup">
+      <div class="absolute right-8 top-24">
+        <p
+          class="capitalize font-semibold mr-1 h-10 w-10 rounded-full bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center transition-all duration-200"
+        >
+          <span class="text-3xl font-semibold text-white">S</span>
+        </p>
+        <span class="text-[#555] hover:text-[#444] font-semibold text-base">Sign up</span>
+      </div>
+    </RouterLink>
+
     <header class="bg-white">
       <div class="h-[70vh] max-w-7xl pb-32 relative mx-auto bg-white">
         <div class="bg-gray-200 h-full rounded-md"></div>

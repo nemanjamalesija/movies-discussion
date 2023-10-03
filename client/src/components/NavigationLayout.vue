@@ -38,11 +38,11 @@ async function logOutHandler() {
       <div class="flex items-center py-2">
         <div class="logo flex items-center gap-2">
           <RouterLink to="/">
-            <button
-              class="capitalize font-semibold mr-1 h-10 w-10 rounded-full bg-indigo-600 flex items-center justify-center relative"
+            <p
+              class="capitalize font-semibold mr-1 h-10 w-10 rounded-full bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center relative transition-all duration-200"
             >
               <span class="absolute text-3xl font-semibold text-white">S</span>
-            </button>
+            </p>
           </RouterLink>
 
           <!-- Search input -->

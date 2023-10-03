@@ -6,7 +6,7 @@ export type CommentType = {
   _id: string
 }
 
-export type PostFeed = {
+export type PostType = {
   _id: string
   text: string
   image: string

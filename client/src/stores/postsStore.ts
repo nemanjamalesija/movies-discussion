@@ -1,14 +1,15 @@
 import { ref } from 'vue'
+import type { Ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { UserType } from '../types/userType'
-import type { CommentType, PostFeed } from '@/types/postType'
+import type { CommentType, PostType } from '@/types/postType'
 
 export const usePostFeedStore = defineStore('postFeed', () => {
-  const postsFeed = ref([] as PostFeed[])
+  const postsFeed = ref([] as PostType[])
 
-  function handleUpdatePostComments(
+  function addComment(
     currentUser: UserType,
-    posts: PostFeed[],
+    posts: PostType[],
     id: string,
     newComment: CommentType
   ) {
@@ -29,5 +30,9 @@ export const usePostFeedStore = defineStore('postFeed', () => {
     }
   }
 
-  return { postsFeed, handleUpdatePostComments }
+  function deleteComment(comments: Ref<CommentType[]>, commentId: string) {
+    comments.value = comments.value.filter((c) => c._id != commentId)
+  }
+
+  return { postsFeed, addComment, deleteComment }
 })

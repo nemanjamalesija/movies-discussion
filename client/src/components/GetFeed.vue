@@ -3,7 +3,7 @@ import { onMounted } from 'vue'
 import useGetUserStore from '../hooks/useGetUserStore'
 import SinglePostFeed from './SinglePostFeed.vue'
 import LoadingSpinner from './LoadingSpinner.vue'
-import type { PostFeed } from '../types/postType'
+import type { PostType } from '../types/postType'
 import useGetPostsFeedStore from '../hooks/useGetPostsFeedStore'
 import getFeed from '../api/getFeed'
 
@@ -14,7 +14,7 @@ async function getFeedHandler() {
   setLoading(true)
 
   const posts = await getFeed()
-  if (posts) postsFeed.value = posts as PostFeed[]
+  if (posts) postsFeed.value = posts as PostType[]
 
   setLoading(false)
 }

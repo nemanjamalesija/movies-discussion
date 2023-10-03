@@ -10,7 +10,7 @@ const createUser = controllerFactory.createOne(User);
 const getOneUser = catchAsync(async (req: Request, res: Response) => {
   const targetUser = await userServices.getOneUser(req.params.id);
 
-  if (req.body.currentUser.id !== targetUser.id) {
+  if (req.body.currentUser.id !== targetUser._id) {
     const isFriendRequested = targetUser.friendRequests.some(
       (requestId) => requestId.toString() === req.body.currentUser.id
     );

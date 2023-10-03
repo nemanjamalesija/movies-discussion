@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import useGetUserStore from '@/hooks/useGetUserStore'
 const props = defineProps<{ visitedUserId: string }>()
+const { currentUser } = useGetUserStore()
 </script>
 <template>
   <button
-    class="px-5 py-2 bg-gray-200 hover:bg-gray-300 font-semibold rounded-md transition-all duration-150"
+    class="px-5 py-2 bg-gray-200 hover:bg-gray-300 font-semibold rounded-md transition-all duration-150 disabled:invisible"
     @click="$emit('onAddFriend', props.visitedUserId)"
+    :disabled="!currentUser.firstName"
   >
     <p class="flex items-center gap-2 text-base">
       <svg
