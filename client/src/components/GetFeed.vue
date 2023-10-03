@@ -26,13 +26,6 @@ onMounted(async () => {
 <template>
   <LoadingSpinner v-if="loading" />
   <section v-else>
-    <RouterLink to="/login">
-      <button
-        class="capitalize font-semibold bg-indigo-600 flex items-center justify-center relative"
-      >
-        <span class="absolute text-3xl font-semibold text-white">LOG IN</span>
-      </button>
-    </RouterLink>
     <div class="flex gap-3 flex-col">
       <SinglePostFeed
         v-for="post in postsFeed"
