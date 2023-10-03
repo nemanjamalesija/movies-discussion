@@ -4,7 +4,7 @@ import GetFeed from './GetFeed.vue'
 </script>
 
 <template>
-  <main>
+  <main class="">
     <CreatePostFeed />
     <GetFeed />
   </main>

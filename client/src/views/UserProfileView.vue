@@ -116,7 +116,7 @@ watch(
     </RouterLink>
 
     <header class="bg-white">
-      <div class="h-[70vh] max-w-7xl pb-32 relative mx-auto bg-white">
+      <div class="h-[55vh] lg:h-[70vh] max-w-7xl pb-32 relative mx-auto bg-white">
         <div class="bg-gray-200 h-full rounded-md"></div>
         <UserPhotoAndName
           containerClass="flex gap-5 items-center absolute bottom-[2%] left-[2%] cursor-default"
@@ -189,7 +189,7 @@ watch(
     </header>
 
     <section>
-      <div class="grid grid-cols-[2.2fr,3fr] gap-5 max-w-[1250px] mx-auto">
+      <div class="flex flex-col lg:grid lg:grid-cols-[2.2fr,3fr] gap-5 max-w-[1250px] mx-auto">
         <!-- target user's friends -->
         <div class="shadow-md rounded-md bg-white px-4 py-4 mt-3 h-fit">
           <div class="mb-3">
