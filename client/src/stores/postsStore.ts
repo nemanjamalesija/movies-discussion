@@ -34,5 +34,16 @@ export const usePostFeedStore = defineStore('postFeed', () => {
     comments.value = comments.value.filter((c) => c._id != commentId)
   }
 
-  return { postsFeed, addComment, deleteComment }
+  function editComment(comments: Ref<CommentType[]>, commentId: string, newCommentText: string) {
+    const currentComment = comments.value.find((c) => c._id == commentId)
+    if (!currentComment) return
+
+    currentComment.text = newCommentText
+    comments.value = comments.value.map((c) => {
+      if (c._id == currentComment._id) return currentComment
+      else return c
+    })
+  }
+
+  return { postsFeed, addComment, deleteComment, editComment }
 })

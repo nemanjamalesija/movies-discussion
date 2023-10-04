@@ -16,7 +16,6 @@ import addCommentAPI from '../api/addCommentAPI'
 import likePost from '../api/likePost'
 import unlikePost from '../api/unlikePost'
 import deletePost from '../api/deletePost'
-import EditCommentForm from './EditCommentForm.vue'
 
 const props = defineProps<{ post: PostType; posts: PostType[]; currentUserProp: UserType }>()
 const postRef = toRefs(props.post)

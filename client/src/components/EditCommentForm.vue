@@ -2,7 +2,6 @@
 import type { CommentType } from '@/types/postType'
 import type { UserType } from '@/types/userType'
 import { ref, defineEmits } from 'vue'
-import editCommentAPI from '../api/editCommentAPI'
 
 const props = defineProps<{
   comment: CommentType
@@ -10,16 +9,13 @@ const props = defineProps<{
 }>()
 
 const editedCommentText = ref<string>(props.comment.text)
-const emit = defineEmits(['onHideEditCommentForm'])
-
-async function editCommentHandler() {
-  emit('onHideEditCommentForm')
-  const editedComment = await editCommentAPI(props.comment._id, editedCommentText.value)
-  console.log(editedComment)
-}
+const emit = defineEmits(['onSubmitEditForm'])
 </script>
 <template>
-  <form class="flex items-center w-full" @submit.prevent="editCommentHandler">
+  <form
+    class="flex items-center w-full"
+    @submit.prevent="emit('onSubmitEditForm', props.comment._id, editedCommentText)"
+  >
     <div
       v-if="props.currentUser.photo"
       class="bg-gray-300 rounded-full flex items-center justify-center cursor-pointer"
