@@ -9,12 +9,11 @@ const props = defineProps<{
 }>()
 
 const editedCommentText = ref<string>(props.comment.text)
-const emit = defineEmits(['onSubmitEditForm'])
 </script>
 <template>
   <form
     class="flex items-center w-full"
-    @submit.prevent="emit('onSubmitEditForm', props.comment._id, editedCommentText)"
+    @submit.prevent="$emit('onSubmitEditForm', props.comment._id, editedCommentText)"
   >
     <div
       v-if="props.currentUser.photo"
