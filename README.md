@@ -40,7 +40,7 @@ TODO:
 - Allow users to edit their profiles
 - Allow users to send messages
 
-TECHNOLOGIES USED:
+TECHNOLOGIES USED:  
 Vue 3, Pina, Typescript, Zod, Tailwind css, Express, Mongo DB.
 
 - After cloning the repository, Run "npm install" to install packages both in the server and client folders.
@@ -52,5 +52,5 @@ PORT= Port (e.g. 3001)
 
 START SCRIPTS:
 
-- client: npm run dev
 - server: npm start
+- client: npm run dev
