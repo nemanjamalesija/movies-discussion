@@ -1,37 +1,59 @@
 SOCIALIS - social network
-
 FEATURES:
 
-- Jason web token authentication workflow.
-  JWT is saved in local storage and sent on request where nescessary.
-- Sign up
-- Log in
+AUTHENTICATION:
+
+- For authentication I used Jason Web Tokens.
+- JWT is saved in local storage and sent on request where nescessary.
+
+USERS:
+
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" checked=""> Register / Log in / Log out</li>
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" checked=""> Search user</li>
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" checked=""> Display profile</li>
+<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" checked=""> Edit own profile</li>
+</ul>
+
+FRIENDSHIPS:
+
 - Send friend requests
 - Accept friend requests
 - Delete friends from friends list
+
+POSTS:
+
 - Posts feed (home page)
-- Search users
-- Look up users' individual profiles
 - Post
 - Like post
 - Unlike post
 - Delete post
+
+COMMENTS:
+
 - Comment
 - Edit comment
 - Delete comment
 
-TECHNOLOGIES USED:  
-Vue 3, Pina, Typescript, Zod, Tailwind css, Express, Mongo DB.
+TODO:
+
+- Complete image upload for users
+- Allow users to edit their profiles
+- Allow users to send messages
+
+TECHNOLOGIES USED:
+
+- Vue 3, Pina, Typescript, Zod, Tailwind css, Express, Mongo DB.
 
 CLONE REPOSITORY:
-git clone git@github.com:nemanjamalesija/social-media-app.git
+git clone git@github.com:nemanjamalesija/social-media-app.git  
 cd social-media-app
 
 - Run "npm install" to install packages both in the server and client folders.
 
 ENVIRONMENT VARIABLES:
-DATABASE_PASSWORD= Mongo DB database password
-DATABASE= Mongo DB connection string
+DATABASE_PASSWORD= Mongo DB database password  
+DATABASE= Mongo DB connection string  
 PORT= Port (e.g. 3001)
 
 START SCRIPTS:
