@@ -6,12 +6,18 @@ import UserPhotoAndName from './ui/UserPhotoAndName.vue'
 import type { UserType } from '../types/userType'
 import deleteCommentAPI from '@/api/deleteCommentAPI'
 import useGetPostsFeedStore from '../hooks/useGetPostsFeedStore'
+import EditCommentForm from './EditCommentForm.vue'
 
 const props = defineProps<{
   comments: Ref<CommentType[]>
   comment: CommentType
   currentUser: UserType
 }>()
+
+const isEditCommentVisibile = ref<boolean>(false)
+const isEditModalVisibile = ref<boolean>(false)
+const isEditFormVisible = ref<boolean>(false)
+const commentEditingId = ref<string>('')
 
 const { deleteComment } = useGetPostsFeedStore()
 
@@ -21,11 +27,19 @@ async function deleteCommentHandler(comments: Ref<CommentType[]>, commentId: str
   deleteComment(comments, commentId)
 }
 
-const isEditCommentVisibile = ref<boolean>(false)
-const isEditModalVisibile = ref<boolean>(false)
+function handleShowEditForm(commentId: string) {
+  isEditFormVisible.value = true
+  commentEditingId.value = commentId
+}
 </script>
 <template>
-  <div class="flex items-center">
+  <EditCommentForm
+    v-if="isEditFormVisible && commentEditingId == props.comment._id"
+    :comment="props.comment"
+    :currentUser="props.currentUser"
+    @onHideEditCommentForm="isEditFormVisible = false"
+  />
+  <div v-else class="flex items-center">
     <UserPhotoAndName
       containerClass="flex gap-3 items-center rounded-t-md cursor-pointer bg-white  pb-2 "
       :currentUser="props.currentUser"
@@ -84,7 +98,10 @@ const isEditModalVisibile = ref<boolean>(false)
               <div
                 class="flex flex-col gap-1 min-w-[120px] items-start justify-between font-semibold hover:font-bold"
               >
-                <button class="w-full text-start hover:bg-slate-200 py-1 px-2 rounded-md">
+                <button
+                  class="w-full text-start hover:bg-slate-200 py-1 px-2 rounded-md"
+                  @click="handleShowEditForm(props.comment._id)"
+                >
                   Edit
                 </button>
                 <button

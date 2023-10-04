@@ -16,10 +16,12 @@ import addCommentAPI from '../api/addCommentAPI'
 import likePost from '../api/likePost'
 import unlikePost from '../api/unlikePost'
 import deletePost from '../api/deletePost'
+import EditCommentForm from './EditCommentForm.vue'
 
 const props = defineProps<{ post: PostType; posts: PostType[]; currentUserProp: UserType }>()
 const postRef = toRefs(props.post)
 const areCommentsVisible = ref<boolean>(false)
+const showEditCommentForm = ref<boolean>(false)
 const { currentUser, visitedUser } = useGetUserStore()
 const showDeletePostModal = ref<boolean>(false)
 const isLiked = ref<boolean>(false)
@@ -126,23 +128,25 @@ onMounted(() => {
           :currentUser="postRef.author.value"
           :wrapperSize="{ height: '2.5rem', width: '2.5rem' }"
           :imageSize="{ height: '2rem', width: '2rem' }"
-          v-if="currentUser.firstName"
+          v-if="currentUser.firstName && !showEditCommentForm"
         >
         </UserPhotoAndName>
         <AddCommentForm
-          v-if="currentUser.firstName"
+          v-if="currentUser.firstName && !showEditCommentForm"
           :postId="postRef._id.value"
           @onAddComment="addCommentHandler"
         />
       </div>
 
-      <UserComments
-        v-for="comment in postRef.comments.value"
-        :key="comment._id"
-        :comments="postRef.comments"
-        :comment="comment"
-        :currentUser="props.currentUserProp"
-      />
+      <div v-for="comment in postRef.comments.value" :key="comment._id">
+        <UserComments
+          v-if="!showEditCommentForm"
+          :comments="postRef.comments"
+          :comment="comment"
+          :currentUser="props.currentUserProp"
+          @onShowEditCommentForm="showEditCommentForm = true"
+        />
+      </div>
     </div>
 
     <!-- delete post component (if current user is author of the post) -->

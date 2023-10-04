@@ -22,6 +22,7 @@ const props = defineProps<{
           :style="{ height: props.imageSize.height, width: props.imageSize.width }"
         />
       </div>
+      <!-- // if there is no photo display generic anonymus user image -->
       <button
         v-if="!props.currentUser.photo"
         class="bg-gray-300 rounded-full flex items-center justify-center cursor-pointer border-2 border-white"
