@@ -1,4 +1,4 @@
-SOCIALIS - social network
+SOCIALIS - social network  
 FEATURES:
 
 AUTHENTICATION:
