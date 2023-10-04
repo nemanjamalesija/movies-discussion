@@ -8,12 +8,11 @@ AUTHENTICATION:
 
 USERS:
 
-<ul class="contains-task-list">
-<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" checked=""> Register / Log in / Log out</li>
-<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" checked=""> Search user</li>
-<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" checked=""> Display profile</li>
-<li class="task-list-item"><input type="checkbox" id="" disabled="" class="task-list-item-checkbox" checked=""> Edit own profile</li>
-</ul>
+- Sign up
+- Log in
+- Log Out
+- Search users
+- Look up users' individual profiles
 
 FRIENDSHIPS:
 
