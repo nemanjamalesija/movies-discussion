@@ -41,14 +41,9 @@ TODO:
 - Allow users to send messages
 
 TECHNOLOGIES USED:
+Vue 3, Pina, Typescript, Zod, Tailwind css, Express, Mongo DB.
 
-- Vue 3, Pina, Typescript, Zod, Tailwind css, Express, Mongo DB.
-
-CLONE REPOSITORY:
-git clone git@github.com:nemanjamalesija/social-media-app.git  
-cd social-media-app
-
-- Run "npm install" to install packages both in the server and client folders.
+- After cloning the repository, Run "npm install" to install packages both in the server and client folders.
 
 ENVIRONMENT VARIABLES:
 DATABASE_PASSWORD= Mongo DB database password  
