@@ -77,7 +77,6 @@ async function deleteFriendHandler(userId: string) {
 
 onMounted(async () => {
   await getVisitedUserHandler()
-  console.log(visitedUser.value._id, currentUser.value._id)
 })
 
 watch(
