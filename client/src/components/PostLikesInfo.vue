@@ -22,7 +22,7 @@ const displayLikesInfo = computed(() => {
       return `${likes[0].firstName} ${likes[0].lastName} and ${likes[1].firstName} ${likes[1].lastName} like this.`
     default:
       // e.g. John Doe, Mark Markson and 10 others like this.
-      return `${likes[0].firstName} ${props.likes.value[0].lastName},
+      return `${likes[0].firstName} ${likes[0].lastName},
               ${likes[1].firstName} ${likes[1].lastName} and 
               ${likesNumber - 1}  others like this.`
   }
