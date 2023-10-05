@@ -51,6 +51,7 @@ const editedCommentText = ref<string>(props.comment.text)
       <div>
         <input
           type="text"
+          id="edit-comment-text"
           class="`block w-full py-[0.5rem] px-4 text-sm border border-slate-300 rounded-md bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
           v-model="editedCommentText"
         />
