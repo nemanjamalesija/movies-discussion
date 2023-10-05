@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CommentType } from '@/types/postType'
 import type { UserType } from '@/types/userType'
-import { ref, defineEmits } from 'vue'
+import { ref } from 'vue'
 
 const props = defineProps<{
   comment: CommentType

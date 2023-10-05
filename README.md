@@ -17,7 +17,7 @@ USERS:
 FRIENDSHIPS:
 
 - Send friend requests
-- Accept friend requests
+- Accept or deny friend requests
 - Delete friends from friends list
 
 POSTS:
@@ -43,7 +43,7 @@ TODO:
 TECHNOLOGIES USED:  
 Vue 3, Pina, Typescript, Zod, Tailwind css, Express, Mongo DB.
 
-- After cloning the repository, Run "npm install" to install packages both in the server and client folders.
+- After cloning the repository, Run "npm install", both in the server and client folders, in order to install packages.
 
 ENVIRONMENT VARIABLES:
 DATABASE_PASSWORD= Mongo DB database password  
