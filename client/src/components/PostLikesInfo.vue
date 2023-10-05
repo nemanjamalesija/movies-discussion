@@ -1,10 +1,32 @@
 <script setup lang="ts">
 import type { UserType } from '../types/userType'
 import type { Ref } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps<{
   likes: Ref<UserType[]>
 }>()
+
+const displayLikesInfo = computed(() => {
+  const likes = props.likes.value
+  const likesNumber = props.likes.value.length
+
+  switch (likesNumber) {
+    case 0:
+      return '0 people like this.'
+    case 1:
+      // e.g. John Doe likes this.
+      return `${likes[0].firstName} ${likes[0].lastName} likes this.`
+    case 2:
+      // e.g. John Doe, Mark Markson like this.
+      return `${likes[0].firstName} ${likes[0].lastName} and ${likes[1].firstName} ${likes[1].lastName} like this.`
+    default:
+      // e.g. John Doe, Mark Markson and 10 others like this.
+      return `${likes[0].firstName} ${props.likes.value[0].lastName},
+              ${likes[1].firstName} ${likes[1].lastName} and 
+              ${likesNumber - 1}  others like this.`
+  }
+})
 </script>
 <template>
   <div class="flex justify-between items-center mb-5">
@@ -24,32 +46,8 @@ const props = defineProps<{
       </button>
 
       <!-- LIKES INFO -->
-      <!-- no likes -->
-      <p v-if="props.likes.value.length === 0" class="text-slate-500 text-sm">
-        <span class="text-slate-500"> 0 people like this. </span>
-      </p>
-
-      <!-- only one like -->
-      <p v-if="props.likes.value.length === 1" class="text-slate-500 text-sm">
-        <span class="text-slate-500">
-          {{ props.likes.value[0].firstName }}&nbsp;{{ props.likes.value[0].lastName }}
-        </span>
-        <span>&nbsp;likes this.&nbsp;</span>
-      </p>
-
-      <!-- two likes -->
-      <p v-if="props.likes.value.length === 2" class="text-slate-500 text-sm">
-        <span> {{ props.likes.value[0].firstName }}&nbsp;{{ props.likes.value[0].lastName }} </span>
-        <span>&nbsp;and&nbsp;</span>
-        <span> {{ props.likes.value[1].firstName }}&nbsp;{{ props.likes.value[1].lastName }} </span
-        >&nbsp;like this.
-      </p>
-
-      <!-- more than two likes -->
-      <p v-if="props.likes.value.length > 2" class="text-slate-500 text-sm">
-        <span> {{ props.likes.value[0].firstName }}&nbsp;{{ props.likes.value[0].lastName }} </span>
-        <span>&nbsp;and&nbsp;</span>
-        <span>{{ props.likes.value.length - 1 }}&nbsp;</span>others like this.
+      <p class="text-slate-500 text-sm">
+        {{ displayLikesInfo }}
       </p>
     </div>
   </div>
