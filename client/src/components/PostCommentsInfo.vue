@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import type { CommentType } from '../types/postType'
 import type { Ref } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps<{
   comments: Ref<CommentType[]>
 }>()
+
+const displayCommentsInfo = computed(() => {
+  const commentsNumber = props.comments.value.length
+
+  return commentsNumber == 1 ? 'Comment' : 'Comments'
+})
 </script>
 <template>
   <div>
@@ -15,13 +22,7 @@ const props = defineProps<{
       @click="$emit('toggleComments')"
     >
       <span>{{ props.comments.value.length }}</span>
-      <span
-        >{{
-          props.comments.value.length > 1 || props.comments.value.length === 0
-            ? 'Comments'
-            : 'Comment'
-        }}
-      </span>
+      <span>{{ displayCommentsInfo }} </span>
     </p>
   </div>
 </template>
