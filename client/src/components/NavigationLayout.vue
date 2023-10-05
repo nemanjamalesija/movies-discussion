@@ -29,7 +29,7 @@ async function logOutHandler() {
 <template>
   <header
     v-if="currentUser.firstName"
-    class="header-nav shadow absolute top-0 left-0 w-full z-40 max-w-screen-2xl"
+    class="header-nav shadow fixed top-0 w-full z-40 max-w-screen-2xl bg-white transition-all duration-300"
   >
     <nav
       class="nav relative h-full px-5 flex items-center justify-between text-base lg:text-lg font-medium"
@@ -53,7 +53,7 @@ async function logOutHandler() {
       <!-- User info -->
       <div
         v-if="currentUser.firstName"
-        class="user flex flex-col items-center gap-3 font-bold"
+        class="user absolute right-[5%] flex flex-col items-center gap-3 font-bold"
         @click="isUserInfoDropDown = !isUserInfoDropDown"
       >
         <div class="user__photo-box flex gap-3 items-center">
@@ -82,9 +82,7 @@ async function logOutHandler() {
           <!-- Drop down modal -->
           <div
             :class="
-              isUserInfoDropDown
-                ? 'account account-active bg-white flex flex-col text-base gap-2 rounded-md w-max visible opacity-100'
-                : 'account bg-white flex flex-col text-base gap-2 rounded-md w-max invisible opacity-0'
+              isUserInfoDropDown ? 'account account-active' : 'account invisible hidden opacity-0'
             "
           >
             <RouterLink class="nav__link inline-block" :to="`/${currentUser._id}`">
@@ -138,34 +136,6 @@ async function logOutHandler() {
 </template>
 
 <style scoped>
-.header-nav {
-  transition: all 0.3s;
-  position: fixed;
-  background-color: #fff;
-}
-
-.user {
-  position: absolute;
-  right: 5%;
-}
-
-.account {
-  -webkit-box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.1);
-  max-height: 0;
-  transition: all 0.1s ease-in-out;
-}
-
-.account {
-  position: absolute;
-  top: 110%;
-  right: 0.3%;
-}
-
-.account-active {
-  padding: 0.8rem;
-  max-height: 300px;
-}
 .nav__link {
   padding: 0.4rem 4rem 0.4rem 0.4rem;
   border-radius: 6px;
@@ -175,5 +145,27 @@ async function logOutHandler() {
   transition: all 0.2s;
   background-color: #e2e8f0;
 }
+
+.account {
+  position: absolute;
+  top: 110%;
+  right: 0.3%;
+  max-height: 0;
+  width: max-content;
+  transition: all 0.1s ease-in-out;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  gap: 0.5rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.1);
+}
+
+.account-active {
+  padding: 0.8rem;
+  max-height: 300px;
+  opacity: 1;
+}
 </style>
-../hooks/useAppNavigation
