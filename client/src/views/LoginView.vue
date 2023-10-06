@@ -109,4 +109,4 @@ async function loginUserHandler() {
     </div>
   </section>
 </template>
-../hooks/useAppNavigation
+../hooks/useAppNavigation ../composables/useGetUserStore../composables/useAppNavigation

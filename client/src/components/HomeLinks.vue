@@ -126,3 +126,4 @@ const { currentUser } = useGetUserStore()
 </template>
 
 <style scoped></style>
+../composables/useGetUserStore

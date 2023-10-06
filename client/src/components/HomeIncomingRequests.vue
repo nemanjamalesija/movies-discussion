@@ -78,3 +78,4 @@ async function dennyFriendHandler(userId: string) {
     </div>
   </section>
 </template>
+../composables/useGetUserStore

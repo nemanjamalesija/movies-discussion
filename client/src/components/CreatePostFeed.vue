@@ -121,3 +121,4 @@ function uploadPhotoHandler() {
     </div>
   </div>
 </template>
+../composables/useGetUserStore../composables/useGetPostsFeedStore@/composables/useAppNavigation

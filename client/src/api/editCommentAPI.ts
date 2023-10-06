@@ -1,5 +1,5 @@
 import { baseUrl } from '@/constants/baseUrl'
-import useGetToken from '@/hooks/useGetToken'
+import useGetToken from '@/composables/useGetToken'
 import type { CommentType } from '@/types/postType'
 import { useToast } from 'vue-toastification'
 

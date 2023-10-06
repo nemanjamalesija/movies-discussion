@@ -169,3 +169,4 @@ async function logOutHandler() {
   opacity: 1;
 }
 </style>
+../composables/useGetUserStore

@@ -140,3 +140,4 @@ function handleShowEditForm(commentId: string) {
   z-index: 999;
 }
 </style>
+../composables/useGetPostsFeedStore

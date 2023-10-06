@@ -1,7 +1,7 @@
 import { baseUrl } from '@/constants/baseUrl'
-import useGetToken from '../hooks/useGetToken'
+import useGetToken from '../composables/useGetToken'
 import { useToast } from 'vue-toastification'
-import type { PostFeed } from '@/types/postType'
+import type { PostType } from '@/types/postType'
 
 export default async function createNewPost(newPost: string) {
   const jwtToken = useGetToken()
@@ -28,7 +28,7 @@ export default async function createNewPost(newPost: string) {
         data: { newPost }
       } = await response.json()
 
-      return newPost as PostFeed
+      return newPost as PostType
     }
   } catch (error) {
     toast.error('Oop, something went wrong!')

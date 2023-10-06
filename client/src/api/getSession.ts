@@ -1,6 +1,6 @@
-import useGetToken from '@/hooks/useGetToken'
+import useGetToken from '@/composables/useGetToken'
 import { baseUrl } from '../constants/baseUrl'
-import useAppNavigation from '../hooks/useAppNavigation'
+import useAppNavigation from '../composables/useAppNavigation'
 
 export default async function useGetSession() {
   const { toast, router } = useAppNavigation()

@@ -142,4 +142,4 @@ async function signUpHandler() {
     </div>
   </section>
 </template>
-../hooks/useAppNavigation
+../hooks/useAppNavigation ../composables/useAppNavigation../composables/useGetUserStore

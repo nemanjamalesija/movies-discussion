@@ -127,4 +127,4 @@ async function getSearchedUSers() {
     </div>
   </div>
 </template>
-../../hooks/useAppNavigation
+../../hooks/useAppNavigation ../../composables/useAppNavigation

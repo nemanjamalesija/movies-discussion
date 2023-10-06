@@ -40,3 +40,4 @@ onMounted(async () => {
     </p>
   </section>
 </template>
+../composables/useGetUserStore../composables/useGetPostsFeedStore

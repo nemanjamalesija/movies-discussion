@@ -25,3 +25,4 @@ const { currentUser } = useGetUserStore()
     </p>
   </button>
 </template>
+@/composables/useGetUserStore

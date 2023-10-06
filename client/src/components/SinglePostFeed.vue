@@ -158,3 +158,4 @@ onMounted(() => {
     />
   </div>
 </template>
+../composables/useGetUserStore../composables/useGetPostsFeedStore

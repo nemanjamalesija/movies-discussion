@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { useUserStore } from '../stores/userStore'
-import useGetToken from '@/hooks/useGetToken'
+import useGetToken from '@/composables/useGetToken'
 import getSession from '@/api/getSession'
 
 const router = createRouter({
