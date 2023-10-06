@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import useGetUserStore from '../hooks/useGetUserStore'
+import useGetUserStore from '../composables/useGetUserStore'
 import SinglePostFeed from './SinglePostFeed.vue'
 import LoadingSpinner from './LoadingSpinner.vue'
 import type { PostType } from '../types/postType'
-import useGetPostsFeedStore from '../hooks/useGetPostsFeedStore'
+import useGetPostsFeedStore from '../composables/useGetPostsFeedStore'
 import getFeed from '../api/getFeed'
 
 const { loading, setLoading, currentUser } = useGetUserStore()
@@ -40,4 +40,3 @@ onMounted(async () => {
     </p>
   </section>
 </template>
-../composables/useGetUserStore../composables/useGetPostsFeedStore

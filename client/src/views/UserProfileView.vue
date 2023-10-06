@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import useGetUserStore from '../hooks/useGetUserStore'
-import useAppNavigation from '../hooks/useAppNavigation'
+import useGetUserStore from '../composables/useGetUserStore'
+import useAppNavigation from '../composables/useAppNavigation'
 import type { UserType } from '../types/userType'
 import { onMounted, watch } from 'vue'
 import UserPhotoAndName from '../components/ui/UserPhotoAndName.vue'
@@ -223,4 +223,3 @@ watch(
 </template>
 
 <style scoped></style>
-../composables/useGetUserStore../composables/useAppNavigation

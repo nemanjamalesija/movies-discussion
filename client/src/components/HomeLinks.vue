@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import useGetUserStore from '../hooks/useGetUserStore'
+import useGetUserStore from '../composables/useGetUserStore'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
 
 const { currentUser } = useGetUserStore()
@@ -126,4 +126,3 @@ const { currentUser } = useGetUserStore()
 </template>
 
 <style scoped></style>
-../composables/useGetUserStore

@@ -4,7 +4,7 @@ import { usePostFeedStore } from '../stores/postsStore'
 export default function useGetPostsFeedStore() {
   const postFeedStore = usePostFeedStore()
   const { postsFeed } = storeToRefs(postFeedStore)
-  const { addComment, deleteComment, editComment } = usePostFeedStore()
+  const { createPost, addComment, deleteComment, editComment, deletePostFeed } = usePostFeedStore()
 
-  return { postsFeed, addComment, deleteComment, editComment }
+  return { postsFeed, createPost, deletePostFeed, addComment, deleteComment, editComment }
 }

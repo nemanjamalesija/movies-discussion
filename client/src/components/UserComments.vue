@@ -5,7 +5,7 @@ import type { CommentType } from '../types/postType'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
 import type { UserType } from '../types/userType'
 import deleteCommentAPI from '@/api/deleteCommentAPI'
-import useGetPostsFeedStore from '../hooks/useGetPostsFeedStore'
+import useGetPostsFeedStore from '../composables/useGetPostsFeedStore'
 import EditCommentForm from './EditCommentForm.vue'
 import editCommentAPI from '../api/editCommentAPI'
 
@@ -140,4 +140,4 @@ function handleShowEditForm(commentId: string) {
   z-index: 999;
 }
 </style>
-../composables/useGetPostsFeedStore
+

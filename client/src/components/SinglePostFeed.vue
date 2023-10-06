@@ -5,8 +5,8 @@ import { toRefs, ref, onMounted } from 'vue'
 import formatDate from '../helpers/formatDate'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
 import UserComments from './UserComments.vue'
-import useGetUserStore from '../hooks/useGetUserStore'
-import useGetPostsFeedStore from '../hooks/useGetPostsFeedStore'
+import useGetUserStore from '../composables/useGetUserStore'
+import useGetPostsFeedStore from '../composables/useGetPostsFeedStore'
 import PostLikesInfo from './PostLikesInfo.vue'
 import PostCommentsInfo from './PostCommentsInfo.vue'
 import LikeUnlikePost from './LikeUnlikePost.vue'
@@ -21,10 +21,10 @@ const props = defineProps<{ post: PostType; posts: PostType[]; currentUserProp: 
 const postRef = toRefs(props.post)
 const areCommentsVisible = ref<boolean>(false)
 const showEditCommentForm = ref<boolean>(false)
-const { currentUser, visitedUser } = useGetUserStore()
 const showDeletePostModal = ref<boolean>(false)
 const isLiked = ref<boolean>(false)
-const { addComment, postsFeed } = useGetPostsFeedStore()
+const { currentUser, visitedUser, deleteUsersPost } = useGetUserStore()
+const { addComment, deletePostFeed, postsFeed } = useGetPostsFeedStore()
 
 // ADD COMMENT
 async function addCommentHandler(postId: string, newCommentText: string) {
@@ -60,9 +60,9 @@ async function deletePostHandler(postId: string) {
 
   if (res != 'success') return
 
-  visitedUser.value.posts = visitedUser.value.posts?.filter((p) => p._id !== postId)
-  currentUser.value.posts = currentUser.value.posts?.filter((p) => p._id !== postId)
-  postsFeed.value = postsFeed.value.filter((p) => p._id !== postId)
+  deletePostFeed(postsFeed, postId)
+  deleteUsersPost(currentUser, postId)
+  visitedUser.value._id == currentUser.value._id && deleteUsersPost(visitedUser, postId)
 }
 
 // DISPLAY OR HIDE COMMENTS
@@ -158,4 +158,3 @@ onMounted(() => {
     />
   </div>
 </template>
-../composables/useGetUserStore../composables/useGetPostsFeedStore

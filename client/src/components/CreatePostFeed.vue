@@ -1,30 +1,22 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import useGetUserStore from '../hooks/useGetUserStore'
+import useGetUserStore from '../composables/useGetUserStore'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
-import useGetPostsFeedStore from '../hooks/useGetPostsFeedStore'
+import useGetPostsFeedStore from '../composables/useGetPostsFeedStore'
 import createNewPostAPI from '../api/createNewPost'
-import useAppNavigation from '@/hooks/useAppNavigation'
+import useAppNavigation from '@/composables/useAppNavigation'
 
 const isPostingPhoto = ref<boolean>(false)
 const newPostText = ref<string>('')
 const { currentUser } = useGetUserStore()
-const { postsFeed } = useGetPostsFeedStore()
+const { createPost } = useGetPostsFeedStore()
 const { toast } = useAppNavigation()
 
-async function createNewPost() {
+async function createNewPostHandler() {
   const newPost = await createNewPostAPI(newPostText.value)
 
   if (!newPost) return
-  postsFeed.value.unshift({
-    ...newPost,
-    author: {
-      _id: currentUser.value._id,
-      firstName: currentUser.value.firstName,
-      lastName: currentUser.value.lastName,
-      photo: currentUser.value.photo
-    }
-  })
+  createPost(newPost, currentUser)
   newPostText.value = ''
 }
 
@@ -44,7 +36,7 @@ function uploadPhotoHandler() {
       >
         <template #user-photo-adjacent> </template>
       </UserPhotoAndName>
-      <form action="" class="w-full" @submit.prevent="createNewPost">
+      <form action="" class="w-full" @submit.prevent="createNewPostHandler">
         <label for="default-search" class="mb-2 text-sm font-medium sr-only">Search</label>
         <div>
           <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"></div>
@@ -121,4 +113,3 @@ function uploadPhotoHandler() {
     </div>
   </div>
 </template>
-../composables/useGetUserStore../composables/useGetPostsFeedStore@/composables/useAppNavigation

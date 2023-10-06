@@ -7,6 +7,22 @@ import type { CommentType, PostType } from '@/types/postType'
 export const usePostFeedStore = defineStore('postFeed', () => {
   const postsFeed = ref([] as PostType[])
 
+  function createPost(newPost: PostType, currentUser: Ref<UserType>) {
+    postsFeed.value.unshift({
+      ...newPost,
+      author: {
+        _id: currentUser.value._id,
+        firstName: currentUser.value.firstName,
+        lastName: currentUser.value.lastName,
+        photo: currentUser.value.photo
+      }
+    })
+  }
+
+  function deletePostFeed(posts: Ref<PostType[]>, postId: string) {
+    posts.value = posts.value.filter((p) => p._id != postId)
+  }
+
   function addComment(
     currentUser: UserType,
     posts: PostType[],
@@ -45,5 +61,5 @@ export const usePostFeedStore = defineStore('postFeed', () => {
     })
   }
 
-  return { postsFeed, addComment, deleteComment, editComment }
+  return { postsFeed, createPost, deletePostFeed, addComment, deleteComment, editComment }
 })

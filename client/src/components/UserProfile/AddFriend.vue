@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import useGetUserStore from '@/hooks/useGetUserStore'
+import useGetUserStore from '@/composables/useGetUserStore'
 const props = defineProps<{ visitedUserId: string }>()
 const { currentUser } = useGetUserStore()
 </script>

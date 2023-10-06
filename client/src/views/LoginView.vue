@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import useGetUserStore from '../hooks/useGetUserStore'
+import useGetUserStore from '../composables/useGetUserStore'
 import { loginSchema } from '../schemas/loginUserSchema'
 import type { LoginUserType } from '../schemas/loginUserSchema'
 import LoadingSpinner from '../components/LoadingSpinner.vue'
-import useAppNavigation from '../hooks/useAppNavigation'
+import useAppNavigation from '../composables/useAppNavigation'
 import logIn from '../api/logIn'
 
 const { setCurrentUser, loading, setLoading } = useGetUserStore()
@@ -109,4 +109,4 @@ async function loginUserHandler() {
     </div>
   </section>
 </template>
-../hooks/useAppNavigation ../composables/useGetUserStore../composables/useAppNavigation
+

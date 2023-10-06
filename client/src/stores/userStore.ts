@@ -1,9 +1,13 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { UserType, visitedUserAditionalInfoType } from '../types/userType'
+import type { PostType } from '@/types/postType'
+import type { Ref } from 'vue'
 
 export const useUserStore = defineStore('user', () => {
   const currentUser = ref({} as UserType)
+  const visitedUser = ref({} as UserType)
+  const visitedUserAditionalInfo = ref({} as visitedUserAditionalInfoType)
 
   const loading = ref(false)
 
@@ -15,8 +19,9 @@ export const useUserStore = defineStore('user', () => {
     currentUser.value = userAPI
   }
 
-  const visitedUser = ref({} as UserType)
-  const visitedUserAditionalInfo = ref({} as visitedUserAditionalInfoType)
+  function deleteUsersPost(user: Ref<UserType>, postId: string) {
+    user.value.posts = user.value.posts?.filter((p) => p._id !== postId)
+  }
 
   // friend requests related
   function acceptFriendRequest(currentUser: UserType, targetUser: UserType) {
@@ -44,6 +49,7 @@ export const useUserStore = defineStore('user', () => {
     setLoading,
     currentUser,
     setCurrentUser,
+    deleteUsersPost,
     visitedUser,
     visitedUserAditionalInfo,
     acceptFriendRequest,

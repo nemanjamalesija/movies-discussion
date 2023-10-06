@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { UserType } from '../types/userType'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
-import useGetUserStore from '../hooks/useGetUserStore'
+import useGetUserStore from '../composables/useGetUserStore'
 import acceptFriend from '../api/acceptFriend'
 import dennyFriend from '../api/dennyFriend'
 
@@ -78,4 +78,3 @@ async function dennyFriendHandler(userId: string) {
     </div>
   </section>
 </template>
-../composables/useGetUserStore

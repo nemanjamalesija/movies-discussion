@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import useGetUserStore from '../hooks/useGetUserStore'
+import useGetUserStore from '../composables/useGetUserStore'
 import { ref } from 'vue'
 import SearchUserInput from './ui/SearchUserInput.vue'
 import logOut from '@/api/logOut'
@@ -169,4 +169,3 @@ async function logOutHandler() {
   opacity: 1;
 }
 </style>
-../composables/useGetUserStore
