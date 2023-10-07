@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { CommentType } from '@/types/postType'
 import type { UserType } from '@/types/userType'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import focusInput from '@/helpers/focusInput'
 
 const props = defineProps<{
   comment: CommentType
@@ -9,6 +10,10 @@ const props = defineProps<{
 }>()
 
 const editedCommentText = ref<string>(props.comment.text)
+
+onMounted(() => {
+  focusInput(`#edit-comment-input-${props.comment._id}`)
+})
 </script>
 <template>
   <form
@@ -51,7 +56,7 @@ const editedCommentText = ref<string>(props.comment.text)
       <div>
         <input
           type="text"
-          id="edit-comment-text"
+          :id="'edit-comment-input-' + props.comment._id"
           class="`block w-full py-[0.5rem] px-4 text-sm border border-slate-300 rounded-md bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
           v-model="editedCommentText"
         />

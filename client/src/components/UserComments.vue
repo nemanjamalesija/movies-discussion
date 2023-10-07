@@ -8,6 +8,7 @@ import deleteCommentAPI from '@/api/deleteCommentAPI'
 import useGetPostsFeedStore from '../composables/useGetPostsFeedStore'
 import EditCommentForm from './EditCommentForm.vue'
 import editCommentAPI from '../api/editCommentAPI'
+import focusInput from '../helpers/focusInput'
 
 const props = defineProps<{
   comments: Ref<CommentType[]>

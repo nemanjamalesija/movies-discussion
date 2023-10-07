@@ -16,6 +16,7 @@ import addCommentAPI from '../api/addCommentAPI'
 import likePost from '../api/likePost'
 import unlikePost from '../api/unlikePost'
 import deletePost from '../api/deletePost'
+import focusInput from '../helpers/focusInput'
 
 // props
 const props = defineProps<{ post: PostType; posts: PostType[]; currentUserProp: UserType }>()
@@ -73,6 +74,8 @@ async function deletePostHandler(postId: string) {
 // DISPLAY OR HIDE COMMENTS
 function toggleComments() {
   areCommentsVisible.value = !areCommentsVisible.value
+
+  focusInput(`#comment-input-${postRef._id.value}`)
 }
 
 // DISPLAY OR HIDE DELETE POST MODAL
