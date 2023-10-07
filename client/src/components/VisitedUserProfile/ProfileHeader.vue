@@ -70,7 +70,6 @@ async function deleteFriendHandler(userId: string) {
          - conditional rendering of the visited user's profile based on: 
           1. friend status and
           2. if user visiting is the current user -->
-
       <!-- if user visiting is the current user -->
       <EditUsersProfile
         v-if="currentUser._id === visitedUser._id"

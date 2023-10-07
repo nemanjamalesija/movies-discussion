@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import useGetUserStore from '@/composables/useGetUserStore'
+import SingleProfileFriend from './SingleProfileFriend.vue'
 
 const { visitedUser } = useGetUserStore()
 </script>
