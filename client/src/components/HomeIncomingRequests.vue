@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { UserType } from '../types/userType'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
 import useGetUserStore from '../composables/useGetUserStore'
 import acceptFriend from '../api/acceptFriend'
@@ -9,7 +8,7 @@ const { acceptFriendRequest, dennyFriendRequest, currentUser } = useGetUserStore
 
 async function acceptFriendHandler(userId: string) {
   const targetUser = await acceptFriend(userId)
-  if (targetUser) acceptFriendRequest(currentUser.value, targetUser as UserType)
+  if (targetUser) acceptFriendRequest(targetUser._id)
 }
 
 async function dennyFriendHandler(userId: string) {

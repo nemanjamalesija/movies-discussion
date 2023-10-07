@@ -1,6 +1,7 @@
 import { baseUrl } from '@/constants/baseUrl'
 import useGetToken from '@/composables/useGetToken'
 import { useToast } from 'vue-toastification'
+import type { UserType } from '@/types/userType'
 
 export default async function deleteFriend(userId: string) {
   const toast = useToast()
@@ -29,7 +30,7 @@ export default async function deleteFriend(userId: string) {
       } = await response.json()
 
       toast.success('User removed from your friends list')
-      return targetUser
+      return targetUser as UserType
     }
   } catch (error) {
     toast.error('Oop, something went wrong!')
