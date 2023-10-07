@@ -60,7 +60,7 @@ async function deletePostHandler(postId: string) {
 
   if (res != 'success') return
 
-  deletePostFeed(postsFeed, postId)
+  deletePostFeed(postId)
   deleteUsersPost(currentUser, postId)
   visitedUser.value._id == currentUser.value._id && deleteUsersPost(visitedUser, postId)
 }

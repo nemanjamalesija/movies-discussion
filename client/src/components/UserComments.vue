@@ -24,6 +24,7 @@ const { deleteComment, editComment } = useGetPostsFeedStore()
 
 async function deleteCommentHandler(comments: Ref<CommentType[]>, commentId: string) {
   const res = await deleteCommentAPI(commentId)
+
   if (res != 'success') return
   deleteComment(comments, commentId)
 }
@@ -32,7 +33,9 @@ async function editCommentHandler(commentId: string, newCommentText: string) {
   const editedComment = await editCommentAPI(commentId, newCommentText)
   isEditFormVisible.value = false
   isEditModalVisibile.value = false
+
   if (!editedComment) return
+
   editComment(props.comments, commentId, newCommentText)
 }
 
@@ -140,4 +143,3 @@ function handleShowEditForm(commentId: string) {
   z-index: 999;
 }
 </style>
-
