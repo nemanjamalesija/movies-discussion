@@ -5,7 +5,7 @@ import useAppNavigation from '../composables/useAppNavigation'
 import LoadingSpinner from '../components/LoadingSpinner.vue'
 import LogInSignUpConditional from '../components/LogInSignUpConditional.vue'
 import ProfileHeader from '../components/VisitedUserProfile/ProfileHeader.vue'
-import ProfilePosts from '../components/VisitedUserProfile/ProfilePosts.vue'
+import ProfileMain from '../components/VisitedUserProfile/ProfileMain.vue'
 import type { UserType } from '../types/userType'
 import { onMounted, watch } from 'vue'
 
@@ -50,6 +50,6 @@ watch(
     <LogInSignUpConditional v-if="!currentUser.firstName" />
 
     <ProfileHeader />
-    <ProfilePosts />
+    <ProfileMain />
   </div>
 </template>
