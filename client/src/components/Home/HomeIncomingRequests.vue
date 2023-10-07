@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import UserPhotoAndName from './ui/UserPhotoAndName.vue'
-import useGetUserStore from '../composables/useGetUserStore'
-import acceptFriend from '../api/acceptFriend'
-import dennyFriend from '../api/dennyFriend'
+import UserPhotoAndName from '.././ui/UserPhotoAndName.vue'
+import useGetUserStore from '../../composables/useGetUserStore'
+import acceptFriend from '../../api/acceptFriend'
+import dennyFriend from '../../api/dennyFriend'
 
 const { acceptFriendRequest, dennyFriendRequest, currentUser } = useGetUserStore()
 

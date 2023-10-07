@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import useGetUserStore from '../composables/useGetUserStore'
-import UserPhotoAndName from './ui/UserPhotoAndName.vue'
+import useGetUserStore from '../../composables/useGetUserStore'
+import UserPhotoAndName from '.././ui/UserPhotoAndName.vue'
 
 const { currentUser } = useGetUserStore()
 </script>
