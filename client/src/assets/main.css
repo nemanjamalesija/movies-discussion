@@ -116,8 +116,11 @@ body {
 @media only screen and (max-width: 1000px) {
   .form__container {
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: 400px 1fr;
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    align-items: center;
+    gap: 4rem;
   }
 
   .singup-form {
