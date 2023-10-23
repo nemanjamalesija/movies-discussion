@@ -1,6 +1,7 @@
 import { baseUrl } from '../constants/baseUrl'
 import useGetToken from '../composables/useGetToken'
 import { useToast } from 'vue-toastification'
+import type { UserType } from '@/types/userType'
 
 export default async function acceptFriend(userId: string) {
   const jwtToken = useGetToken()
@@ -28,7 +29,7 @@ export default async function acceptFriend(userId: string) {
         data: { targetUser }
       } = await response.json()
       toast.success('User added to your friends list')
-      return targetUser
+      return targetUser as UserType
     }
   } catch (error) {
     toast.error('Oop, something went wrong!')

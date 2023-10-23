@@ -8,6 +8,7 @@ import deleteCommentAPI from '@/api/deleteCommentAPI'
 import useGetPostsFeedStore from '../composables/useGetPostsFeedStore'
 import EditCommentForm from './EditCommentForm.vue'
 import editCommentAPI from '../api/editCommentAPI'
+import focusInput from '../helpers/focusInput'
 
 const props = defineProps<{
   comments: Ref<CommentType[]>
@@ -24,6 +25,7 @@ const { deleteComment, editComment } = useGetPostsFeedStore()
 
 async function deleteCommentHandler(comments: Ref<CommentType[]>, commentId: string) {
   const res = await deleteCommentAPI(commentId)
+
   if (res != 'success') return
   deleteComment(comments, commentId)
 }
@@ -32,7 +34,9 @@ async function editCommentHandler(commentId: string, newCommentText: string) {
   const editedComment = await editCommentAPI(commentId, newCommentText)
   isEditFormVisible.value = false
   isEditModalVisibile.value = false
+
   if (!editedComment) return
+
   editComment(props.comments, commentId, newCommentText)
 }
 
@@ -140,4 +144,3 @@ function handleShowEditForm(commentId: string) {
   z-index: 999;
 }
 </style>
-

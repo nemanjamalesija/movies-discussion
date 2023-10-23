@@ -20,7 +20,7 @@ const newCommentText = ref<string>('')
       <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"></div>
       <input
         type="text"
-        id="comment-text"
+        :id="'comment-input-' + postId"
         class="`block w-full py-[0.5rem] px-4 text-sm border border-slate-300 rounded-md bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
         placeholder="Write a comment..."
         v-model="newCommentText"

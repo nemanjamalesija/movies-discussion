@@ -45,7 +45,7 @@ Vue 3, Pina, Typescript, Zod, Tailwind css, Express, Mongo DB.
 
 - After cloning the repository, Run "npm install", both in the server and client folders, in order to install packages.
 
-ENVIRONMENT VARIABLES:
+ENVIRONMENT VARIABLES (SERVER FOLDER):
 DATABASE_PASSWORD= Mongo DB database password  
 DATABASE= Mongo DB connection string  
 PORT= Port (e.g. 3001)

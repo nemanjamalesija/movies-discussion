@@ -6,6 +6,7 @@ export default function useGetUserStore() {
   const { currentUser, visitedUser, visitedUserAditionalInfo, loading } = storeToRefs(userStore)
   const {
     setCurrentUser,
+    setVisitedUser,
     deleteUsersPost,
     setLoading,
     acceptFriendRequest,
@@ -17,6 +18,7 @@ export default function useGetUserStore() {
     userStore,
     currentUser,
     setCurrentUser,
+    setVisitedUser,
     deleteUsersPost,
     loading,
     setLoading,

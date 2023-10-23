@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import HomeLinks from '../components/HomeLinks.vue'
-import HomeFeed from '../components/HomeFeed.vue'
-import HomeIncomingRequests from '../components/HomeIncomingRequests.vue'
+import HomeLinks from '../components/Home/HomeLinks.vue'
+import HomeFeed from '../components/Home/HomeFeed.vue'
+import HomeIncomingRequests from '../components/Home/HomeIncomingRequests.vue'
 </script>
 
 <template>

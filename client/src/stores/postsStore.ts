@@ -19,8 +19,8 @@ export const usePostFeedStore = defineStore('postFeed', () => {
     })
   }
 
-  function deletePostFeed(posts: Ref<PostType[]>, postId: string) {
-    posts.value = posts.value.filter((p) => p._id != postId)
+  function deletePostFeed(postId: string) {
+    postsFeed.value = postsFeed.value.filter((p) => p._id != postId)
   }
 
   function addComment(

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { PostType } from '../types/postType'
 import type { UserType } from '../types/userType'
-import { toRefs, ref, onMounted } from 'vue'
+import { toRefs, ref } from 'vue'
 import formatDate from '../helpers/formatDate'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
 import UserComments from './UserComments.vue'
@@ -16,15 +16,21 @@ import addCommentAPI from '../api/addCommentAPI'
 import likePost from '../api/likePost'
 import unlikePost from '../api/unlikePost'
 import deletePost from '../api/deletePost'
+import focusInput from '../helpers/focusInput'
 
+// props
 const props = defineProps<{ post: PostType; posts: PostType[]; currentUserProp: UserType }>()
+
+// refs
 const postRef = toRefs(props.post)
 const areCommentsVisible = ref<boolean>(false)
 const showEditCommentForm = ref<boolean>(false)
 const showDeletePostModal = ref<boolean>(false)
-const isLiked = ref<boolean>(false)
+const isLiked = ref<boolean>(postRef.likes.value.some((f) => f._id === props.currentUserProp._id))
+
+// stores
 const { currentUser, visitedUser, deleteUsersPost } = useGetUserStore()
-const { addComment, deletePostFeed, postsFeed } = useGetPostsFeedStore()
+const { addComment, deletePostFeed } = useGetPostsFeedStore()
 
 // ADD COMMENT
 async function addCommentHandler(postId: string, newCommentText: string) {
@@ -60,7 +66,7 @@ async function deletePostHandler(postId: string) {
 
   if (res != 'success') return
 
-  deletePostFeed(postsFeed, postId)
+  deletePostFeed(postId)
   deleteUsersPost(currentUser, postId)
   visitedUser.value._id == currentUser.value._id && deleteUsersPost(visitedUser, postId)
 }
@@ -68,16 +74,14 @@ async function deletePostHandler(postId: string) {
 // DISPLAY OR HIDE COMMENTS
 function toggleComments() {
   areCommentsVisible.value = !areCommentsVisible.value
+
+  focusInput(`#comment-input-${postRef._id.value}`)
 }
 
 // DISPLAY OR HIDE DELETE POST MODAL
 function toggleDeletePostModal() {
   showDeletePostModal.value = !showDeletePostModal.value
 }
-
-onMounted(() => {
-  isLiked.value = postRef.likes.value.some((f) => f._id === props.currentUserProp._id)
-})
 </script>
 <template>
   <div class="shadow-md rounded-md bg-white px-4 py-4 mt-3 relative">
