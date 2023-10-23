@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import type { UserType } from '@/types/userType'
 import UserPhotoAndName from './ui/UserPhotoAndName.vue'
+import { onClose } from '@/constants/emitEvents'
 
 const props = defineProps<{ user: UserType }>()
+
+defineEmits(['onClose'])
 </script>
 <template>
-  <div class="searched-user" @click="$emit('onClose')">
+  <div class="searched-user" @click="$emit(onClose)">
     <UserPhotoAndName
       containerClass="flex gap-3 items-center rounded-t-md cursor-pointer "
       :currentUser="props.user"

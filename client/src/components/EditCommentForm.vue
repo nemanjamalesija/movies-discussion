@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { CommentType } from '@/types/postType'
 import type { UserType } from '@/types/userType'
+import { onSubmitEditForm } from '@/constants/emitEvents'
 import { ref } from 'vue'
 
 const props = defineProps<{
@@ -8,12 +9,14 @@ const props = defineProps<{
   currentUser: UserType
 }>()
 
+defineEmits(['onSubmitEditForm'])
+
 const editedCommentText = ref<string>(props.comment.text)
 </script>
 <template>
   <form
     class="flex items-center w-full"
-    @submit.prevent="$emit('onSubmitEditForm', props.comment._id, editedCommentText)"
+    @submit.prevent="$emit(onSubmitEditForm, props.comment._id, editedCommentText)"
   >
     <div
       v-if="props.currentUser.photo"

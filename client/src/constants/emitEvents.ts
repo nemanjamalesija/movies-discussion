@@ -1,0 +1,8 @@
+export const onAddComment = 'onAddComment'
+export const onToggleDeletePostModal = 'onToggleDeletePostModal'
+export const onDeletePost = 'onDeletePost'
+export const onSubmitEditForm = 'onSubmitEditForm'
+export const onToggleComments = 'onToggleComments'
+export const onLike = 'onLike'
+export const onUnlike = 'onUnlike'
+export const onClose = 'onClose'

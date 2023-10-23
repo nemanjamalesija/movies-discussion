@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import { onToggleComments, onLike } from '@/constants/emitEvents'
+
 const props = defineProps<{
   isLiked: boolean
   postRefId: string
 }>()
+
+defineEmits(['onLike', 'onUnlike', 'onToggleComments'])
 </script>
 <template>
   <div class="flex items-center gap-3 border-t-2 border-b-2 border-slate-100">
@@ -10,7 +14,7 @@ const props = defineProps<{
     <button
       v-if="!props.isLiked"
       class="flex items-center justify-center gap-1 w-full py-2 px-4 text-base hover:bg-slate-100 cursor-pointer rounded-md capitalize font-semibold disabled:bg-gray-500 transition-all duration-150"
-      @click="$emit('onLike', postRefId)"
+      @click="$emit(onLike, postRefId)"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -55,7 +59,7 @@ const props = defineProps<{
     </button>
     <button
       class="block w-full py-2 px-4 hover:bg-slate-100 text-base cursor-pointer rounded-md capitalize font-semibold text-gray-600 transition-all duration-150"
-      @click="$emit('onToggleComments')"
+      @click="$emit(onToggleComments)"
     >
       Comment
     </button>

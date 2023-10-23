@@ -1,14 +1,18 @@
 <script setup lang="ts">
+import { onDeletePost, onToggleDeletePostModal } from '@/constants/emitEvents'
+
 const props = defineProps<{
   showDeletePostModal: boolean
   postId: string
 }>()
+
+defineEmits(['onToggleDeletePostModal', 'onDeletePost'])
 </script>
 <template>
   <div>
     <button
       class="absolute -top-1 -right-1 p-2 hover:scale-125 transition-all duration-200 rounded-full"
-      @click="$emit('onToggleDeletePostModal')"
+      @click="$emit(onToggleDeletePostModal)"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -36,7 +40,7 @@ const props = defineProps<{
           >
             <button
               class="w-full text-start hover:bg-slate-200 py-1 px-2 rounded-md"
-              @click="$emit('onDeletePost', props.postId), $emit('onToggleDeletePostModal')"
+              @click="$emit(onDeletePost, props.postId), $emit(onToggleDeletePostModal)"
             >
               Delete
             </button>

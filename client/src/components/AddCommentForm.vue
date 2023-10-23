@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { onAddComment } from '@/constants/emitEvents'
 
 const props = defineProps<{
   postId: string
 }>()
 
+defineEmits(['onAddComment'])
+
 const newCommentText = ref<string>('')
 </script>
 <template>
   <form
-    @submit.prevent="$emit('onAddComment', props.postId, newCommentText), (newCommentText = '')"
+    @submit.prevent="$emit(onAddComment, props.postId, newCommentText), (newCommentText = '')"
     class="w-full"
   >
     <label for="default-search" class="mb-2 text-sm font-medium sr-only">Search</label>
