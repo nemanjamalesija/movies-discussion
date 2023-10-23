@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import useAppNavigation from '../../composables/useAppNavigation'
-import { baseUrl } from '../../constants/baseUrl'
 import type { UserType } from '../../types/userType'
 import { ref } from 'vue'
 import LoadingSpinner from '../LoadingSpinner.vue'
 import NavInputSearchedUser from '../NavInputSearchedUser.vue'
+import useGetToken from '@/composables/useGetToken'
+import getSearchedUSersAPI from '../../api/getSearchedUsers'
 
 const tryUser = ref<string>()
 const searchedUsers = ref([] as UserType[])
@@ -18,13 +19,12 @@ function closeShowSeachedUsers() {
 }
 
 async function getSearchedUSers() {
-  const jwtToken = localStorage.getItem('jwt')
+  const jwtToken = useGetToken()
 
   if (!jwtToken) {
     toast.error('Could not get your session! Please log in.')
     router.push('/')
   }
-
   showSearchedUsers.value = true
 
   if (!tryUser.value) {
@@ -37,38 +37,12 @@ async function getSearchedUSers() {
 
   loadingUsers.value = true
 
-  try {
-    const response = await fetch(
-      `${baseUrl}/users/getSearched?firstName=${firstName}&lastName=${lastName || ''}&limit=10`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + jwtToken
-        }
-      }
-    )
+  const users = await getSearchedUSersAPI(firstName, lastName)
 
-    if (!response.ok) {
-      const error = await response.json()
-      toast.error(error.message)
-      router.push('/login')
-      return
-    } else {
-      const {
-        data: { users }
-      } = await response.json()
+  if (!users) return
 
-      searchedUsers.value = users
-      loadingUsers.value = false
-    }
-  } catch (error) {
-    toast.error('Oop, something went wrong!')
-    console.log(error)
-    loadingUsers.value = false
-  } finally {
-    loadingUsers.value = false
-  }
+  searchedUsers.value = users
+  loadingUsers.value = false
 }
 </script>
 <template>

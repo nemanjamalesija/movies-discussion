@@ -21,7 +21,7 @@ const displayCommentsInfo = computed(() => {
       role="button"
       tabindex="0"
       class="flex items-center gap-1 text-slate-500 text-sm"
-      @click="$emit('onToggleComments')"
+      @click="$emit(onToggleComments)"
     >
       <span>{{ props.comments.value.length }}</span>
       <span>{{ displayCommentsInfo }} </span>
